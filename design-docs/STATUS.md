@@ -11,7 +11,7 @@ M1/M2 web rows (added by the web orchestrator):
 
 | Task | Repo | State | Branch | PR | Updated | Notes / blockers |
 |---|---|---|---|---|---|---|
-| W-03 | web | todo | `feature/W-03-design-system` | — | 2026-10-14 | brief: handoffs/W-03.md |
+| W-03 | web | in progress | `feature/W-03-design-system` | — | 2026-10-14 | brief: handoffs/W-03.md |
 | W-02 | web | blocked | — | — | 2026-10-14 | waits for backend tag `api-v0.1.0`; starts after W-03 merges (shared `package.json`/lock, CLAUDE.md, `docs/README.md`) |
 
 M0 record:
