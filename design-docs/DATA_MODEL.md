@@ -205,7 +205,7 @@ Example:
 The enum-like values are validated in Go, not by PG enums or CHECKs, so adding a value needs no migration. The OpenAPI spec models
 metadata as a `oneOf` keyed by item `kind` (discriminator on the Item schema), so the generated TS client gets typed metadata.
 
-### item_content_versions / item_contents (Markdown, in Postgres)
+### item_content_versions (Markdown, in Postgres)
 ```sql
 CREATE TABLE item_content_versions (
   item_id     UUID NOT NULL REFERENCES items(id) ON DELETE CASCADE,
@@ -216,15 +216,10 @@ CREATE TABLE item_content_versions (
   created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
   PRIMARY KEY (item_id, version)
 );
-CREATE TABLE item_contents (
-  item_id          UUID PRIMARY KEY REFERENCES items(id) ON DELETE CASCADE,
-  current_version  INTEGER NOT NULL,
-  updated_at       TIMESTAMPTZ NOT NULL DEFAULT now(),
-  FOREIGN KEY (item_id, current_version) REFERENCES item_content_versions(item_id, version)
-);
 ```
-- An item with no `item_contents` row has empty content at **version 0**.
-- **Save** (in one tx): `SELECT … FOR UPDATE` the `item_contents` row (or lock the item row when none exists). Compare with the `If-Match` version, and on mismatch return `ErrVersionConflict`. If the sha256 equals the current one, return the current version unchanged. Otherwise insert version `current+1`, upsert the pointer, then prune: `DELETE … WHERE item_id=$1 AND version <= current_new - (limit + 1)`.
+- An item with no `item_content_versions` rows has empty content at **version 0**. The current version is the highest `version` for the item (`ORDER BY version DESC LIMIT 1`, served by the PK).
+- **Save** (in one tx): lock the item row (`SELECT … FROM items … FOR NO KEY UPDATE`), read the latest version (number + sha256), compare with `If-Match` (mismatch → `ErrVersionConflict`). If the sha256 is equal, return the current version unchanged. Otherwise insert version `current+1`, then prune: `DELETE … WHERE item_id=$1 AND version <= current_new - (limit + 1)`.
+- The latest version of an item is never deleted (prune and restore keep it), so version numbers only grow and a `c-N` ETag is never reused for a different body.
 - **Restore v**: same as save, using the body of version v. It fails with 404 if v was pruned.
 - Content versions are independent of `items.version`. A content save **does** bump `items.updated_at` (for "recently updated" sort) but **not** `items.version`.
 
@@ -250,7 +245,7 @@ If more than one workspace exists, fail startup loudly (MVP invariant). The resu
 
 **Purge batch B** (tx, then files):
 1. Collect the attachment IDs and storage keys of **all** items in the root's subtree (any batch).
-2. Hard-delete the root row. FK `ON DELETE CASCADE` removes the descendants, content versions, and contents.
+2. Hard-delete the root row. FK `ON DELETE CASCADE` removes the descendants and content versions.
 3. Delete the collected `attachments` rows. Delete `trash_batches` row B **and** any other batches whose root no longer exists, i.e. nested older batches.
 4. Commit, then delete the files (log failures; the sweeper retries them).
 

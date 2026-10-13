@@ -68,7 +68,7 @@ Postgres plus `DATA_DIR/images` together. A DB-only backup is **insufficient**.
 restores the dump into a fresh DB, extracts the files, runs `migrate up` (to support a newer app version), and starts the api.
 
 `scripts/verify-restore.sh`: compares counts per table with the manifest and checks every `attachments.storage_key` and
-thumbnail exists with a matching sha256 on the original. It also checks that every `item_contents` pointer resolves.
+thumbnail exists with a matching sha256 on the original. It also checks that every item's latest content version body matches the backup.
 
 Rules: run a backup **before every migration in production** (the README upgrade steps include this). Backups never go into Git.
 Keep at least 7 daily and 4 weekly copies off the device (user's choice of location, documented).
