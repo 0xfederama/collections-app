@@ -84,6 +84,7 @@ Dispatch rules:
 - One concern per PR, sized for review (aim for under ~600 changed lines excluding generated code).
 - `--force-with-lease` is allowed **only** on your own unmerged branch. Rebasing on `main` is preferred over merge commits.
 - **Do not merge PRs yourself** unless the user explicitly authorized it for that PR. The user reviews and merges.
+- **After every merge, always delete the branch** locally (`git branch -D <branch>`) and on the remote (`git push origin --delete <branch>`), remove its worktree (`git worktree remove <path>`), then `git fetch --prune`. The orchestrator does this when it bumps the parent pointer (user rule, 2026-10-14).
 - Never commit secrets, `.env`, real user data, or the local `data/` directories.
 
 ### PR checklist (copy in the template)
