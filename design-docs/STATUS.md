@@ -7,7 +7,14 @@ States: `todo` · `in progress` · `in review` (PR open) · `blocked` · `done` 
 
 ## Current milestone: M1 — Contracts (C0 reached 2026-10-14)
 
-M1 rows are added by the repo orchestrators. M0 record:
+M1/M2 web rows (added by the web orchestrator):
+
+| Task | Repo | State | Branch | PR | Updated | Notes / blockers |
+|---|---|---|---|---|---|---|
+| W-03 | web | todo | `feature/W-03-design-system` | — | 2026-10-14 | brief: handoffs/W-03.md |
+| W-02 | web | blocked | — | — | 2026-10-14 | waits for backend tag `api-v0.1.0`; starts after W-03 merges (shared `package.json`/lock, CLAUDE.md, `docs/README.md`) |
+
+M0 record:
 
 | Task | Repo | State | Branch | PR | Updated | Notes / blockers |
 |---|---|---|---|---|---|---|
@@ -63,9 +70,11 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 ## Waiting on the user
 
-- Q-4 license, Q-6 visual direction (DECISIONS.md). Defaults apply if unanswered. Q-6 is needed before W-03.
+- Q-4 license (DECISIONS.md). Default applies if unanswered.
 
 ## Log (newest first, one line each)
+
+- 2026-10-14: Web orchestrator: baseline `npm run check` green on `835a040`. Q-6 answered (D-046), icons D-047, W-03 scope D-048. Brief handoffs/W-03.md written; W-02 waits for `api-v0.1.0` and for W-03 to merge.
 
 - 2026-10-14: **C0 reached.** backend#1 and web#1 squashed to one commit each (trees identical to the reviewed heads, gates re-run green) and rebase-merged: backend `main` d867326, web `main` 835a040. Branches deleted. Parent pointers bumped. Older parent commits (806dbaf, adb7e36) point at pre-squash commits that no longer exist on any branch; only check out the parent from a later commit. Next: repo orchestrators (backend B-02, web W-03).
 - 2026-10-14: M0 review of both PRs. Fixed on the branches: backend `make check` adds a Docker build, goimports and noctx, pinned Go build image; web ESLint `defineConfig`, `color-scheme` removed until W-03; CLAUDE.md files say docs are versioned in the parent. Docs: AGENT_WORKFLOW §3/§7 updated for parent commits (D-044), D-045, plan deps B-01→B-00, M1 serialized (B-03 after B-02). Orchestrator notes added below.

@@ -7,9 +7,8 @@ Format: `D-NNN | date | decision | rationale | alternatives`. Newest wins. Super
 | ID | Question | Default if unanswered | Blocks |
 |---|---|---|---|
 | Q-4 | License for the private repos? | No LICENSE file (all rights reserved) until decided | Nothing |
-| Q-6 | Visual direction: Inter + Fraunces, warm stone neutrals, teal accent. OK, or a different mood or accent? | As proposed | W-03 |
 
-Answered 2026-10-13: Q-1 → D-026, Q-2 → D-027, Q-3 → D-028, Q-5 → D-029, Q-7 → D-030.
+Answered 2026-10-13: Q-1 → D-026, Q-2 → D-027, Q-3 → D-028, Q-5 → D-029, Q-7 → D-030. Answered 2026-10-14: Q-6 → D-046.
 
 ## Decisions
 
@@ -60,6 +59,9 @@ Answered 2026-10-13: Q-1 → D-026, Q-2 → D-027, Q-3 → D-028, Q-5 → D-029,
 | D-043 | 2026-10-14 | **Parent repo `0xfederama/collections-app`** (private) wraps the two service repos as **git submodules** with short local folders: `backend/` → `collections-app-backend`, `frontend-web/` → `collections-app-frontend-web`. GitHub repo names and remotes are unchanged. The parent tracks `design-docs/`, the whole-app `compose.yaml`, `.env.example`, `.gitignore` and README. D-001 (no monorepo, independent service repos) still holds; D-026 (docs not versioned) is superseded. Submodule pointers are bumped by the orchestrator after service PRs merge | User decision | Rename the GitHub repos; monorepo; sibling clones without a parent |
 | D-044 | 2026-10-14 | **Parent repo commits go straight to its `main`** (no PRs): design docs, `compose.yaml`, `.env.example`, README, CLAUDE.md and submodule pointer bumps. Service repos stay PR-only. Sessions commit only the files they edited, by pathspec (never `git add -A` / `commit -a` in the parent), then `pull --rebase` and push. Pointer bumps only by the orchestrator, only to commits on the service repo's `main` | User decision. Docs change constantly and are not code under review; pathspec commits keep parallel sessions from sweeping up each other's edits or pointers | PRs for docs; one session owning all doc commits |
 | D-045 | 2026-10-14 | **Gate additions after the M0 review:** backend `make check` also runs `docker build` (ARCHITECTURE §6 lists it; catches Dockerfile drift such as a new top-level Go dir) and golangci-lint enables `noctx` plus the `gofmt`/`goimports` formatters; the build image is pinned to the exact Go patch (`golang:1.27.2-alpine3.24`). Web ESLint uses core `defineConfig` (`tseslint.config` is deprecated). **M1 is serialized:** B-03 starts after B-02 merges (both own `Makefile` `generate`/`check` and CLAUDE.md, single-owner files per ORCHESTRATOR_BRIEF §5) | M0 review findings | Keep the Docker build manual; run B-02 and B-03 in parallel |
+| D-046 | 2026-10-14 | **Visual direction accepted as in UI_SPEC §11** (Q-6): Inter + Fraunces, warm stone neutrals, teal accent, light and dark tokens | User accepted the proposal | A different mood or accent |
+| D-047 | 2026-10-14 | **Icons: `lucide-react`**, imported per icon from one file (`src/components/ui/icons.ts`) so only used glyphs ship. Not an icon mega-pack under D-034. The motorcycle kind icon is a Lucide glyph if one exists, otherwise one hand-drawn SVG in the 24px / 2px-stroke style | Consistent stroke style, tree-shaken, small | Hand-drawn SVGs only; another icon pack |
+| D-048 | 2026-10-14 | **W-03 ships all 18 UI_SPEC §11 primitives in one PR**, including Tree (presentational, keyboard-only, data-agnostic; W-04 wires data, W-05 adds dnd) and Combobox (Radix Popover plus our own ARIA combobox/listbox, since Radix has none). W-03 adds `@testing-library/user-event` (dev) for keyboard tests. The PR exceeding ~600 lines is accepted. W-02 starts after W-03 merges (shared `package.json`/lockfile, CLAUDE.md, `docs/README.md`) | User chose everything in one PR; avoids two tasks editing the same files | Split into W-03a/b; Tree and Combobox later |
 
 ## Toolchain versions (R-1, checked 2026-10-13)
 
