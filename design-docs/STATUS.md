@@ -18,7 +18,7 @@ M1 backend rows (added by the backend orchestrator):
 
 | Task | Repo | State | Branch | PR | Updated | Notes / blockers |
 |---|---|---|---|---|---|---|
-| B-02 | backend | in progress | `feature/B-02-schema-sqlc` | — | 2026-10-14 | brief: handoffs/B-02.md; worktree `../collections-app-backend-B-02` |
+| B-02 | backend | in review | `feature/B-02-schema-sqlc` | [#2](https://github.com/0xfederama/collections-app-backend/pull/2) | 2026-10-14 | brief: handoffs/B-02.md; C1 schema review pending (user). `make check` + compose verified; D-051 tests pass |
 | B-03 | backend | blocked | — | — | 2026-10-14 | starts after B-02 merges and the user reviews the schema (C1, D-045); brief written then |
 
 M0 record:
