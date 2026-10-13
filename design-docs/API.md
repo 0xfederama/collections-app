@@ -1,7 +1,7 @@
 # API Design
 
 The private REST API is used by `collections-app-frontend-web`. Base path is `/api/v1`, and bodies are JSON (`application/json`) unless noted.
-This document is the input to `collections-app-backend/api/openapi.yaml`. Once the spec exists, **the spec wins**, and
+This document is the input to `backend/api/openapi.yaml` (repo `collections-app-backend`). Once the spec exists, **the spec wins**, and
 divergences are fixed in the same PR.
 
 > `/api/v1` is **not** a public API product (PRODUCT §13, Phase 4). There is no auth in MVP, so it is private-network only.

@@ -58,6 +58,8 @@ Answered 2026-10-13: Q-1 → D-026, Q-2 → D-027, Q-3 → D-028, Q-5 → D-029,
 | D-041 | 2026-10-13 | **Contract tooling (resolves D-020):** OpenAPI **3.0.3**; server generation with **oapi-codegen v2 (strict server, chi)**; spec lint with **Redocly CLI** pinned and run via `npx` (no config needed, `recommended` ruleset). oapi-codegen's 3.1 support is only "initial" (v2.8.0, July 2026), and ogen has no official 3.1 claim. openapi-typescript and openapi-fetch work with 3.0.3. ETag/`If-Match` and problem+json handling are unverified for the generator, so B-03 prototypes one operation first | R-2 | ogen; spec 3.1; Spectral |
 | D-042 | 2026-10-13 | **Web runtime baseline:** Node 24 LTS (`.nvmrc` 24, `engines` `>=24`). React Router 8 imports everything from `react-router` (`react-router-dom` is gone; DOM `RouterProvider` comes from `react-router/dom`). Node 26 becomes LTS on 2026-10-28, so revisit then | R-1 | Node 22, Node 26 |
 | D-043 | 2026-10-14 | **Parent repo `0xfederama/collections-app`** (private) wraps the two service repos as **git submodules** with short local folders: `backend/` → `collections-app-backend`, `frontend-web/` → `collections-app-frontend-web`. GitHub repo names and remotes are unchanged. The parent tracks `design-docs/`, the whole-app `compose.yaml`, `.env.example`, `.gitignore` and README. D-001 (no monorepo, independent service repos) still holds; D-026 (docs not versioned) is superseded. Submodule pointers are bumped by the orchestrator after service PRs merge | User decision | Rename the GitHub repos; monorepo; sibling clones without a parent |
+| D-044 | 2026-10-14 | **Parent repo commits go straight to its `main`** (no PRs): design docs, `compose.yaml`, `.env.example`, README, CLAUDE.md and submodule pointer bumps. Service repos stay PR-only. Sessions commit only the files they edited, by pathspec (never `git add -A` / `commit -a` in the parent), then `pull --rebase` and push. Pointer bumps only by the orchestrator, only to commits on the service repo's `main` | User decision. Docs change constantly and are not code under review; pathspec commits keep parallel sessions from sweeping up each other's edits or pointers | PRs for docs; one session owning all doc commits |
+| D-045 | 2026-10-14 | **Gate additions after the M0 review:** backend `make check` also runs `docker build` (ARCHITECTURE §6 lists it; catches Dockerfile drift such as a new top-level Go dir) and golangci-lint enables `noctx` plus the `gofmt`/`goimports` formatters; the build image is pinned to the exact Go patch (`golang:1.27.2-alpine3.24`). Web ESLint uses core `defineConfig` (`tseslint.config` is deprecated). **M1 is serialized:** B-03 starts after B-02 merges (both own `Makefile` `generate`/`check` and CLAUDE.md, single-owner files per ORCHESTRATOR_BRIEF §5) | M0 review findings | Keep the Docker build manual; run B-02 and B-03 in parallel |
 
 ## Toolchain versions (R-1, checked 2026-10-13)
 
@@ -66,7 +68,7 @@ Sources: GitHub releases API, proxy.golang.org, go.dev, Docker Hub, npm registry
 ### Backend
 | Tool | Version | Source |
 |---|---|---|
-| Go | 1.27.2 | https://go.dev/dl/?mode=json |
+| Go / build image | 1.27.2 / `golang:1.27.2-alpine3.24` (D-045) | https://go.dev/dl/?mode=json , https://hub.docker.com/_/golang |
 | PostgreSQL / image | 18.6 / `postgres:18.6-alpine3.24` | https://www.postgresql.org/support/versioning/ , https://hub.docker.com/_/postgres |
 | chi | v5.4.0 | https://github.com/go-chi/chi/releases |
 | pgx | v5.11.0 | https://github.com/jackc/pgx/releases |

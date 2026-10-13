@@ -25,8 +25,8 @@ Wherever a later task says "in CI", read it as "in the local `make check` / `npm
 
 | ID | Task | Deps |
 |---|---|---|
-| B-02 | Migration 000001: full schema from DATA_MODEL §2 + pg_trgm; up/down/up in CI; sqlc config + empty query files compiling | B-01 |
-| B-03 | `api/openapi.yaml` v0.1 covering **all** of API.md, with examples; codegen wired; lint in CI; tag `api-v0.1.0` after merge | B-01, R-2 |
+| B-02 | Migration 000001: full schema from DATA_MODEL §2 + pg_trgm; up/down/up in the local `make check`; sqlc config + empty query files compiling | B-00 |
+| B-03 | `api/openapi.yaml` v0.1 covering **all** of API.md, with examples; codegen wired; lint in CI; tag `api-v0.1.0` after merge | B-00, R-2, **B-02** (M1 is serialized) |
 | W-02 | `scripts/api-sync.mjs`, `api:sync` / `api:check` scripts, vendor `api-v0.1.0`, generate client, `lib/api` wrapper (ETag→If-Match, problem → `ApiError`), MSW handlers from spec examples | B-03 |
 
 **Checkpoint C1: the user reviews the schema and spec.**

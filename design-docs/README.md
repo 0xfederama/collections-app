@@ -60,7 +60,7 @@ GitHub repo names keep the `collections-app-` prefix.** Wherever these docs say 
 3. Everything else
 4. The original conversation archive (historical only — several of its points are superseded, see DECISIONS.md)
 
-Once implemented, `collections-app-backend/api/openapi.yaml` becomes the authoritative API contract; `API.md` then
+Once implemented, `backend/api/openapi.yaml` becomes the authoritative API contract; `API.md` then
 describes intent and conventions, and any divergence must be resolved by updating one or the other in the same PR.
 
 ## Status

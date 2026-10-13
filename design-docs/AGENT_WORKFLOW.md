@@ -20,8 +20,8 @@ rules, and this file has the full version.
 
 | Session | Where | Lifetime | Does |
 |---|---|---|---|
-| **Setup** | `/Users/federico/Developer/collections-app` (both repos) | Once | M0 for both repos (research, skeletons, CI, CLAUDE.md, agents), with one PR per repo task |
-| **Repo orchestrator** | one per repo | Long-lived, one per milestone if context grows | Plans the next tasks, writes **handoff briefs**, gives the user worker prompts, reviews worker PRs against the design docs, keeps STATUS.md, coordinates cross-repo contract changes. Implements only small glue or fixes itself |
+| **Setup** | `/Users/federico/Developer/collections-app` (both repos) | Once | M0 for both repos (research, skeletons, local gates, CLAUDE.md, agents), with one PR per repo task |
+| **Repo orchestrator** | one per repo, started in `backend/` or `frontend-web/` | Long-lived, one per milestone if context grows | Plans the next tasks, writes **handoff briefs**, gives the user worker prompts, reviews worker PRs against the design docs, keeps STATUS.md, coordinates cross-repo contract changes. Implements only small glue or fixes itself |
 | **Worker** | one per task, in its **own git worktree** | One task = one branch = one PR | Reads its brief, implements, tests, opens the PR, updates STATUS.md, then ends |
 
 ### Handoff briefs
@@ -63,7 +63,7 @@ Dispatch rules:
 
 ## 3. Git & PR rules (mandatory)
 
-- **Never push to `main`.** Every change goes through a PR the user reviews. There's no CI for now (D-031/D-032): run `make check` / `npm run check` yourself before opening the PR and paste the result. Never force-push `main`.
+- **Never push to `main` of a service repo** (`backend/`, `frontend-web/`). Every service change goes through a PR the user reviews. The **parent** repo is the exception: design docs, `compose.yaml`, README and pointer bumps are committed straight to its `main` (§7, D-044). There's no CI for now (D-031/D-032): run `make check` / `npm run check` yourself before opening the PR and paste the result. Never force-push `main`.
 - Branch from an up-to-date `origin/main`: `git switch -c <type>/<short-kebab-description> origin/main`
 - Branch types:
 
@@ -93,7 +93,7 @@ Dispatch rules:
 - [ ] `docs/` updated by `docs-keeper`
 - [ ] API change? Followed §6 contract protocol
 - [ ] Migration? Up/down tested on a fresh DB and a DB with data
-- [ ] No scope creep beyond the task (see ORCHESTRATOR_BRIEF §3)
+- [ ] No scope creep beyond the task (see ORCHESTRATOR_BRIEF §2)
 
 ---
 
@@ -140,9 +140,9 @@ Before opening every PR, the main session dispatches `docs-keeper` with the diff
 
 ## 7. Keeping the design docs current (living docs, versioned in the parent repo)
 
-`design-docs/` is a **living planning workspace** shared by all sessions in both repos. It is intentionally **not** under
-git, and it is **not** the documentation of the services (that lives in each repo's `README.md`, `CLAUDE.md`, and `docs/`).
-Because it is the shared coordination point, keep it updated **frequently**:
+`design-docs/` is a **living planning workspace** shared by all sessions in both repos. It is tracked in the **parent**
+repo `collections-app` (D-043), and it is **not** the documentation of the services (that lives in each repo's `README.md`,
+`CLAUDE.md`, and `docs/`). Because it is the shared coordination point, keep it updated **frequently**:
 
 - **When you start a task:** set it to `in progress` in [STATUS.md](STATUS.md) with your branch name.
 - **When you open or merge a PR, or get blocked:** update STATUS.md (PR link, state, blocker).
@@ -150,7 +150,14 @@ Because it is the shared coordination point, keep it updated **frequently**:
 - **When you discover something future sessions need** (a new task, a dependency between tasks, a cross-repo gap): add it to IMPLEMENTATION_PLAN.md or STATUS.md.
 - Ask the user first for changes that alter product behavior, scope, security, or UX in a meaningful way.
 
-Since there is no git history to fall back on, edit safely:
+Committing design-doc edits (D-044). The parent repo has no PRs: commit straight to its `main`.
+- Commit **only the files you edited**, by pathspec: `git -C /Users/federico/Developer/collections-app commit -m "docs: …" -- design-docs/STATUS.md …`.
+  Never `git add -A` or `git commit -a` in the parent: it would sweep up other sessions' edits and submodule pointers.
+- Then `git -C /Users/federico/Developer/collections-app pull --rebase && git -C /Users/federico/Developer/collections-app push`.
+- Commit at natural points (task started, PR opened, decision recorded), not on every edit.
+- Submodule pointer bumps are the orchestrator's job, only to commits already on the service repo's `main`.
+
+Several sessions share one working copy of these files, so edit safely:
 - **Re-read** the section right before editing it, because another session may have changed it.
 - Make **small targeted edits** (Edit tool) and never rewrite whole files.
 - Never delete other sessions' entries. Mark them superseded or done instead.

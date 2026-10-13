@@ -6,7 +6,7 @@ Go REST API + PostgreSQL for the Collection App. It owns the canonical API contr
 
 `/Users/federico/Developer/collections-app/design-docs/`. Always use this **absolute** path (worktrees break `../`).
 - Every session: `AGENT_WORKFLOW.md`, then `STATUS.md` and `DECISIONS.md` (open questions + recent entries).
-- These are **living, unversioned** docs. Update `STATUS.md` when you start or finish a task or open a PR, and record decisions as they happen (AGENT_WORKFLOW §7). Re-read before editing, and make small targeted edits.
+- These are **living** docs, versioned in the **parent** repo (D-043). Update `STATUS.md` when you start or finish a task or open a PR, and record decisions as they happen (AGENT_WORKFLOW §7). Re-read before editing, and make small targeted edits. Commit design-doc edits in the parent, never in this repo (AGENT_WORKFLOW §7, D-044).
 - Backend work: `DATA_MODEL.md`, `API.md`, `ARCHITECTURE.md` §2/§4/§5, and the task in `IMPLEMENTATION_PLAN.md`.
 - If the code must deviate from the docs, follow AGENT_WORKFLOW §7. Never deviate silently.
 

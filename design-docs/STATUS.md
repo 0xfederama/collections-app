@@ -12,10 +12,44 @@ States: `todo` · `in progress` · `in review` (PR open) · `blocked` · `done` 
 | M0-U | — | done | — | — | 2026-10-13 | Repos created and cloned. License still open (Q-4) |
 | R-1 | both | done | — | — | 2026-10-13 | Versions + D-035–D-042 in DECISIONS.md |
 | R-2 | backend | done | — | — | 2026-10-13 | OpenAPI 3.0.3, oapi-codegen, Redocly (D-041) |
-| B-00 | backend | in review | `chore/B-00-skeleton` | [#1](https://github.com/0xfederama/collections-app-backend/pull/1) | 2026-10-13 | `make check` + compose verified. Awaiting your review |
+| B-00 | backend | in review | `chore/B-00-skeleton` | [#1](https://github.com/0xfederama/collections-app-backend/pull/1) | 2026-10-14 | Reviewed 2026-10-14, fixes pushed (D-045). `make check` + compose verified. Awaiting your merge |
 | B-01 | backend | dropped | — | — | 2026-10-13 | No CI for now (D-031); local `make check` from B-00 |
-| W-00 | web | in review | `chore/W-00-skeleton` | [#1](https://github.com/0xfederama/collections-app-frontend-web/pull/1) | 2026-10-13 | `npm run check` + dev proxy verified. Awaiting your review |
+| W-00 | web | in review | `chore/W-00-skeleton` | [#1](https://github.com/0xfederama/collections-app-frontend-web/pull/1) | 2026-10-14 | Reviewed 2026-10-14, fixes pushed (D-045). `npm run check` + dev proxy verified. Awaiting your merge |
 | W-01 | web | dropped | — | — | 2026-10-13 | No CI for now (D-031); local `npm run check` from W-00 |
+
+## Notes for repo orchestrators (from M0, 2026-10-14)
+
+**Start order once backend#1 and web#1 are merged** (after bumping the parent pointers to the merged `main` commits):
+backend B-02 → (user review) → B-03 → tag `api-v0.1.0` (ask the user before pushing the tag) → web W-02. Web W-03 only
+needs W-00, so it runs in parallel with backend M1 (needs Q-6 answered or the default accepted). Then M2 per the plan.
+
+**Backend (`make check` today: gofmt check, golangci-lint with goimports + noctx, `go test ./...` on testcontainers
+Postgres, AT-18 compose exposure, `docker build`).**
+- Tools: add `sqlc` and `oapi-codegen` with `go get -tool …@<version>` and run them as `go tool …` (D-035). golangci-lint stays
+  `go run …@v2.14.0`. Redocly runs pinned via `npx` or its Docker image (D-041). Wire both generators into `make generate`.
+- B-02 must add to `check`: `sqlc generate` + `git diff --exit-code` drift check, and a migrations up → down → up test on a
+  fresh testcontainers Postgres. Once `000001` exists the compose migrate guard (D-037) is a no-op; keep it.
+- B-03 must add to `check`: Redocly lint of `api/openapi.yaml` and an oapi-codegen drift check. Generated code goes under
+  `internal/` (the Dockerfile copies only `cmd/` and `internal/`; `make check-docker` fails otherwise).
+- `http.Server` has `ReadTimeout` 30s / `WriteTimeout` 60s globally. B-04/B-09 should set per-route body limits and
+  revisit timeouts for 10 MB uploads.
+- Not covered by tests yet: `cmd/api` (wiring, `healthcheck` subcommand, verified manually) and `internal/database`
+  (B-04's `InTx` tests should cover `NewPool`). `APP_ENV` only gates `make reset-dev` today.
+- Logs: slog JSON by default. Request IDs, access log, recovery and security headers are B-04.
+
+**Web (`npm run check` today: Prettier incl. Markdown, ESLint, `tsc`, Vitest on jsdom, `vite build`).**
+- Lean rule (D-034): each task installs only what it uses. W-02 adds openapi-typescript, openapi-fetch, TanStack Query, MSW,
+  `api:sync` / `api:check` (joins `check`), and replaces `src/lib/backendStatus.ts` with `lib/api`. Decide then whether the
+  `/healthz` and `/readyz` dev proxies are still needed.
+- W-03 adds Radix per-primitive (D-038), Fontsource, tokens for light and dark, the no-flash theme bootstrap, `color-scheme`
+  (deliberately removed in M0) and a favicon.
+- TypeScript stays on 6.x until typescript-eslint supports 7 (D-040). React Router 8: import from `react-router`.
+
+**Both / parent.**
+- The parent `compose.yaml` (web on `127.0.0.1:5173`) is not covered by the AT-18 script, which only renders the backend
+  compose. Q-03's production compose must get its own exposure check.
+- GitGuardian scans every push: no `user:pass@host` strings, blank secrets in examples (see backend CLAUDE.md gotchas).
+- Parent commits go straight to `main` by pathspec (D-044). Service repos are PR-only; the user merges.
 
 ## Repos
 
@@ -27,10 +61,12 @@ States: `todo` · `in progress` · `in review` (PR open) · `blocked` · `done` 
 
 ## Waiting on the user
 
-- Q-4 license, Q-6 visual direction (DECISIONS.md). Defaults apply if unanswered.
+- Merge backend#1 and web#1 (prefer **merge commit or rebase**, not squash: the parent may point at PR-branch commits).
+- Q-4 license, Q-6 visual direction (DECISIONS.md). Defaults apply if unanswered. Q-6 is needed before W-03.
 
 ## Log (newest first, one line each)
 
+- 2026-10-14: M0 review of both PRs. Fixed on the branches: backend `make check` adds a Docker build, goimports and noctx, pinned Go build image; web ESLint `defineConfig`, `color-scheme` removed until W-03; CLAUDE.md files say docs are versioned in the parent. Docs: AGENT_WORKFLOW §3/§7 updated for parent commits (D-044), D-045, plan deps B-01→B-00, M1 serialized (B-03 after B-02). Orchestrator notes added below.
 - 2026-10-14: Parent repo `0xfederama/collections-app` created (D-043): backend/ and frontend-web/ are submodules pinned to the open skeleton PR branches (backend#1, web#1 still unmerged). Docs now versioned in the parent. After each service PR merges, bump the pointer to the merged `main` commit.
 
 - 2026-10-13: GitGuardian flagged backend#1 (password-shaped strings in `.env.example`, `compose.yaml`, Makefile, tests). Fixed by blank secret values in examples, credentials as `?user=&password=` query params, and plain `${POSTGRES_PASSWORD}` in compose; branch amended + force-with-lease (history clean), check now passes. The earlier incident may still be open in the GitGuardian dashboard (user can resolve it).
