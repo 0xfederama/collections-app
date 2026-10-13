@@ -129,7 +129,7 @@ Theme resolution: the `localStorage` choice, else `prefers-color-scheme`. It is 
 **Radii:** `--radius-sm` 6 px (chips, inputs), `--radius-md` 10 px (buttons, menus), `--radius-lg` 16 px (cards, panels), `--radius-xl` 24 px (dialogs, hero image), and full (pills, avatars).
 
 **Color** (warm neutral with one accent):
-- Neutrals: warm stone scale (e.g. `#FAFAF9` background, `#FFFFFF` surface, `#E7E5E4` border, `#78716C` muted text, `#1C1917` text).
+- Neutrals: warm stone scale (e.g. `#FAFAF9` background, `#FFFFFF` surface, `#E7E5E4` border, `#78716C` muted text, but the token uses `#57534E` per D-053, `#1C1917` text).
 - Accent: one confident hue (proposal: deep teal `#0F766E` / hover `#115E59`), used for primary actions, focus, and selection.
 - Semantic: success, warning, and danger, each with tinted background, border, and text variants.
 - Dark theme: warm near-black surfaces, not pure black (e.g. `#0C0A09` background, `#1C1917` surface, `#292524` raised, `#44403C` border, `#A8A29E` muted text, `#FAFAF9` text). The accent is lightened for contrast (e.g. teal `#2DD4BF` for text, links, and focus; primary buttons `#14B8A6` with dark text). Shadows are mostly replaced by borders and lighter raised surfaces.
