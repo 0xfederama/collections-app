@@ -18,7 +18,7 @@ M1 backend rows (added by the backend orchestrator):
 
 | Task | Repo | State | Branch | PR | Updated | Notes / blockers |
 |---|---|---|---|---|---|---|
-| B-02 | backend | todo | `feature/B-02-schema-sqlc` | — | 2026-10-14 | brief: handoffs/B-02.md |
+| B-02 | backend | in progress | `feature/B-02-schema-sqlc` | — | 2026-10-14 | brief: handoffs/B-02.md; worktree `../collections-app-backend-B-02` |
 | B-03 | backend | blocked | — | — | 2026-10-14 | starts after B-02 merges and the user reviews the schema (C1, D-045); brief written then |
 
 M0 record:
