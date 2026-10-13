@@ -65,7 +65,7 @@ CREATE TABLE folders (
   version          INTEGER NOT NULL DEFAULT 1,
   created_at, updated_at,
   deleted_at       TIMESTAMPTZ NULL,
-  trash_batch_id   UUID NULL REFERENCES trash_batches(id) ON DELETE SET NULL,  -- see §4 purge
+  trash_batch_id   UUID NULL REFERENCES trash_batches(id),  -- no ON DELETE action, see §4 end (D-051)
   UNIQUE (id, workspace_id),
   FOREIGN KEY (parent_folder_id, workspace_id) REFERENCES folders(id, workspace_id) ON DELETE CASCADE,
   CHECK (parent_folder_id IS DISTINCT FROM id),
@@ -254,8 +254,9 @@ If more than one workspace exists, fail startup loudly (MVP invariant). The resu
 3. Delete the collected `attachments` rows. Delete `trash_batches` row B **and** any other batches whose root no longer exists, i.e. nested older batches.
 4. Commit, then delete the files (log failures; the sweeper retries them).
 
-`trash_batch_id … ON DELETE SET NULL` exists only so that deleting a batch row can never fail. The service always
-clears or deletes the rows first.
+`trash_batch_id` references `trash_batches` with **no `ON DELETE` action** (D-051). The service always clears or deletes
+the rows first, so deleting a batch row that is still referenced is a bug and fails loudly. NO ACTION is checked after the
+statement's cascades, so multi-path cascades such as `DELETE FROM workspaces` are expected to succeed (B-02 tests this).
 
 ## 5. Images
 

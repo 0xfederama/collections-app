@@ -14,6 +14,13 @@ M1/M2 web rows (added by the web orchestrator):
 | W-03 | web | in progress | `feature/W-03-design-system` | — | 2026-10-14 | brief: handoffs/W-03.md |
 | W-02 | web | blocked | — | — | 2026-10-14 | waits for backend tag `api-v0.1.0`; starts after W-03 merges (shared `package.json`/lock, CLAUDE.md, `docs/README.md`) |
 
+M1 backend rows (added by the backend orchestrator):
+
+| Task | Repo | State | Branch | PR | Updated | Notes / blockers |
+|---|---|---|---|---|---|---|
+| B-02 | backend | todo | `feature/B-02-schema-sqlc` | — | 2026-10-14 | brief: handoffs/B-02.md |
+| B-03 | backend | blocked | — | — | 2026-10-14 | starts after B-02 merges and the user reviews the schema (C1, D-045); brief written then |
+
 M0 record:
 
 | Task | Repo | State | Branch | PR | Updated | Notes / blockers |
@@ -74,6 +81,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 ## Log (newest first, one line each)
 
+- 2026-10-14: Backend orchestrator: baseline `make check` green on `d867326`. D-049 (sqlc types), D-050 (migration test), D-051 (`trash_batch_id` FK with no ON DELETE action; DATA_MODEL §2/§4 updated). Brief handoffs/B-02.md written; B-03 waits for B-02 merge + C1.
 - 2026-10-14: Web orchestrator: baseline `npm run check` green on `835a040`. Q-6 answered (D-046), icons D-047, W-03 scope D-048. Brief handoffs/W-03.md written; W-02 waits for `api-v0.1.0` and for W-03 to merge.
 
 - 2026-10-14: **C0 reached.** backend#1 and web#1 squashed to one commit each (trees identical to the reviewed heads, gates re-run green) and rebase-merged: backend `main` d867326, web `main` 835a040. Branches deleted. Parent pointers bumped. Older parent commits (806dbaf, adb7e36) point at pre-squash commits that no longer exist on any branch; only check out the parent from a later commit. Next: repo orchestrators (backend B-02, web W-03).
