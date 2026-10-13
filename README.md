@@ -140,7 +140,7 @@ Current progress is always in [design-docs/STATUS.md](design-docs/STATUS.md). Th
 
 | Milestone | Content |
 |---|---|
-| M0 Bootstrap | Researched toolchain, backend and web skeletons, local gates (**PRs open for review**) |
+| M0 Bootstrap | Researched toolchain, backend and web skeletons, local gates (**done 2026-10-14**) |
 | M1 Contracts | Database schema (B-02), OpenAPI spec (B-03), web API client (W-02). You review schema and spec |
 | M2 Core | Backend foundations, workspace, folders, lists, items. Web design system, shell, tree, list view |
 | M3 / M4 | Backend content, images, trash, search. Web item detail/edit, images, Markdown editor, search, trash, settings |
