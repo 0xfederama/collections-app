@@ -1,0 +1,6 @@
+[submodule "backend"]
+	path = backend
+	url = https://github.com/0xfederama/collections-app-backend.git
+[submodule "frontend-web"]
+	path = frontend-web
+	url = https://github.com/0xfederama/collections-app-frontend-web.git

@@ -1,0 +1,32 @@
+# Whole-app local dev: `docker compose up --build` from this folder.
+# Backend (db + migrate + api) comes from the backend repo's compose file; the web
+# service runs the Vite dev server from the frontend repo (not a production image: Q-03).
+# Needs backend/.env (POSTGRES_PASSWORD set). This folder is the parent repo; backend/ and frontend-web/ are git submodules.
+name: collections-app
+
+include:
+  - path: ./backend/compose.yaml
+    project_directory: ./backend
+    env_file: ./backend/.env
+
+services:
+  web:
+    image: node:24-alpine
+    working_dir: /app
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      # Inside the compose network the API is reachable as `api` (D-033 proxy target).
+      API_PROXY_TARGET: http://api:8080
+    volumes:
+      - ./frontend-web:/app
+      # Keep Linux node_modules in a volume so they don't clash with the host's macOS ones.
+      - web_node_modules:/app/node_modules
+    command: sh -c "npm ci && npm run dev -- --host 0.0.0.0"
+    ports:
+      - "127.0.0.1:${WEB_PORT:-5173}:5173"
+    restart: unless-stopped
+
+volumes:
+  web_node_modules:
