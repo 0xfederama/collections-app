@@ -20,6 +20,8 @@ M1/M2 web rows (added by the web orchestrator):
 | W-11 | web | done | `feature/W-11-search` | [#7](https://github.com/0xfederama/collections-app-frontend-web/pull/7) | 2026-10-14 | Rebased on W-07, squash-merged as `f65d620`; real-backend search checked. Branch and worktree removed |
 | W-08 | web | todo | `feature/W-08-item-edit` | — | 2026-10-14 | brief: handoffs/W-08.md. Parallel with W-12. Then W-09 ∥ W-10 ∥ W-13 |
 | W-12 | web | todo | `feature/W-12-trash` | — | 2026-10-14 | brief: handoffs/W-12.md. Parallel with W-08 |
+| Q-01a | web | blocked | — | — | 2026-10-14 | e2e harness (`npm run e2e`, backend at the `openapi.lock.json` ref, isolated compose project, 127.0.0.1 ports, API seeding) + AT-03/09/11/12/13/14/22. Starts after W-08 and W-12 merge; brief handoffs/Q-01.md written then |
+| Q-01b | web | blocked | — | — | 2026-10-14 | AT-06 (images) + AT-14 extended to Settings/Home. After Q-01a, W-09 and W-13 |
 
 M1 backend rows (added by the backend orchestrator):
 
@@ -97,6 +99,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 ## Log (newest first, one line each)
 
+- 2026-10-14: Web orchestrator: backend reported feature-complete (main d680a9a, spec still api-v0.1.0). Q-01 split: Q-01a after W-08 + W-12 (everything but AT-06), Q-01b after W-09 + W-13. API gaps found by e2e go to the backend orchestrator.
 - 2026-10-14: Q-02 squash-merged (backend `main` d680a9a), parent pointer bumped. Backend idle by choice until Q-01 (needs W-12); then Q-03 → Q-04 → Q-05.
 
 - 2026-10-14: W-11 squash-merged (web `main` f65d620), parent pointer bumped. Briefs W-08 and W-12 written (parallel).
