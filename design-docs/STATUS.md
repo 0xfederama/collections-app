@@ -23,7 +23,7 @@ M1 backend rows (added by the backend orchestrator):
 | B-03 | backend | done | `feature/B-03-openapi` | [#3](https://github.com/0xfederama/collections-app-backend/pull/3) | 2026-10-14 | Squash-merged as `ae8ae4e`; C1 spec approved (D-054, create with missing parent → 409). Branch and worktree removed. Tag `api-v0.1.0` pushed |
 | B-04 | backend | done | `feature/B-04-foundations` | [#4](https://github.com/0xfederama/collections-app-backend/pull/4) | 2026-10-14 | Squash-merged as `d48ecc1` (D-055–D-057). Branch and worktree removed |
 | B-05 | backend | in progress | `feature/B-05-workspace-settings` | — | 2026-10-14 | brief: handoffs/B-05.md. Parallel with B-06 |
-| B-06 | backend | todo | `feature/B-06-folders-lists` | — | 2026-10-14 | brief: handoffs/B-06.md. Parallel with B-05. Folder/list DELETE is B-10 |
+| B-06 | backend | in progress | `feature/B-06-folders-lists` | — | 2026-10-14 | brief: handoffs/B-06.md. Parallel with B-05. Folder/list DELETE is B-10. Worktree `collections-app-backend-B-06` |
 
 M0 record:
 
