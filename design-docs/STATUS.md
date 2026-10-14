@@ -31,7 +31,8 @@ M1 backend rows (added by the backend orchestrator):
 | B-07 | backend | done | `feature/B-07-items` | [#7](https://github.com/0xfederama/collections-app-backend/pull/7) | 2026-10-14 | Squash-merged as `371e0c1` (D-062). Branch and worktree removed |
 | B-08 | backend | done | `feature/B-08-content` | [#8](https://github.com/0xfederama/collections-app-backend/pull/8) | 2026-10-14 | Squash-merged as `4c73f85`. Branch and worktree removed |
 | B-09 | backend | done | `feature/B-09-images` | [#10](https://github.com/0xfederama/collections-app-backend/pull/10) | 2026-10-14 | Rebased on B-08 + B-11, squash-merged as `9c583e3` (D-064; EXIF strip of originals is a future to-do, DATA_MODEL §9). Branch and worktree removed |
-| B-10 | backend | in review | `feature/B-10-trash` | [#11](https://github.com/0xfederama/collections-app-backend/pull/11) | 2026-10-14 | D-065. `make check` green, compose session verified (image files gone after purge). 501 stub path removed |
+| B-10 | backend | done | `feature/B-10-trash` | [#11](https://github.com/0xfederama/collections-app-backend/pull/11) | 2026-10-14 | Squash-merged as `35d5deb`. All API operations implemented; no spec change since `api-v0.1.0` (B-12 not needed). Branch and worktree removed |
+| Q-02 | backend | todo | `feature/Q-02-backup-restore` | — | 2026-10-14 | brief: handoffs/Q-02.md. Parallel with web M4 |
 | B-11 | backend | done | `feature/B-11-search` | [#9](https://github.com/0xfederama/collections-app-backend/pull/9) | 2026-10-14 | Rebased on B-08, squash-merged as `08d30ab`. Branch and worktree removed |
 
 M0 record:
@@ -93,6 +94,8 @@ Postgres, AT-18 compose exposure, `docker build`).**
 - Q-4 license (DECISIONS.md). Default applies if unanswered.
 
 ## Log (newest first, one line each)
+
+- 2026-10-14: B-10 squash-merged (backend `main` 35d5deb), parent pointer bumped. **Backend M2–M3 complete**: every API operation implemented, spec unchanged since `api-v0.1.0` (B-12 not needed). Brief Q-02 (backup/restore) written; Q-01 waits for W-12.
 
 - 2026-10-14: B-10 PR opened (backend#11): trash delete/list/restore/purge, AT-11 tests, 501 stubs removed (D-065). Check green; waiting for the user's review.
 - 2026-10-14: B-09 squash-merged (backend `main` 9c583e3), parent pointer bumped. Brief B-10 (trash) written. No spec change since `api-v0.1.0`, so B-12 is not needed so far.
