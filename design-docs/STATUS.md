@@ -20,7 +20,7 @@ M1/M2 web rows (added by the web orchestrator):
 | W-11 | web | done | `feature/W-11-search` | [#7](https://github.com/0xfederama/collections-app-frontend-web/pull/7) | 2026-10-14 | Rebased on W-07, squash-merged as `f65d620`; real-backend search checked. Branch and worktree removed |
 | W-08 | web | done | `feature/W-08-item-edit` | [#10](https://github.com/0xfederama/collections-app-frontend-web/pull/10) | 2026-10-14 | Squash-merged as `8b9d014` on top of W-12; `npm run check` green on main (979 tests). Branch and worktree removed |
 | W-12 | web | done | `feature/W-12-trash` | [#9](https://github.com/0xfederama/collections-app-frontend-web/pull/9) | 2026-10-14 | Squash-merged as `d9d2ccb`. Branch and worktree removed |
-| W-09 | web | todo | `feature/W-09-item-image` | — | 2026-10-14 | brief: handoffs/W-09.md. Parallel with W-10, W-13, T-01, Q-03w |
+| W-09 | web | in progress | `feature/W-09-item-image` | — | 2026-10-14 | brief: handoffs/W-09.md. Parallel with W-10, W-13, T-01, Q-03w |
 | W-10 | web | todo | `feature/W-10-content-editor` | — | 2026-10-14 | brief: handoffs/W-10.md. Parallel with W-09, W-13, T-01, Q-03w |
 | W-13 | web | todo | `feature/W-13-settings-home` | — | 2026-10-14 | brief: handoffs/W-13.md. Recent items per D-070 (B-12, `api-v0.2.0`); sync the client when tagged |
 | T-01 | web | todo | `chore/T-01-test-stability` | — | 2026-10-14 | brief: handoffs/T-01.md. Flaky ItemView/ItemActions tests under load |
