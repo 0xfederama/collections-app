@@ -1,0 +1,17 @@
+# Throwaway sandbox: the whole app with an EMPTY database and data dir on every start.
+#   docker compose -f compose.yaml -f compose.fresh.yaml up --build
+# Postgres data and uploaded files live in tmpfs (RAM), so stopping the containers (Ctrl-C, `stop`, `down`) wipes them,
+# and the next `up` re-runs the migrations on a blank DB. Separate project name, so the persistent `collections-app`
+# volumes are never touched. It uses the same ports, so stop the normal stack first.
+name: collections-app-fresh
+
+services:
+  db:
+    volumes: !reset []
+    tmpfs:
+      - /var/lib/postgresql
+  api:
+    volumes: !reset []
+    tmpfs:
+      # The api runs as the distroless nonroot user (backend Dockerfile), so the mount must be owned by it.
+      - /data:uid=65532,gid=65532,mode=0755

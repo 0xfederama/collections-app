@@ -32,6 +32,16 @@ docker compose up --build
 | Postgres | `db:5432` | Docker network only, not published |
 
 Stop with `docker compose down`. Add `-v` to also delete the database and uploaded files.
+
+**Throwaway sandbox (empty DB every start).** To play without keeping anything, add the `compose.fresh.yaml` override:
+
+```bash
+docker compose -f compose.yaml -f compose.fresh.yaml up --build
+```
+
+The database and uploaded files live in memory (tmpfs), so every stop wipes them and every start re-runs the migrations on
+a blank DB. It runs as a separate project (`collections-app-fresh`), so your normal data is never touched, but it uses
+the same ports, so stop the normal stack first. Tear down with the same `-f` pair plus `down`.
 Already cloned without `--recurse-submodules`: `git submodule update --init --recursive`.
 
 The first start is slower: the `web` container runs `npm ci` into a Linux-only `node_modules` volume.
