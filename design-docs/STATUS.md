@@ -19,7 +19,7 @@ M1 backend rows (added by the backend orchestrator):
 | Task | Repo | State | Branch | PR | Updated | Notes / blockers |
 |---|---|---|---|---|---|---|
 | B-02 | backend | done | `feature/B-02-schema-sqlc` | [#2](https://github.com/0xfederama/collections-app-backend/pull/2) | 2026-10-14 | Squash-merged as `70cb527` (tree identical to the reviewed head); C1 schema approved by the user. Branch and worktree removed |
-| B-03 | backend | in review | `feature/B-03-openapi` | [#3](https://github.com/0xfederama/collections-app-backend/pull/3) | 2026-10-14 | worktree `../collections-app-backend-B-03`; brief: handoffs/B-03.md. After merge: tag `api-v0.1.0` (user OK), which unblocks W-02 |
+| B-03 | backend | done | `feature/B-03-openapi` | [#3](https://github.com/0xfederama/collections-app-backend/pull/3) | 2026-10-14 | Squash-merged as `ae8ae4e`; C1 spec approved (D-054, create with missing parent → 409). Branch and worktree removed. Tag `api-v0.1.0` waits for the user's OK |
 
 M0 record:
 
@@ -80,6 +80,8 @@ Postgres, AT-18 compose exposure, `docker build`).**
 - Q-4 license (DECISIONS.md). Default applies if unanswered.
 
 ## Log (newest first, one line each)
+
+- 2026-10-14: B-03 squash-merged (backend `main` ae8ae4e), parent pointer bumped. C1 reached for the backend. Next: tag `api-v0.1.0` (user OK), then W-02 and B-04 in parallel.
 
 - 2026-10-14: B-02 squash-merged (backend `main` 70cb527), parent pointer bumped, C1 schema approved. Brief handoffs/B-03.md written.
 
