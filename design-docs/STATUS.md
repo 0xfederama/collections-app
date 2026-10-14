@@ -12,7 +12,7 @@ M1/M2 web rows (added by the web orchestrator):
 | Task | Repo | State | Branch | PR | Updated | Notes / blockers |
 |---|---|---|---|---|---|---|
 | W-03 | web | done | `feature/W-03-design-system` | [#2](https://github.com/0xfederama/collections-app-frontend-web/pull/2) | 2026-10-14 | Squash-merged as `320208c`; `npm run check` re-run green on main. Branch and worktrees removed |
-| W-02 | web | in review | `feature/W-02-api-client` | [#3](https://github.com/0xfederama/collections-app-frontend-web/pull/3) | 2026-10-14 | `npm run check` green (259 tests). Needs a manual `VITE_API_MOCKS=1 npm run dev` try in a real browser (pane has no service workers). D-058. Worktree `frontend-web-W-02`. Then W-04 → (W-05 ∥ W-06) |
+| W-02 | web | done | `feature/W-02-api-client` | [#3](https://github.com/0xfederama/collections-app-frontend-web/pull/3) | 2026-10-14 | Squash-merged as `39d81ff` (D-058). Branch and worktree removed. `VITE_API_MOCKS=1` dev not yet tried in a real browser |
 
 M1 backend rows (added by the backend orchestrator):
 
@@ -82,6 +82,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 ## Log (newest first, one line each)
 
+- 2026-10-14: W-02 squash-merged (web `main` 39d81ff), parent pointer bumped. Next web: W-04.
 - 2026-10-14: W-02 PR opened (web#3): vendored `api-v0.1.0`, `api:sync`/`api:check`, `lib/api`, TanStack Query, MSW. Check green; waiting for the user's review.
 - 2026-10-14: Web orchestrator: brief handoffs/W-02.md written; worker prompt handed to the user. Process change: no full orchestrator reviews from now on (user checks PRs; orchestrator merges).
 - 2026-10-14: Tag `api-v0.1.0` pushed on backend `ae8ae4e` (user OK). **W-02 is unblocked.**
