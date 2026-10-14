@@ -30,7 +30,7 @@ M1 backend rows (added by the backend orchestrator):
 | B-06 | backend | done | `feature/B-06-folders-lists` | [#6](https://github.com/0xfederama/collections-app-backend/pull/6) | 2026-10-14 | Rebased on B-05, squash-merged as `a3bc87a` (D-060). Branch and worktree removed |
 | B-07 | backend | done | `feature/B-07-items` | [#7](https://github.com/0xfederama/collections-app-backend/pull/7) | 2026-10-14 | Squash-merged as `371e0c1` (D-062). Branch and worktree removed |
 | B-08 | backend | done | `feature/B-08-content` | [#8](https://github.com/0xfederama/collections-app-backend/pull/8) | 2026-10-14 | Squash-merged as `4c73f85`. Branch and worktree removed |
-| B-09 | backend | in review | `feature/B-09-images` | [#10](https://github.com/0xfederama/collections-app-backend/pull/10) | 2026-10-14 | `make check` green; compose upload/restart verified. D-064. Worktree collections-app-backend-B-09 |
+| B-09 | backend | in review | `feature/B-09-images` | [#10](https://github.com/0xfederama/collections-app-backend/pull/10) | 2026-10-14 | Rebased on 08d30ab (B-08 + B-11), `make check` green; compose upload/restart verified. D-064. Worktree collections-app-backend-B-09 |
 | B-11 | backend | done | `feature/B-11-search` | [#9](https://github.com/0xfederama/collections-app-backend/pull/9) | 2026-10-14 | Rebased on B-08, squash-merged as `08d30ab`. Branch and worktree removed |
 
 M0 record:
