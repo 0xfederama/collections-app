@@ -114,7 +114,7 @@ divergences are fixed in the same PR.
 ### Folders
 | Method | Path | Notes |
 |---|---|---|
-| POST | `/api/v1/folders` | `{ name, parent_folder_id? }` → 201. A missing or trashed parent → 404 |
+| POST | `/api/v1/folders` | `{ name, parent_folder_id? }` → 201. A missing or trashed parent → `409 destination_unavailable` |
 | GET | `/api/v1/folders/{id}` | |
 | PATCH | `/api/v1/folders/{id}` | `If-Match`. `{ name }` |
 | DELETE | `/api/v1/folders/{id}` | `If-Match`. Moves the subtree to Trash → 204 |
@@ -124,7 +124,7 @@ divergences are fixed in the same PR.
 ### Lists
 | Method | Path | Notes |
 |---|---|---|
-| POST | `/api/v1/lists` | `{ name, folder_id?, description?, display_mode?, sort_mode? }` |
+| POST | `/api/v1/lists` | `{ name, folder_id?, description?, display_mode?, sort_mode? }` → 201. A missing or trashed folder → `409 destination_unavailable` |
 | GET | `/api/v1/lists/{id}` | Includes `path: [{type:"folder",id,name}]` |
 | PATCH | `/api/v1/lists/{id}` | `If-Match`. `name, description, display_mode, sort_mode` |
 | DELETE | `/api/v1/lists/{id}` | `If-Match` |
