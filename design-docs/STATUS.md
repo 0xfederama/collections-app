@@ -15,7 +15,9 @@ M1/M2 web rows (added by the web orchestrator):
 | W-02 | web | done | `feature/W-02-api-client` | [#3](https://github.com/0xfederama/collections-app-frontend-web/pull/3) | 2026-10-14 | Squash-merged as `39d81ff` (D-058). Branch and worktree removed. `VITE_API_MOCKS=1` dev not yet tried in a real browser |
 | W-04 | web | done | `feature/W-04-app-shell` | [#4](https://github.com/0xfederama/collections-app-frontend-web/pull/4) | 2026-10-14 | Squash-merged as `8b6110a`. Branch and worktree removed. Breadcrumbs owned by the shell (UI_SPEC §3 amended) |
 | W-05 | web | done | `feature/W-05-tree-actions` | [#5](https://github.com/0xfederama/collections-app-frontend-web/pull/5) | 2026-10-14 | Squash-merged as `c812c9d`. Branch and worktree removed. Open: VoiceOver pass on "Picked up…" announcement; no right-click/Shift+F10 menu (More button instead) |
-| W-06 | web | in review | `feature/W-06-list-view` | [#6](https://github.com/0xfederama/collections-app-frontend-web/pull/6) | 2026-10-14 | Rebased on W-05 (`c812c9d`); ListActionsMenu wired; `npm run check` green (570 tests); browser-checked (rename/move/delete, tree + list reorder). Sort semantics D-063. Worktree frontend-web-W-06 |
+| W-06 | web | done | `feature/W-06-list-view` | [#6](https://github.com/0xfederama/collections-app-frontend-web/pull/6) | 2026-10-14 | Rebased on W-05, squash-merged as `89e045c` (D-063). Branch and worktree removed. Follow-ups (panel close keeps query, lazy routes) moved to W-07 |
+| W-07 | web | todo | `feature/W-07-item-detail` | — | 2026-10-14 | brief: handoffs/W-07.md. Parallel with W-11. Then W-08 |
+| W-11 | web | todo | `feature/W-11-search` | — | 2026-10-14 | brief: handoffs/W-11.md. Parallel with W-07. Real-backend check once B-11 merges |
 
 M1 backend rows (added by the backend orchestrator):
 
@@ -91,6 +93,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 ## Log (newest first, one line each)
 
+- 2026-10-14: W-06 squash-merged (web `main` 89e045c), parent pointer bumped. M2 web done. Briefs W-07 and W-11 written (parallel). Not yet checked for W-06: exact 768/1024/1280 widths in both themes, real-backend run.
 - 2026-10-14: B-11 squash-merged (backend `main` 08d30ab), parent pointer bumped. B-09 (#10) must rebase on it; then B-10.
 
 - 2026-10-14: B-09 PR opened (backend#10): FileStore, image upload/url/delete, file serving, orphan sweeper, own EXIF orientation (D-064). Check green; waiting for the user's review.
