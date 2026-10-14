@@ -13,7 +13,7 @@ M1/M2 web rows (added by the web orchestrator):
 |---|---|---|---|---|---|---|
 | W-03 | web | done | `feature/W-03-design-system` | [#2](https://github.com/0xfederama/collections-app-frontend-web/pull/2) | 2026-10-14 | Squash-merged as `320208c`; `npm run check` re-run green on main. Branch and worktrees removed |
 | W-02 | web | done | `feature/W-02-api-client` | [#3](https://github.com/0xfederama/collections-app-frontend-web/pull/3) | 2026-10-14 | Squash-merged as `39d81ff` (D-058). Branch and worktree removed. `VITE_API_MOCKS=1` dev not yet tried in a real browser |
-| W-04 | web | todo | `feature/W-04-app-shell` | — | 2026-10-14 | brief: handoffs/W-04.md. After merge: W-05 ∥ W-06 |
+| W-04 | web | in progress | `feature/W-04-app-shell` | — | 2026-10-14 | brief: handoffs/W-04.md. Worktree `frontend-web-W-04`. After merge: W-05 ∥ W-06 |
 
 M1 backend rows (added by the backend orchestrator):
 
