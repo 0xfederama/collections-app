@@ -22,7 +22,7 @@ M1/M2 web rows (added by the web orchestrator):
 | W-12 | web | done | `feature/W-12-trash` | [#9](https://github.com/0xfederama/collections-app-frontend-web/pull/9) | 2026-10-14 | Squash-merged as `d9d2ccb`. Branch and worktree removed |
 | W-09 | web | in progress | `feature/W-09-item-image` | — | 2026-10-14 | brief: handoffs/W-09.md. Parallel with W-10, W-13, T-01, Q-03w |
 | W-10 | web | in progress | `feature/W-10-content-editor` | — | 2026-10-14 | brief: handoffs/W-10.md. Parallel with W-09, W-13, T-01, Q-03w |
-| W-13 | web | todo | `feature/W-13-settings-home` | — | 2026-10-14 | brief: handoffs/W-13.md. Recent items per D-070 (B-12, `api-v0.2.0`); sync the client when tagged |
+| W-13 | web | todo | `feature/W-13-settings-home` | — | 2026-10-14 | brief: handoffs/W-13.md. `api-v0.2.0` is out (98d3b87): sync first, recent items on the real endpoint (D-070) |
 | T-01 | web | in progress | `chore/T-01-test-stability` | — | 2026-10-14 | brief: handoffs/T-01.md. Flaky ItemView/ItemActions tests under load |
 | Q-01a | web | deferred | — | — | 2026-10-14 | Post-MVP (D-068). C4 uses the smoke checklist in ACCEPTANCE_TESTS.md |
 | Q-01b | web | deferred | — | — | 2026-10-14 | Post-MVP (D-068) |
