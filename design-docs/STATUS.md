@@ -23,7 +23,8 @@ M1 backend rows (added by the backend orchestrator):
 | B-03 | backend | done | `feature/B-03-openapi` | [#3](https://github.com/0xfederama/collections-app-backend/pull/3) | 2026-10-14 | Squash-merged as `ae8ae4e`; C1 spec approved (D-054, create with missing parent → 409). Branch and worktree removed. Tag `api-v0.1.0` pushed |
 | B-04 | backend | done | `feature/B-04-foundations` | [#4](https://github.com/0xfederama/collections-app-backend/pull/4) | 2026-10-14 | Squash-merged as `d48ecc1` (D-055–D-057). Branch and worktree removed |
 | B-05 | backend | done | `feature/B-05-workspace-settings` | [#5](https://github.com/0xfederama/collections-app-backend/pull/5) | 2026-10-14 | Squash-merged as `67e5f17` (D-059). Branch and worktree removed |
-| B-06 | backend | in review | `feature/B-06-folders-lists` | [#6](https://github.com/0xfederama/collections-app-backend/pull/6) | 2026-10-14 | brief: handoffs/B-06.md. Parallel with B-05. Folder/list DELETE is B-10. Worktree `collections-app-backend-B-06` |
+| B-06 | backend | done | `feature/B-06-folders-lists` | [#6](https://github.com/0xfederama/collections-app-backend/pull/6) | 2026-10-14 | Rebased on B-05, squash-merged as `a3bc87a` (D-060). Branch and worktree removed |
+| B-07 | backend | todo | `feature/B-07-items` | — | 2026-10-14 | brief: handoffs/B-07.md. Runs alone; after merge B-08 ∥ B-09 ∥ B-11 |
 
 M0 record:
 
@@ -84,6 +85,8 @@ Postgres, AT-18 compose exposure, `docker build`).**
 - Q-4 license (DECISIONS.md). Default applies if unanswered.
 
 ## Log (newest first, one line each)
+
+- 2026-10-14: B-06 squash-merged (backend `main` a3bc87a), parent pointer bumped. Brief B-07 (items) written.
 
 - 2026-10-14: W-04 PR opened (web#4): responsive shell, sidebar tree, breadcrumbs, route skeleton, W-05/W-06 seams. Check green; waiting for the user's review.
 - 2026-10-14: B-05 squash-merged (backend `main` 67e5f17), parent pointer bumped. B-06 (#6) must rebase on the new main (conflicts in the shared seam).
