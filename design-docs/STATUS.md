@@ -32,7 +32,7 @@ M1 backend rows (added by the backend orchestrator):
 | B-08 | backend | done | `feature/B-08-content` | [#8](https://github.com/0xfederama/collections-app-backend/pull/8) | 2026-10-14 | Squash-merged as `4c73f85`. Branch and worktree removed |
 | B-09 | backend | done | `feature/B-09-images` | [#10](https://github.com/0xfederama/collections-app-backend/pull/10) | 2026-10-14 | Rebased on B-08 + B-11, squash-merged as `9c583e3` (D-064; EXIF strip of originals is a future to-do, DATA_MODEL §9). Branch and worktree removed |
 | B-10 | backend | done | `feature/B-10-trash` | [#11](https://github.com/0xfederama/collections-app-backend/pull/11) | 2026-10-14 | Squash-merged as `35d5deb`. All API operations implemented; no spec change since `api-v0.1.0` (B-12 not needed). Branch and worktree removed |
-| Q-02 | backend | in progress | `feature/Q-02-backup-restore` | — | 2026-10-14 | brief: handoffs/Q-02.md. Parallel with web M4. Worktree `collections-app-backend-Q-02` |
+| Q-02 | backend | in review | `feature/Q-02-backup-restore` | [#12](https://github.com/0xfederama/collections-app-backend/pull/12) | 2026-10-14 | D-066. `make check` + `make test-backup` green. Manual dev-stack backup/reset/restore not run (would delete dev data): user to try |
 | B-11 | backend | done | `feature/B-11-search` | [#9](https://github.com/0xfederama/collections-app-backend/pull/9) | 2026-10-14 | Rebased on B-08, squash-merged as `08d30ab`. Branch and worktree removed |
 
 M0 record:
@@ -95,6 +95,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 ## Log (newest first, one line each)
 
+- 2026-10-14: Q-02 PR opened (backend#12): backup/restore/verify scripts, AT-17 `make test-backup`, shellcheck in `make check` (D-066). Waiting for the user's review.
 - 2026-10-14: W-07 squash-merged (web `main` d64e6b6), parent pointer bumped. W-11 rebases on it (conflicts in docs, mocks/browser.ts, mocks/devItems.ts). Next: W-08.
 - 2026-10-14: W-07 PR opened (web#8): item detail view, AT-13 links, per-kind configs, MarkdownView (react-markdown + remark-gfm), move/delete, lazy routes (entry 675 → 564 kB), panel close keeps query. Check green; waiting for the user's review.
 - 2026-10-14: W-11 PR opened (web#7): sidebar search dropdown (ARIA combobox), `/search` results page, dev fake. Check green x4; browser-checked on the real backend.
