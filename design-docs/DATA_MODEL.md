@@ -289,3 +289,6 @@ Paths are resolved by loading active folders once (they're small) and walking pa
 - Phase 3 adds `users` and `memberships(workspace_id, user_id, role)` plus the bootstrap change. All FKs are already workspace-scoped.
 - Phase 2 adds `provider`, `provider_ref`, `provider_fetched_at`, and per-field override tracking, likely in metadata.
 - Real-time adds `item_content_updates` and `item_content_snapshots` (see ARCHITECTURE §7).
+- **To do (user, 2026-10-14):** strip metadata (EXIF incl. GPS) from uploaded **originals**, not only thumbnails (D-064 keeps originals
+  byte-identical in MVP). JPEG: drop APP1/EXIF segments losslessly and bake in or keep orientation; PNG/WebP: drop metadata chunks.
+  Required before any sharing or public-facing feature (Phase 3+); existing files need a one-off rewrite.
