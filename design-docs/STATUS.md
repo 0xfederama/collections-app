@@ -28,7 +28,7 @@ M1 backend rows (added by the backend orchestrator):
 | B-06 | backend | done | `feature/B-06-folders-lists` | [#6](https://github.com/0xfederama/collections-app-backend/pull/6) | 2026-10-14 | Rebased on B-05, squash-merged as `a3bc87a` (D-060). Branch and worktree removed |
 | B-07 | backend | done | `feature/B-07-items` | [#7](https://github.com/0xfederama/collections-app-backend/pull/7) | 2026-10-14 | Squash-merged as `371e0c1` (D-062). Branch and worktree removed |
 | B-08 | backend | done | `feature/B-08-content` | [#8](https://github.com/0xfederama/collections-app-backend/pull/8) | 2026-10-14 | Squash-merged as `4c73f85`. Branch and worktree removed |
-| B-09 | backend | in progress | `feature/B-09-images` | — | 2026-10-14 | brief: handoffs/B-09.md. Parallel with B-08, B-11. Worktree collections-app-backend-B-09 |
+| B-09 | backend | in review | `feature/B-09-images` | [#10](https://github.com/0xfederama/collections-app-backend/pull/10) | 2026-10-14 | `make check` green; compose upload/restart verified. D-064. Worktree collections-app-backend-B-09 |
 | B-11 | backend | in review | `feature/B-11-search` | [#9](https://github.com/0xfederama/collections-app-backend/pull/9) | 2026-10-14 | Rebased on `4c73f85` (B-08) and pushed, `make check` green; AT-12 tests. Trigram index used from ~55k rows. No spec change. Worktree collections-app-backend-B-11 |
 
 M0 record:
@@ -91,6 +91,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 ## Log (newest first, one line each)
 
+- 2026-10-14: B-09 PR opened (backend#10): FileStore, image upload/url/delete, file serving, orphan sweeper, own EXIF orientation (D-064). Check green; waiting for the user's review.
 - 2026-10-14: W-06 (web#6) rebased on W-05, ListActionsMenu wired, shared sortable wrapper, dev mocks share one list record. Check green; waiting for the user's review.
 - 2026-10-14: B-08 squash-merged (backend `main` 4c73f85), parent pointer bumped. B-11 (#9) and B-09 must rebase on it before merging.
 
