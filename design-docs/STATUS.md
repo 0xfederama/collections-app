@@ -34,7 +34,7 @@ M1 backend rows (added by the backend orchestrator):
 | B-08 | backend | done | `feature/B-08-content` | [#8](https://github.com/0xfederama/collections-app-backend/pull/8) | 2026-10-14 | Squash-merged as `4c73f85`. Branch and worktree removed |
 | B-09 | backend | done | `feature/B-09-images` | [#10](https://github.com/0xfederama/collections-app-backend/pull/10) | 2026-10-14 | Rebased on B-08 + B-11, squash-merged as `9c583e3` (D-064; EXIF strip of originals is a future to-do, DATA_MODEL §9). Branch and worktree removed |
 | B-10 | backend | done | `feature/B-10-trash` | [#11](https://github.com/0xfederama/collections-app-backend/pull/11) | 2026-10-14 | Squash-merged as `35d5deb`. All API operations implemented; no spec change since `api-v0.1.0` (B-12 not needed). Branch and worktree removed |
-| Q-02 | backend | in review | `feature/Q-02-backup-restore` | [#12](https://github.com/0xfederama/collections-app-backend/pull/12) | 2026-10-14 | D-066. `make check` + `make test-backup` green. Manual dev-stack backup/reset/restore not run (would delete dev data): user to try |
+| Q-02 | backend | done | `feature/Q-02-backup-restore` | [#12](https://github.com/0xfederama/collections-app-backend/pull/12) | 2026-10-14 | Squash-merged as `d680a9a` (D-066). `make test-backup` green. Open: manual backup → reset-dev → restore on the dev stack (user). Branch and worktree removed |
 | B-11 | backend | done | `feature/B-11-search` | [#9](https://github.com/0xfederama/collections-app-backend/pull/9) | 2026-10-14 | Rebased on B-08, squash-merged as `08d30ab`. Branch and worktree removed |
 
 M0 record:
@@ -96,6 +96,8 @@ Postgres, AT-18 compose exposure, `docker build`).**
 - Q-4 license (DECISIONS.md). Default applies if unanswered.
 
 ## Log (newest first, one line each)
+
+- 2026-10-14: Q-02 squash-merged (backend `main` d680a9a), parent pointer bumped. Backend idle by choice until Q-01 (needs W-12); then Q-03 → Q-04 → Q-05.
 
 - 2026-10-14: W-11 squash-merged (web `main` f65d620), parent pointer bumped. Briefs W-08 and W-12 written (parallel).
 - 2026-10-14: W-11 (web#7) rebased on W-07, force-pushed with lease; real-backend check done. Ready for review.
