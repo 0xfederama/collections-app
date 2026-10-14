@@ -114,12 +114,12 @@ divergences are fixed in the same PR.
 ### Folders
 | Method | Path | Notes |
 |---|---|---|
-| POST | `/api/v1/folders` | `{ name, parent_folder_id? }` → 201 |
+| POST | `/api/v1/folders` | `{ name, parent_folder_id? }` → 201. A missing or trashed parent → 404 |
 | GET | `/api/v1/folders/{id}` | |
 | PATCH | `/api/v1/folders/{id}` | `If-Match`. `{ name }` |
 | DELETE | `/api/v1/folders/{id}` | `If-Match`. Moves the subtree to Trash → 204 |
 | POST | `/api/v1/folders/{id}/move` | `If-Match`. `{ parent_folder_id: uuid\|null }` |
-| PUT | `/api/v1/folders/order` | `{ parent_folder_id: uuid\|null, ids: [uuid] }` orders child **folders** of that parent |
+| PUT | `/api/v1/folders/order` | `{ parent_folder_id: uuid\|null, ids: [uuid] }` orders child **folders** of that parent → 204 |
 
 ### Lists
 | Method | Path | Notes |
@@ -129,7 +129,7 @@ divergences are fixed in the same PR.
 | PATCH | `/api/v1/lists/{id}` | `If-Match`. `name, description, display_mode, sort_mode` |
 | DELETE | `/api/v1/lists/{id}` | `If-Match` |
 | POST | `/api/v1/lists/{id}/move` | `If-Match`. `{ folder_id: uuid\|null }` |
-| PUT | `/api/v1/lists/order` | `{ folder_id: uuid\|null, ids: [uuid] }` orders child **lists** of that folder or the root |
+| PUT | `/api/v1/lists/order` | `{ folder_id: uuid\|null, ids: [uuid] }` orders child **lists** of that folder or the root → 204 |
 
 ### Items
 | Method | Path | Notes |
@@ -140,7 +140,7 @@ divergences are fixed in the same PR.
 | PATCH | `/api/v1/items/{id}` | `If-Match`. Any of: `title, kind, summary, status, price, official_website_url, metadata`. If `kind` changes and `metadata` is absent, metadata resets to `{}` |
 | DELETE | `/api/v1/items/{id}` | `If-Match` |
 | POST | `/api/v1/items/{id}/move` | `If-Match`. `{ list_id }` |
-| PUT | `/api/v1/lists/{id}/items/order` | `{ ids: [uuid] }`. **All** active items of the list. Allowed regardless of `sort_mode` |
+| PUT | `/api/v1/lists/{id}/items/order` | `{ ids: [uuid] }`. **All** active items of the list. Allowed regardless of `sort_mode` → 204 |
 
 Max list page is 200 (not 100 as in the archive) so typical lists render in one request.
 
@@ -158,7 +158,7 @@ Max list page is 200 (not 100 as in the archive) so typical lists render in one 
 | GET | `/api/v1/items/{id}/content` | Content. Version 0 with empty body if never saved |
 | PUT | `/api/v1/items/{id}/content` | `If-Match: "c-N"`. `{ body }` (≤ 1 MiB UTF-8). Identical body returns 200 with the same version |
 | GET | `/api/v1/items/{id}/content/versions` | `{ data: [{ version, size_bytes, created_at }] }`, newest first, unpaginated (≤ 201) |
-| GET | `/api/v1/items/{id}/content/versions/{version}` | Content of that version (for preview) |
+| GET | `/api/v1/items/{id}/content/versions/{version}` | Content of that version (for preview). 404 if pruned. Its `ETag` is that version's `"c-N"` |
 | POST | `/api/v1/items/{id}/content/restore` | `If-Match: "c-N"` (current). `{ version }` → creates a new version, returns Content |
 
 ### Search
@@ -168,7 +168,7 @@ Max list page is 200 (not 100 as in the archive) so typical lists render in one 
 | Method | Path | Notes |
 |---|---|---|
 | GET | `/api/v1/trash` | `{ data: [TrashEntry], page }`, newest first |
-| POST | `/api/v1/trash/{batch_id}/restore` | Optional `{ destination: { folder_id: uuid\|null } }` for folders/lists, `{ list_id }` for items. Returns `{ root_type, root_id }` |
+| POST | `/api/v1/trash/{batch_id}/restore` | Optional `{ destination: { folder_id: uuid\|null } }` for folders/lists, `{ destination: { list_id } }` for items. Returns `{ root_type, root_id }` |
 | DELETE | `/api/v1/trash/{batch_id}` | Purge → 204 |
 
 Trash is addressed by **batch id** (simpler than `{type}/{id}` from the archive, and it maps 1:1 to UI entries).
