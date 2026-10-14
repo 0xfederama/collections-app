@@ -12,7 +12,7 @@ M1/M2 web rows (added by the web orchestrator):
 | Task | Repo | State | Branch | PR | Updated | Notes / blockers |
 |---|---|---|---|---|---|---|
 | W-03 | web | done | `feature/W-03-design-system` | [#2](https://github.com/0xfederama/collections-app-frontend-web/pull/2) | 2026-10-14 | Squash-merged as `320208c`; `npm run check` re-run green on main. Branch and worktrees removed |
-| W-02 | web | todo | — | — | 2026-10-14 | **unblocked**: backend tag `api-v0.1.0` (`ae8ae4e`) pushed 2026-10-14 |
+| W-02 | web | todo | `feature/W-02-api-client` | — | 2026-10-14 | brief: handoffs/W-02.md. Unblocked (`api-v0.1.0` = `ae8ae4e`). Then W-04 → (W-05 ∥ W-06) |
 
 M1 backend rows (added by the backend orchestrator):
 
@@ -82,6 +82,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 ## Log (newest first, one line each)
 
+- 2026-10-14: Web orchestrator: brief handoffs/W-02.md written; worker prompt handed to the user. Process change: no full orchestrator reviews from now on (user checks PRs; orchestrator merges).
 - 2026-10-14: Tag `api-v0.1.0` pushed on backend `ae8ae4e` (user OK). **W-02 is unblocked.**
 
 - 2026-10-14: B-03 squash-merged (backend `main` ae8ae4e), parent pointer bumped. C1 reached for the backend. Next: tag `api-v0.1.0` (user OK), then W-02 and B-04 in parallel.
