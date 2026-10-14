@@ -29,7 +29,7 @@ M1 backend rows (added by the backend orchestrator):
 | B-07 | backend | done | `feature/B-07-items` | [#7](https://github.com/0xfederama/collections-app-backend/pull/7) | 2026-10-14 | Squash-merged as `371e0c1` (D-062). Branch and worktree removed |
 | B-08 | backend | in progress | `feature/B-08-content` | — | 2026-10-14 | brief: handoffs/B-08.md. Parallel with B-09, B-11. Worktree collections-app-backend-B-08 |
 | B-09 | backend | in progress | `feature/B-09-images` | — | 2026-10-14 | brief: handoffs/B-09.md. Parallel with B-08, B-11. Worktree collections-app-backend-B-09 |
-| B-11 | backend | todo | `feature/B-11-search` | — | 2026-10-14 | brief: handoffs/B-11.md. Parallel with B-08, B-09 |
+| B-11 | backend | in progress | `feature/B-11-search` | — | 2026-10-14 | brief: handoffs/B-11.md. Parallel with B-08, B-09. Worktree collections-app-backend-B-11 |
 
 M0 record:
 
