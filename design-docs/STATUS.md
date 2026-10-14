@@ -12,14 +12,14 @@ M1/M2 web rows (added by the web orchestrator):
 | Task | Repo | State | Branch | PR | Updated | Notes / blockers |
 |---|---|---|---|---|---|---|
 | W-03 | web | done | `feature/W-03-design-system` | [#2](https://github.com/0xfederama/collections-app-frontend-web/pull/2) | 2026-10-14 | Squash-merged as `320208c`; `npm run check` re-run green on main. Branch and worktrees removed |
-| W-02 | web | blocked | — | — | 2026-10-14 | waits for backend tag `api-v0.1.0` (B-03). W-03 is merged, so that is the only blocker |
+| W-02 | web | todo | — | — | 2026-10-14 | **unblocked**: backend tag `api-v0.1.0` (`ae8ae4e`) pushed 2026-10-14 |
 
 M1 backend rows (added by the backend orchestrator):
 
 | Task | Repo | State | Branch | PR | Updated | Notes / blockers |
 |---|---|---|---|---|---|---|
 | B-02 | backend | done | `feature/B-02-schema-sqlc` | [#2](https://github.com/0xfederama/collections-app-backend/pull/2) | 2026-10-14 | Squash-merged as `70cb527` (tree identical to the reviewed head); C1 schema approved by the user. Branch and worktree removed |
-| B-03 | backend | done | `feature/B-03-openapi` | [#3](https://github.com/0xfederama/collections-app-backend/pull/3) | 2026-10-14 | Squash-merged as `ae8ae4e`; C1 spec approved (D-054, create with missing parent → 409). Branch and worktree removed. Tag `api-v0.1.0` waits for the user's OK |
+| B-03 | backend | done | `feature/B-03-openapi` | [#3](https://github.com/0xfederama/collections-app-backend/pull/3) | 2026-10-14 | Squash-merged as `ae8ae4e`; C1 spec approved (D-054, create with missing parent → 409). Branch and worktree removed. Tag `api-v0.1.0` pushed |
 
 M0 record:
 
@@ -71,7 +71,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 | Repo | Remote | Local path | Latest API tag |
 |---|---|---|---|
-| backend | https://github.com/0xfederama/collections-app-backend | `/Users/federico/Developer/collections-app/backend` (submodule) | — |
+| backend | https://github.com/0xfederama/collections-app-backend | `/Users/federico/Developer/collections-app/backend` (submodule) | `api-v0.1.0` (`ae8ae4e`) |
 | web | https://github.com/0xfederama/collections-app-frontend-web | `/Users/federico/Developer/collections-app/frontend-web` (submodule) | pinned: — |
 | parent | https://github.com/0xfederama/collections-app | `/Users/federico/Developer/collections-app` | — |
 
@@ -80,6 +80,8 @@ Postgres, AT-18 compose exposure, `docker build`).**
 - Q-4 license (DECISIONS.md). Default applies if unanswered.
 
 ## Log (newest first, one line each)
+
+- 2026-10-14: Tag `api-v0.1.0` pushed on backend `ae8ae4e` (user OK). **W-02 is unblocked.**
 
 - 2026-10-14: B-03 squash-merged (backend `main` ae8ae4e), parent pointer bumped. C1 reached for the backend. Next: tag `api-v0.1.0` (user OK), then W-02 and B-04 in parallel.
 
