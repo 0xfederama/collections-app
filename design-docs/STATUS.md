@@ -19,7 +19,7 @@ M1 backend rows (added by the backend orchestrator):
 | Task | Repo | State | Branch | PR | Updated | Notes / blockers |
 |---|---|---|---|---|---|---|
 | B-02 | backend | done | `feature/B-02-schema-sqlc` | [#2](https://github.com/0xfederama/collections-app-backend/pull/2) | 2026-10-14 | Squash-merged as `70cb527` (tree identical to the reviewed head); C1 schema approved by the user. Branch and worktree removed |
-| B-03 | backend | in progress | `feature/B-03-openapi` | — | 2026-10-14 | worktree `../collections-app-backend-B-03`; brief: handoffs/B-03.md. After merge: tag `api-v0.1.0` (user OK), which unblocks W-02 |
+| B-03 | backend | in review | `feature/B-03-openapi` | [#3](https://github.com/0xfederama/collections-app-backend/pull/3) | 2026-10-14 | worktree `../collections-app-backend-B-03`; brief: handoffs/B-03.md. After merge: tag `api-v0.1.0` (user OK), which unblocks W-02 |
 
 M0 record:
 
