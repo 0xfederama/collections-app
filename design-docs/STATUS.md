@@ -11,8 +11,8 @@ M1/M2 web rows (added by the web orchestrator):
 
 | Task | Repo | State | Branch | PR | Updated | Notes / blockers |
 |---|---|---|---|---|---|---|
-| W-03 | web | in review | `feature/W-03-design-system` | [#2](https://github.com/0xfederama/collections-app-frontend-web/pull/2) | 2026-10-14 | brief: handoffs/W-03.md. `npm run check` green (180 tests). W-02 can start after merge |
-| W-02 | web | blocked | — | — | 2026-10-14 | waits for backend tag `api-v0.1.0`; starts after W-03 merges (shared `package.json`/lock, CLAUDE.md, `docs/README.md`) |
+| W-03 | web | done | `feature/W-03-design-system` | [#2](https://github.com/0xfederama/collections-app-frontend-web/pull/2) | 2026-10-14 | Squash-merged as `320208c`; `npm run check` re-run green on main. Branch and worktrees removed |
+| W-02 | web | blocked | — | — | 2026-10-14 | waits for backend tag `api-v0.1.0` (B-03). W-03 is merged, so that is the only blocker |
 
 M1 backend rows (added by the backend orchestrator):
 
@@ -81,6 +81,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 ## Log (newest first, one line each)
 
+- 2026-10-14: W-03 squash-merged (web `main` 320208c), gate green on main, parent pointer bumped. Web is idle until `api-v0.1.0`: W-02 → W-04 → (W-05 ∥ W-06).
 - 2026-10-14: W-03 PR opened (web#2): tokens, themes, fonts, 18 primitives, /dev/ui. Check green; waiting for the user's review.
 - 2026-10-14: Backend orchestrator: baseline `make check` green on `d867326`. D-049 (sqlc types), D-050 (migration test), D-051 (`trash_batch_id` FK with no ON DELETE action; DATA_MODEL §2/§4 updated). Brief handoffs/B-02.md written; B-03 waits for B-02 merge + C1.
 - 2026-10-14: Web orchestrator: baseline `npm run check` green on `835a040`. Q-6 answered (D-046), icons D-047, W-03 scope D-048. Brief handoffs/W-03.md written; W-02 waits for `api-v0.1.0` and for W-03 to merge.
