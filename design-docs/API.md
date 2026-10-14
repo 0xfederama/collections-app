@@ -164,6 +164,9 @@ Max list page is 200 (not 100 as in the archive) so typical lists render in one 
 ### Search
 | GET | `/api/v1/search?q=&limit=&offset=` | `q` 1–200 chars, required. `{ data: [{ item: ItemSummary, path: [{type,id,name}] }], page }` |
 
+### Recent items (Home, D-070)
+| GET | `/api/v1/recent-items?limit=` | `limit` 1–50, default 12. `{ data: [{ item: ItemSummary, path }] }` like search results, no `page`. Active items, `updated_at DESC, id` (a PATCH or content save moves an item up) |
+
 ### Trash
 | Method | Path | Notes |
 |---|---|---|
