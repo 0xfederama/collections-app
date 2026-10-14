@@ -71,7 +71,7 @@ Foundational files with a single owner at a time, never edited concurrently by t
 | C1 after M1 | openapi.yaml lints; migrations up/down/up clean; user approved |
 | C2 mid-M2/M4 | Web generates the client from pinned `api-v0.1.0`; basic tree/list/item flows hit the real API locally |
 | C3 after M4 | All features usable end to end locally |
-| C4 after M5 | Every ACCEPTANCE_TESTS.md item green; fresh-clone setup verified by an agent following only the READMEs |
+| C4 after M5 | Every ACCEPTANCE_TESTS.md item green (E level replaced by the smoke checklist for the MVP, D-068); fresh-clone setup verified by an agent following only the READMEs |
 
 ## 7. Definition of done (MVP)
 

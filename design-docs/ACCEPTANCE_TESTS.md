@@ -4,6 +4,9 @@ Levels: **U** = unit, **I** = backend integration (real Postgres via testcontain
 **C** = contract (spec lint, generated-code drift), **W** = web component test (Vitest + MSW), **E** = Playwright e2e against the real backend,
 **M** = documented manual check.
 
+> **MVP (D-068):** the **E** level is deferred to post-MVP. For C4, E is replaced by the **smoke checklist** at the end of this file;
+> AT-14 and AT-22 are checked manually there (plus their existing W tests). All U/I/C/W/M criteria still apply.
+
 Test writing is usually dispatched to the `test-writer` subagent (sonnet). The main session reviews the tests and runs them itself (AGENT_WORKFLOW §2).
 Each test name or describe block references the AT id (e.g. `TestAT07_ImageSourceExclusive`, `describe("AT-09 …")`).
 
@@ -31,3 +34,27 @@ Each test name or describe block references the AT id (e.g. `TestAT07_ImageSourc
 | AT-20 | Storage failure recovery | I | Simulated crash after file write before DB commit leaves an orphan file → sweeper removes it (with injected clock > 1 h); file deletion failure after purge is retried by the sweeper; never a dangling DB reference |
 | AT-21 | Reorder validation | I | Duplicate ID, missing ID, foreign ID, or trashed ID → 409 `order_stale`; valid → `sort_order` 0..n-1 |
 | AT-22 | Unsaved changes guard | E | Edit field, click another list → dialog; cancel keeps edits; confirm discards |
+
+## Smoke checklist (MVP, D-068)
+
+Run once before C4 against the real stack (`./app up --test --fresh` from the parent repo, or the production compose), in a desktop
+browser and at phone width (375 px), in light and dark theme. Note pass/fail per line in STATUS.md.
+
+1. Home loads; the empty state guides to create a first list. Create a folder, a nested folder and two lists (AT-03).
+2. Drag-reorder folders and lists in the sidebar, reload: order kept. Move a list root → folder → root; it lands last (AT-03).
+3. Try to move a folder into its own child: refused with a clear message (AT-04).
+4. Create a movie, a TV show and a car with metadata and a price; switch the list between compact / thumbnail / grid; sort by title and
+   recently updated; filter by title.
+5. Item page: the three external links are correct and open in a new tab; official site disabled when absent (AT-13).
+6. Edit an item in two tabs: save in A, save in B → conflict banner, B's draft kept, Copy works (AT-09).
+7. Edit a field, click another list → unsaved-changes dialog; cancel keeps edits, confirm discards (AT-22).
+8. Upload a JPEG and a PNG image, replace with a URL image, remove it; an SVG is rejected with a clear message (AT-06).
+9. Markdown notes: save several versions, preview a `<script>` and a `javascript:` link (not executed/rendered), restore an old version (AT-08).
+10. Search `MAT`-style partial titles from the global search; results show the right path (AT-12).
+11. Delete a folder with content: it disappears from tree, lists and search; restore it; delete an item whose list is trashed and restore
+    it to another list; purge something with an image (AT-11).
+12. Settings: rename the workspace, change default currency and history limit; theme override works and survives reload.
+13. Phone width: drawer navigation, item page and edit form usable; tablet width: rail. Keyboard-only: tab through sidebar, list and
+    dialogs with visible focus (AT-14, manual).
+14. Backup → `make reset-dev` (or the prod restore drill) → restore: data and images back (AT-17, manual part).
+

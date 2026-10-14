@@ -24,8 +24,9 @@ M1/M2 web rows (added by the web orchestrator):
 | W-10 | web | todo | `feature/W-10-content-editor` | — | 2026-10-14 | brief: handoffs/W-10.md. Parallel with W-09, W-13, Q-01a, T-01 |
 | W-13 | web | todo | `feature/W-13-settings-home` | — | 2026-10-14 | brief: handoffs/W-13.md. Home "recent items" blocked on a backend endpoint (contract gap, requested) |
 | T-01 | web | todo | `chore/T-01-test-stability` | — | 2026-10-14 | brief: handoffs/T-01.md. Flaky ItemView/ItemActions tests under load |
-| Q-01a | web | todo | `feature/Q-01a-e2e-harness` | — | 2026-10-14 | brief: handoffs/Q-01.md. Harness + AT-03/09/11/12/13/14/22 |
-| Q-01b | web | blocked | — | — | 2026-10-14 | AT-06 (images) + AT-14 extended to Settings/Home. After Q-01a, W-09 and W-13 |
+| Q-01a | web | deferred | — | — | 2026-10-14 | Post-MVP (D-068). C4 uses the smoke checklist in ACCEPTANCE_TESTS.md |
+| Q-01b | web | deferred | — | — | 2026-10-14 | Post-MVP (D-068) |
+| Q-03w | web | todo | — | — | 2026-10-14 | Web production image (Dockerfile Node → Caddy, Caddyfile), D-069. Brief by the web orchestrator. Needed by Q-03 |
 
 M1 backend rows (added by the backend orchestrator):
 
@@ -41,6 +42,8 @@ M1 backend rows (added by the backend orchestrator):
 | B-09 | backend | done | `feature/B-09-images` | [#10](https://github.com/0xfederama/collections-app-backend/pull/10) | 2026-10-14 | Rebased on B-08 + B-11, squash-merged as `9c583e3` (D-064; EXIF strip of originals is a future to-do, DATA_MODEL §9). Branch and worktree removed |
 | B-10 | backend | done | `feature/B-10-trash` | [#11](https://github.com/0xfederama/collections-app-backend/pull/11) | 2026-10-14 | Squash-merged as `35d5deb`. All API operations implemented; no spec change since `api-v0.1.0` (B-12 not needed). Branch and worktree removed |
 | Q-02 | backend | done | `feature/Q-02-backup-restore` | [#12](https://github.com/0xfederama/collections-app-backend/pull/12) | 2026-10-14 | Squash-merged as `d680a9a` (D-066). `make test-backup` green. Open: manual backup → reset-dev → restore on the dev stack (user). Branch and worktree removed |
+| B-12 | backend | todo | `feature/B-12-recent-items` | — | 2026-10-14 | brief: handoffs/B-12.md. `GET /recent-items` for W-13 (D-070), then tag `api-v0.2.0` (user OK). Parallel with Q-03 |
+| Q-03 | parent + backend | todo | `feature/Q-03-prod-deploy` (backend, if needed) | — | 2026-10-14 | brief: handoffs/Q-03.md. Prod compose in parent `deploy/`, built on the server (D-069). Final run needs Q-03w |
 | B-11 | backend | done | `feature/B-11-search` | [#9](https://github.com/0xfederama/collections-app-backend/pull/9) | 2026-10-14 | Rebased on B-08, squash-merged as `08d30ab`. Branch and worktree removed |
 
 M0 record:
@@ -102,6 +105,8 @@ Postgres, AT-18 compose exposure, `docker build`).**
 - Q-4 license (DECISIONS.md). Default applies if unanswered.
 
 ## Log (newest first, one line each)
+
+- 2026-10-14: User decisions: e2e (Q-01a/b) deferred post-MVP, C4 uses the smoke checklist (D-068); prod images built on the server, prod compose in parent `deploy/`, web image = Q-03w (D-069); W-13 gap closed by `GET /recent-items` (D-070, B-12 → `api-v0.2.0`). Briefs B-12, Q-03 written; they run in parallel.
 
 - 2026-10-14: W-12 and W-08 squash-merged (web `main` 8b9d014), gate green on main, parent pointer bumped. Briefs W-09, W-10, W-13, Q-01 (Q-01a), T-01 written; all five can run in parallel. Contract gap: no endpoint for Home's "recently updated items (12)" (UI_SPEC §1); backend task requested.
 - 2026-10-14: W-08 PR opened (web#10): item create + edit form, `?edit=1`, 412/422/network UX, unsaved guard (useBlocker + beforeunload), dev fakes for POST/PATCH. `npm run check` green (916 tests); acceptance run by hand on the real backend. Waiting for the user's review.

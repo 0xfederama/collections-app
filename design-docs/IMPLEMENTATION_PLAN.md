@@ -52,7 +52,7 @@ Wherever a later task says "in CI", read it as "in the local `make check` / `npm
 | B-09 | Storage + images: FileStore, sniffing, thumbnails, PUT/DELETE image, file serving, orphan sweeper (AT-06, AT-07, AT-20) | B-07 |
 | B-10 | Trash: batch delete for folder/list/item, list, restore (+destination), purge incl. files (AT-11) | B-08, B-09 |
 | B-11 | Search (AT-12) | B-07 |
-| B-12 | Tag `api-v0.2.0` if any contract fixes happened during M2–M3 | as needed |
+| B-12 | `GET /api/v1/recent-items` for Home (D-070, W-13 contract gap), then tag `api-v0.2.0` | B-11 |
 
 ## M4 — Web features
 
@@ -72,9 +72,10 @@ Wherever a later task says "in CI", read it as "in the local `make check` / `npm
 
 | ID | Task | Deps |
 |---|---|---|
-| Q-01 | Playwright e2e in web CI: checkout backend at `openapi.lock.json` ref, `docker compose up`, run AT-03/06/09/11/12/13/14/22 | W-12, B-10 |
+| Q-01 | ~~Playwright e2e in web CI: checkout backend at `openapi.lock.json` ref, `docker compose up`, run AT-03/06/09/11/12/13/14/22~~ **Deferred to post-MVP (D-068)**; C4 uses the manual smoke checklist (ACCEPTANCE_TESTS.md) | W-12, B-10 |
 | Q-02 | `scripts/backup.sh`, `restore.sh`, `verify-restore.sh` + an integration test for AT-17 | B-10 |
-| Q-03 | `deploy/compose.prod.yaml` (images: api + web/Caddy, same origin), Caddyfile, multi-arch image build (amd64 + arm64) on tag | Q-01 |
+| Q-03w | Web production image: multi-stage `Dockerfile` (Node build → Caddy), `Caddyfile` (SPA fallback, `/api/*` + `/readyz` proxy to `api:8080`, CSP and security headers, immutable caching for hashed assets), image built in `npm run check` (D-069) | W-00 |
+| Q-03 | Parent `deploy/compose.prod.yaml` building both images on the server (D-069: no registry, native arch), host paths, prod backup/restore wiring, exposure check for the prod compose, deployment + upgrade README | B-10, Q-02, Q-03w |
 | Q-04 | Fresh-clone verification (AT-01) by an agent following only the READMEs; fix the docs | Q-03 |
 | Q-05 | Final review against AT-19 scope fence + security checklist (ARCHITECTURE §5) by a reviewer session | Q-04 |
 
