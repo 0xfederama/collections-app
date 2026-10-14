@@ -27,7 +27,7 @@ M1 backend rows (added by the backend orchestrator):
 | B-05 | backend | done | `feature/B-05-workspace-settings` | [#5](https://github.com/0xfederama/collections-app-backend/pull/5) | 2026-10-14 | Squash-merged as `67e5f17` (D-059). Branch and worktree removed |
 | B-06 | backend | done | `feature/B-06-folders-lists` | [#6](https://github.com/0xfederama/collections-app-backend/pull/6) | 2026-10-14 | Rebased on B-05, squash-merged as `a3bc87a` (D-060). Branch and worktree removed |
 | B-07 | backend | done | `feature/B-07-items` | [#7](https://github.com/0xfederama/collections-app-backend/pull/7) | 2026-10-14 | Squash-merged as `371e0c1` (D-062). Branch and worktree removed |
-| B-08 | backend | in review | `feature/B-08-content` | [#8](https://github.com/0xfederama/collections-app-backend/pull/8) | 2026-10-14 | `make check` green; no curl session against compose (covered by router tests). Worktree collections-app-backend-B-08 |
+| B-08 | backend | done | `feature/B-08-content` | [#8](https://github.com/0xfederama/collections-app-backend/pull/8) | 2026-10-14 | Squash-merged as `4c73f85`. Branch and worktree removed |
 | B-09 | backend | in progress | `feature/B-09-images` | — | 2026-10-14 | brief: handoffs/B-09.md. Parallel with B-08, B-11. Worktree collections-app-backend-B-09 |
 | B-11 | backend | in review | `feature/B-11-search` | [#9](https://github.com/0xfederama/collections-app-backend/pull/9) | 2026-10-14 | `make check` green; AT-12 tests. Trigram index used from ~55k rows. No spec change. Worktree collections-app-backend-B-11 |
 
@@ -90,6 +90,8 @@ Postgres, AT-18 compose exposure, `docker build`).**
 - Q-4 license (DECISIONS.md). Default applies if unanswered.
 
 ## Log (newest first, one line each)
+
+- 2026-10-14: B-08 squash-merged (backend `main` 4c73f85), parent pointer bumped. B-11 (#9) and B-09 must rebase on it before merging.
 
 - 2026-10-14: B-11 PR opened (backend#9): search endpoint with paths, AT-12 tests, EXPLAIN notes. Check green; waiting for the user's review.
 - 2026-10-14: B-08 PR opened (backend#8): content get/save/versions/restore/retention. Check green; waiting for the user's review.
