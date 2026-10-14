@@ -16,7 +16,7 @@ M1/M2 web rows (added by the web orchestrator):
 | W-04 | web | done | `feature/W-04-app-shell` | [#4](https://github.com/0xfederama/collections-app-frontend-web/pull/4) | 2026-10-14 | Squash-merged as `8b6110a`. Branch and worktree removed. Breadcrumbs owned by the shell (UI_SPEC §3 amended) |
 | W-05 | web | done | `feature/W-05-tree-actions` | [#5](https://github.com/0xfederama/collections-app-frontend-web/pull/5) | 2026-10-14 | Squash-merged as `c812c9d`. Branch and worktree removed. Open: VoiceOver pass on "Picked up…" announcement; no right-click/Shift+F10 menu (More button instead) |
 | W-06 | web | done | `feature/W-06-list-view` | [#6](https://github.com/0xfederama/collections-app-frontend-web/pull/6) | 2026-10-14 | Rebased on W-05, squash-merged as `89e045c` (D-063). Branch and worktree removed. Follow-ups (panel close keeps query, lazy routes) moved to W-07 |
-| W-07 | web | todo | `feature/W-07-item-detail` | — | 2026-10-14 | brief: handoffs/W-07.md. Parallel with W-11. Then W-08 |
+| W-07 | web | in progress | `feature/W-07-item-detail` | — | 2026-10-14 | brief: handoffs/W-07.md. Parallel with W-11. Then W-08 |
 | W-11 | web | todo | `feature/W-11-search` | — | 2026-10-14 | brief: handoffs/W-11.md. Parallel with W-07. Real-backend check once B-11 merges |
 
 M1 backend rows (added by the backend orchestrator):
