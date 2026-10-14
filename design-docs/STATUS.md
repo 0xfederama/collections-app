@@ -18,8 +18,8 @@ M1 backend rows (added by the backend orchestrator):
 
 | Task | Repo | State | Branch | PR | Updated | Notes / blockers |
 |---|---|---|---|---|---|---|
-| B-02 | backend | in review | `feature/B-02-schema-sqlc` | [#2](https://github.com/0xfederama/collections-app-backend/pull/2) | 2026-10-14 | brief: handoffs/B-02.md; C1 schema review pending (user). `make check` + compose verified; D-051 tests pass |
-| B-03 | backend | blocked | — | — | 2026-10-14 | starts after B-02 merges and the user reviews the schema (C1, D-045); brief written then |
+| B-02 | backend | done | `feature/B-02-schema-sqlc` | [#2](https://github.com/0xfederama/collections-app-backend/pull/2) | 2026-10-14 | Squash-merged as `70cb527` (tree identical to the reviewed head); C1 schema approved by the user. Branch and worktree removed |
+| B-03 | backend | todo | `feature/B-03-openapi` | — | 2026-10-14 | brief: handoffs/B-03.md. After merge: tag `api-v0.1.0` (user OK), which unblocks W-02 |
 
 M0 record:
 
@@ -80,6 +80,8 @@ Postgres, AT-18 compose exposure, `docker build`).**
 - Q-4 license (DECISIONS.md). Default applies if unanswered.
 
 ## Log (newest first, one line each)
+
+- 2026-10-14: B-02 squash-merged (backend `main` 70cb527), parent pointer bumped, C1 schema approved. Brief handoffs/B-03.md written.
 
 - 2026-10-14: W-03 squash-merged (web `main` 320208c), gate green on main, parent pointer bumped. Web is idle until `api-v0.1.0`: W-02 → W-04 → (W-05 ∥ W-06).
 - 2026-10-14: W-03 PR opened (web#2): tokens, themes, fonts, 18 primitives, /dev/ui. Check green; waiting for the user's review.
