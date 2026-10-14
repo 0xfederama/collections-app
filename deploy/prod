@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+# Operate the production stack (deploy/compose.prod.yaml, project collections-app-prod).
+#
+#   ./deploy/prod up -d --build        any docker compose command: ps, logs -f api, down, ...
+#   ./deploy/prod backup [dest]        Postgres + images (default $BACKUP_DIR, /srv/collection/backups)
+#   ./deploy/prod restore <dir> [--force]
+#   ./deploy/prod verify <dir>         check a backup against the running database
+#   ./deploy/prod prune [dest]         keep the newest 7 daily + 4 weekly backups, delete the rest
+#   ./deploy/prod check                exposure check (AT-18 for prod)
+#
+# backup/restore/verify reuse the backend scripts (backend/scripts) pointed at this compose project.
+set -euo pipefail
+here="$(cd "$(dirname "$0")" && pwd)"
+root="$(dirname "$here")"
+[ -f "$here/.env" ] || { echo "missing deploy/.env: cp deploy/.env.example deploy/.env and set POSTGRES_PASSWORD" >&2; exit 1; }
+
+# Compose reads deploy/.env itself; the backend scripts also need the values in the environment
+# (they would otherwise pick up backend/.env, which is the dev password).
+set -a
+# shellcheck disable=SC1091
+. "$here/.env"
+set +a
+export COMPOSE_FILE="$here/compose.prod.yaml" COMPOSE_PROJECT_NAME=collections-app-prod
+backups="${BACKUP_DIR:-/srv/collection/backups}"
+
+usage() { sed -n '2,10p' "$0" | sed 's/^# \{0,1\}//'; exit "${1:-0}"; }
+
+# Newest backup per day (first 7 days) and per ISO week (first 4 weeks); everything else goes.
+prune() {
+  local dest="${1:-$backups}" dir name day week kept=0 removed=0
+  local -a seen_days=() seen_weeks=()
+  [ -d "$dest" ] || { echo "no such directory: $dest" >&2; exit 1; }
+  while IFS= read -r name; do
+    [[ "$name" =~ ^[0-9]{8}T[0-9]{6}Z$ ]] || continue
+    day="${name:0:8}"
+    if date -u -d "$day" +%G-%V >/dev/null 2>&1; then
+      week="$(date -u -d "$day" +%G-%V)"
+    else
+      week="$(date -u -j -f %Y%m%d "$day" +%G-%V)"
+    fi
+    keep=0
+    if [[ ! " ${seen_days[*]-} " == *" $day "* ]] && [ "${#seen_days[@]}" -lt 7 ]; then
+      seen_days+=("$day"); keep=1
+    fi
+    if [[ ! " ${seen_weeks[*]-} " == *" $week "* ]] && [ "${#seen_weeks[@]}" -lt 4 ]; then
+      seen_weeks+=("$week"); keep=1
+    fi
+    if [ "$keep" = 1 ]; then
+      kept=$((kept + 1))
+    else
+      dir="$dest/$name"
+      rm -rf -- "$dir"
+      removed=$((removed + 1))
+      echo "removed $dir"
+    fi
+  done < <(cd "$dest" && printf '%s\n' * | sort -r)
+  echo "prune: kept $kept, removed $removed"
+}
+
+cmd="${1:-}"
+[ -n "$cmd" ] || usage 1
+shift
+case "$cmd" in
+  -h | --help | help) usage ;;
+  backup)
+    dest="${1:-$backups}"
+    mkdir -p "$dest"
+    exec "$root/backend/scripts/backup.sh" "$dest"
+    ;;
+  restore) exec "$root/backend/scripts/restore.sh" "$@" ;;
+  verify) exec "$root/backend/scripts/verify-restore.sh" "$@" ;;
+  prune) prune "$@" ;;
+  check) exec "$here/check.sh" ;;
+  *) exec docker compose "$cmd" "$@" ;;
+esac

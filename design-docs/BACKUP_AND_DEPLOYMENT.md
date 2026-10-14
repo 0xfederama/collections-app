@@ -80,6 +80,6 @@ Keep at least 7 daily and 4 weekly copies off the device (user's choice of locat
 - `deploy/compose.prod.yaml` lives in the **parent repo** and **builds** both images on the server from the `backend/` and `frontend-web/` submodules (D-069: no registry, native arch, arm64 on a Pi), plus `db` and `migrate`.
 - The `web` container (Caddy) serves the SPA and reverse-proxies `/api/*` to `api:8080`, so it's same-origin and needs no CORS. It's published on `127.0.0.1:8081` by default, or on the LAN interface or a Tailscale IP **by explicit opt-in**.
 - **Recommended remote access:** Tailscale (or equivalent private VPN) on the host, with no router port-forwarding. **Never** expose to the public internet until Phase 3 auth exists.
-- Persistent host paths: `/srv/collection/{pgdata,data,backups}` with owner = the container UID and least privilege.
+- Persistent data: Docker named volumes `pgdata` and `appdata` (D-071); only backups are a host path, `/srv/collection/backups`. See `deploy/README.md`.
 - Upgrade: backup → `git pull --recurse-submodules` → rebuild images → `migrate up` → restart → check `/readyz`. Rollback: restore the backup taken before the upgrade (a migration `down` doesn't restore files and may lose data).
 - No images are published (D-069). Publishing to a registry later is outward-facing, so an agent asks the user before configuring it.

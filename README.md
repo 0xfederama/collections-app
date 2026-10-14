@@ -13,6 +13,7 @@ whole-app local setup. The service code lives in the submodules.
 | `frontend-web/` | React + TypeScript + Vite web app | [collections-app-frontend-web](https://github.com/0xfederama/collections-app-frontend-web) (submodule) |
 | `design-docs/` | Product, architecture, API, data model, decisions, status, agent workflow | this repo |
 | `compose.yaml` | Whole-app local dev: db + migrate + api + Vite dev server | this repo |
+| `deploy/` | Production on a home server: `compose.prod.yaml`, backups, exposure check. See [deploy/README.md](deploy/README.md) | this repo |
 
 ## Quick start
 
@@ -54,7 +55,7 @@ Both can run at the same time.
 ```
 
 Plain `docker compose up --build` still works and starts the prod project with `backend/.env` values only.
-"Prod" here means your persistent local environment. The real deployment with built images (Caddy, GHCR) is Q-03.
+"Prod" here means your persistent local environment. The real home-server deployment (images built on the server, Caddy) is in [deploy/README.md](deploy/README.md).
 Already cloned without `--recurse-submodules`: `git submodule update --init --recursive`.
 
 The first start is slower: the `web` container runs `npm ci` into a Linux-only `node_modules` volume.

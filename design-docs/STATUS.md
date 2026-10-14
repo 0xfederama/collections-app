@@ -43,7 +43,7 @@ M1 backend rows (added by the backend orchestrator):
 | B-10 | backend | done | `feature/B-10-trash` | [#11](https://github.com/0xfederama/collections-app-backend/pull/11) | 2026-10-14 | Squash-merged as `35d5deb`. All API operations implemented; no spec change since `api-v0.1.0` (B-12 not needed). Branch and worktree removed |
 | Q-02 | backend | done | `feature/Q-02-backup-restore` | [#12](https://github.com/0xfederama/collections-app-backend/pull/12) | 2026-10-14 | Squash-merged as `d680a9a` (D-066). `make test-backup` green. Open: manual backup → reset-dev → restore on the dev stack (user). Branch and worktree removed |
 | B-12 | backend | done | `feature/B-12-recent-items` | [#13](https://github.com/0xfederama/collections-app-backend/pull/13) | 2026-10-14 | Squash-merged as `98d3b87` (D-070). Tag `api-v0.2.0` pushed (user OK). Branch and worktree removed |
-| Q-03 | parent + backend | in progress | `feature/Q-03-prod-deploy` (backend, if needed) | — | 2026-10-14 | brief: handoffs/Q-03.md. Prod compose in parent `deploy/`, built on the server (D-069). Final run needs Q-03w |
+| Q-03 | parent + backend | in progress | `feature/Q-03-prod-deploy` (backend, if needed) | — | 2026-10-14 | brief: handoffs/Q-03.md. Parent `deploy/` done and tested with a stand-in web image (D-071); no backend PR needed. Remaining: final end-to-end run once Q-03w (`frontend-web/Dockerfile`) is merged |
 | B-11 | backend | done | `feature/B-11-search` | [#9](https://github.com/0xfederama/collections-app-backend/pull/9) | 2026-10-14 | Rebased on B-08, squash-merged as `08d30ab`. Branch and worktree removed |
 
 M0 record:
