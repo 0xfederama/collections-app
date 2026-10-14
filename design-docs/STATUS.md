@@ -20,7 +20,7 @@ M1/M2 web rows (added by the web orchestrator):
 | W-11 | web | done | `feature/W-11-search` | [#7](https://github.com/0xfederama/collections-app-frontend-web/pull/7) | 2026-10-14 | Rebased on W-07, squash-merged as `f65d620`; real-backend search checked. Branch and worktree removed |
 | W-08 | web | done | `feature/W-08-item-edit` | [#10](https://github.com/0xfederama/collections-app-frontend-web/pull/10) | 2026-10-14 | Squash-merged as `8b9d014` on top of W-12; `npm run check` green on main (979 tests). Branch and worktree removed |
 | W-12 | web | done | `feature/W-12-trash` | [#9](https://github.com/0xfederama/collections-app-frontend-web/pull/9) | 2026-10-14 | Squash-merged as `d9d2ccb`. Branch and worktree removed |
-| W-09 | web | in review | `feature/W-09-item-image` | [#11](https://github.com/0xfederama/collections-app-frontend-web/pull/11) | 2026-10-14 | Acceptance run by hand on the real backend (see PR). Parallel with W-10, W-13, T-01, Q-03w |
+| W-09 | web | done | `feature/W-09-item-image` | [#11](https://github.com/0xfederama/collections-app-frontend-web/pull/11) | 2026-10-14 | Squash-merged as `162faab`. Branch and worktree removed. Not checked: 40 MP case in the UI, live progress on a slow link |
 | W-10 | web | in progress | `feature/W-10-content-editor` | — | 2026-10-14 | brief: handoffs/W-10.md. Parallel with W-09, W-13, T-01, Q-03w |
 | W-13 | web | in progress | `feature/W-13-settings-home` | — | 2026-10-14 | brief: handoffs/W-13.md. `api-v0.2.0` is out (98d3b87): sync first, recent items on the real endpoint (D-070) |
 | T-01 | web | in progress | `chore/T-01-test-stability` | — | 2026-10-14 | brief: handoffs/T-01.md. Flaky ItemView/ItemActions tests under load |
@@ -106,6 +106,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 ## Log (newest first, one line each)
 
+- 2026-10-14: W-09 squash-merged (web `main` 162faab), parent pointer bumped. W-10, W-13, T-01, Q-03w rebase on it.
 - 2026-10-14: W-09 PR opened (web#11): item image dropzone/picker/URL/remove with XHR progress, base-version snapshot in the edit form, dev fake. Real-backend acceptance done; waiting for the user's review.
 - 2026-10-14: Q-03 closed by the backend orchestrator (parent-only, `4c41afc`, D-071). Next backend-side: Q-04 (fresh clone + prod run with the real web image) after Q-03w, W-09, W-10, W-13 merge; then Q-05.
 
