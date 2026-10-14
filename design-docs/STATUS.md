@@ -20,13 +20,13 @@ M1/M2 web rows (added by the web orchestrator):
 | W-11 | web | done | `feature/W-11-search` | [#7](https://github.com/0xfederama/collections-app-frontend-web/pull/7) | 2026-10-14 | Rebased on W-07, squash-merged as `f65d620`; real-backend search checked. Branch and worktree removed |
 | W-08 | web | done | `feature/W-08-item-edit` | [#10](https://github.com/0xfederama/collections-app-frontend-web/pull/10) | 2026-10-14 | Squash-merged as `8b9d014` on top of W-12; `npm run check` green on main (979 tests). Branch and worktree removed |
 | W-12 | web | done | `feature/W-12-trash` | [#9](https://github.com/0xfederama/collections-app-frontend-web/pull/9) | 2026-10-14 | Squash-merged as `d9d2ccb`. Branch and worktree removed |
-| W-09 | web | todo | `feature/W-09-item-image` | — | 2026-10-14 | brief: handoffs/W-09.md. Parallel with W-10, W-13, Q-01a, T-01 |
-| W-10 | web | todo | `feature/W-10-content-editor` | — | 2026-10-14 | brief: handoffs/W-10.md. Parallel with W-09, W-13, Q-01a, T-01 |
-| W-13 | web | todo | `feature/W-13-settings-home` | — | 2026-10-14 | brief: handoffs/W-13.md. Home "recent items" blocked on a backend endpoint (contract gap, requested) |
+| W-09 | web | todo | `feature/W-09-item-image` | — | 2026-10-14 | brief: handoffs/W-09.md. Parallel with W-10, W-13, T-01, Q-03w |
+| W-10 | web | todo | `feature/W-10-content-editor` | — | 2026-10-14 | brief: handoffs/W-10.md. Parallel with W-09, W-13, T-01, Q-03w |
+| W-13 | web | todo | `feature/W-13-settings-home` | — | 2026-10-14 | brief: handoffs/W-13.md. Recent items per D-070 (B-12, `api-v0.2.0`); sync the client when tagged |
 | T-01 | web | todo | `chore/T-01-test-stability` | — | 2026-10-14 | brief: handoffs/T-01.md. Flaky ItemView/ItemActions tests under load |
 | Q-01a | web | deferred | — | — | 2026-10-14 | Post-MVP (D-068). C4 uses the smoke checklist in ACCEPTANCE_TESTS.md |
 | Q-01b | web | deferred | — | — | 2026-10-14 | Post-MVP (D-068) |
-| Q-03w | web | todo | — | — | 2026-10-14 | Web production image (Dockerfile Node → Caddy, Caddyfile), D-069. Brief by the web orchestrator. Needed by Q-03 |
+| Q-03w | web | todo | `feature/Q-03w-web-image` | — | 2026-10-14 | brief: handoffs/Q-03w.md (D-069). Parallel with W-09, W-10, W-13, T-01. Needed by Q-03 |
 
 M1 backend rows (added by the backend orchestrator):
 
@@ -106,6 +106,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 ## Log (newest first, one line each)
 
+- 2026-10-14: Web orchestrator: brief handoffs/Q-03w.md written (D-069); W-13 brief updated for D-070. Current web batch: W-09, W-10, W-13, T-01, Q-03w (Q-01a dropped, D-068).
 - 2026-10-14: User decisions: e2e (Q-01a/b) deferred post-MVP, C4 uses the smoke checklist (D-068); prod images built on the server, prod compose in parent `deploy/`, web image = Q-03w (D-069); W-13 gap closed by `GET /recent-items` (D-070, B-12 → `api-v0.2.0`). Briefs B-12, Q-03 written; they run in parallel.
 
 - 2026-10-14: W-12 and W-08 squash-merged (web `main` 8b9d014), gate green on main, parent pointer bumped. Briefs W-09, W-10, W-13, Q-01 (Q-01a), T-01 written; all five can run in parallel. Contract gap: no endpoint for Home's "recently updated items (12)" (UI_SPEC §1); backend task requested.
