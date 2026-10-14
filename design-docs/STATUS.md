@@ -13,6 +13,7 @@ M1/M2 web rows (added by the web orchestrator):
 |---|---|---|---|---|---|---|
 | W-03 | web | done | `feature/W-03-design-system` | [#2](https://github.com/0xfederama/collections-app-frontend-web/pull/2) | 2026-10-14 | Squash-merged as `320208c`; `npm run check` re-run green on main. Branch and worktrees removed |
 | W-02 | web | done | `feature/W-02-api-client` | [#3](https://github.com/0xfederama/collections-app-frontend-web/pull/3) | 2026-10-14 | Squash-merged as `39d81ff` (D-058). Branch and worktree removed. `VITE_API_MOCKS=1` dev not yet tried in a real browser |
+| W-04 | web | todo | `feature/W-04-app-shell` | — | 2026-10-14 | brief: handoffs/W-04.md. After merge: W-05 ∥ W-06 |
 
 M1 backend rows (added by the backend orchestrator):
 
@@ -82,6 +83,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 ## Log (newest first, one line each)
 
+- 2026-10-14: Web orchestrator: brief handoffs/W-04.md written; UI_SPEC §2 now states the tree order (folders, then lists).
 - 2026-10-14: W-02 squash-merged (web `main` 39d81ff), parent pointer bumped. Next web: W-04.
 - 2026-10-14: W-02 PR opened (web#3): vendored `api-v0.1.0`, `api:sync`/`api:check`, `lib/api`, TanStack Query, MSW. Check green; waiting for the user's review.
 - 2026-10-14: Web orchestrator: brief handoffs/W-02.md written; worker prompt handed to the user. Process change: no full orchestrator reviews from now on (user checks PRs; orchestrator merges).

@@ -29,6 +29,8 @@ Navigating back from an item restores the list scroll position and the selected 
 Sidebar contents: workspace name, global search field (`/` shortcut focuses it), the folder/list tree
 (expand/collapse, item counts, a "+" menu for new folder or list, a context menu with rename/move/delete), then Trash
 and Settings at the bottom.
+Inside each folder (and at the root) the tree shows sub-folders first, then lists, each by `(sort_order, id)`: folders and
+lists have separate order spaces (`PUT /folders/order`, `PUT /lists/order`), so they never interleave.
 
 ## 3. List view
 
