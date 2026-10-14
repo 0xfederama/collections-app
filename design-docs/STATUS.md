@@ -13,7 +13,7 @@ M1/M2 web rows (added by the web orchestrator):
 |---|---|---|---|---|---|---|
 | W-03 | web | done | `feature/W-03-design-system` | [#2](https://github.com/0xfederama/collections-app-frontend-web/pull/2) | 2026-10-14 | Squash-merged as `320208c`; `npm run check` re-run green on main. Branch and worktrees removed |
 | W-02 | web | done | `feature/W-02-api-client` | [#3](https://github.com/0xfederama/collections-app-frontend-web/pull/3) | 2026-10-14 | Squash-merged as `39d81ff` (D-058). Branch and worktree removed. `VITE_API_MOCKS=1` dev not yet tried in a real browser |
-| W-04 | web | in progress | `feature/W-04-app-shell` | — | 2026-10-14 | brief: handoffs/W-04.md. Worktree `frontend-web-W-04`. After merge: W-05 ∥ W-06 |
+| W-04 | web | in review | `feature/W-04-app-shell` | [#4](https://github.com/0xfederama/collections-app-frontend-web/pull/4) | 2026-10-14 | Check green (425 tests), browser-verified 375–1440. Seams for W-05 ∥ W-06 in the PR. Open questions in handoffs/W-04.md (breadcrumb ownership vs UI_SPEC §3) |
 
 M1 backend rows (added by the backend orchestrator):
 
@@ -85,6 +85,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 ## Log (newest first, one line each)
 
+- 2026-10-14: W-04 PR opened (web#4): responsive shell, sidebar tree, breadcrumbs, route skeleton, W-05/W-06 seams. Check green; waiting for the user's review.
 - 2026-10-14: B-05 squash-merged (backend `main` 67e5f17), parent pointer bumped. B-06 (#6) must rebase on the new main (conflicts in the shared seam).
 
 - 2026-10-14: B-04 squash-merged (backend `main` d48ecc1), parent pointer bumped. Briefs B-05 and B-06 written; they run in parallel (shared seam `Deps.WorkspaceID`, second to merge rebases).
