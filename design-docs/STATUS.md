@@ -17,7 +17,7 @@ M1/M2 web rows (added by the web orchestrator):
 | W-05 | web | done | `feature/W-05-tree-actions` | [#5](https://github.com/0xfederama/collections-app-frontend-web/pull/5) | 2026-10-14 | Squash-merged as `c812c9d`. Branch and worktree removed. Open: VoiceOver pass on "Picked up…" announcement; no right-click/Shift+F10 menu (More button instead) |
 | W-06 | web | done | `feature/W-06-list-view` | [#6](https://github.com/0xfederama/collections-app-frontend-web/pull/6) | 2026-10-14 | Rebased on W-05, squash-merged as `89e045c` (D-063). Branch and worktree removed. Follow-ups (panel close keeps query, lazy routes) moved to W-07 |
 | W-07 | web | done | `feature/W-07-item-detail` | [#8](https://github.com/0xfederama/collections-app-frontend-web/pull/8) | 2026-10-14 | Squash-merged as `d64e6b6`. Lazy routes (entry 675→564 kB), panel close keeps query. Branch and worktree removed. Next: W-08 |
-| W-11 | web | in review | `feature/W-11-search` | [#7](https://github.com/0xfederama/collections-app-frontend-web/pull/7) | 2026-10-14 | Checked against the real backend (B-11). Not run: `VITE_API_MOCKS=1` in a normal browser (devSearch.ts untested live). Touches `mocks/devItems.ts` (additive); AppShell.test searchbox assertion now vacuous |
+| W-11 | web | in review | `feature/W-11-search` | [#7](https://github.com/0xfederama/collections-app-frontend-web/pull/7) | 2026-10-14 | Rebased on W-07 (`d64e6b6`), check green x3, checked on the real backend (B-11) incl. opening W-07's detail. Not run: `VITE_API_MOCKS=1` in a normal browser (devSearch.ts untested live) |
 
 M1 backend rows (added by the backend orchestrator):
 
@@ -95,6 +95,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 ## Log (newest first, one line each)
 
+- 2026-10-14: W-11 (web#7) rebased on W-07, force-pushed with lease; real-backend check done. Ready for review.
 - 2026-10-14: Q-02 PR opened (backend#12): backup/restore/verify scripts, AT-17 `make test-backup`, shellcheck in `make check` (D-066). Waiting for the user's review.
 - 2026-10-14: W-07 squash-merged (web `main` d64e6b6), parent pointer bumped. W-11 rebases on it (conflicts in docs, mocks/browser.ts, mocks/devItems.ts). Next: W-08.
 - 2026-10-14: W-07 PR opened (web#8): item detail view, AT-13 links, per-kind configs, MarkdownView (react-markdown + remark-gfm), move/delete, lazy routes (entry 675 → 564 kB), panel close keeps query. Check green; waiting for the user's review.
