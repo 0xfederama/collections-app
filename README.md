@@ -22,7 +22,7 @@ Prerequisites: Git, Docker with Compose v2. (Go 1.27 and Node 24 are only needed
 git clone --recurse-submodules https://github.com/0xfederama/collections-app.git
 cd collections-app
 cp backend/.env.example backend/.env      # set POSTGRES_PASSWORD (URL-safe characters only)
-docker compose up --build
+./app up                                  # prod environment (the default)
 ```
 
 | Service | URL | Exposure |
@@ -31,17 +31,30 @@ docker compose up --build
 | API | http://localhost:8080 (`/healthz`, `/readyz`) | `127.0.0.1` only (`API_PORT` in `backend/.env` overrides) |
 | Postgres | `db:5432` | Docker network only, not published |
 
-Stop with `docker compose down`. Add `-v` to also delete the database and uploaded files.
+### Environments: `./app`
 
-**Throwaway sandbox (empty DB every start).** To play without keeping anything, add the `compose.fresh.yaml` override:
+`./app` wraps `docker compose` (it can't take custom flags itself) with two environments. Their variables are in `env/`:
+
+| | `--prod` (default) | `--test` |
+|---|---|---|
+| Purpose | Your real, persistent data | Playing and testing; wipe any time |
+| Web / API | http://localhost:5173 / :8080 | http://localhost:5183 / :8090 |
+| Compose project (own volumes) | `collections-app` | `collections-app-test` |
+| Settings | `APP_ENV=production`, JSON logs, password from `backend/.env` | `APP_ENV=development`, debug text logs, workspace "Test Collection" |
+
+Both can run at the same time.
 
 ```bash
-docker compose -f compose.yaml -f compose.fresh.yaml up --build
+./app up --test -d            # start test in the background (omit -d for foreground logs)
+./app up --test --fresh -d    # wipe test's DB + uploaded files, then start on a blank DB
+./app down --test             # stop test (keeps its data)
+./app down --test --fresh     # stop test and wipe its data
+./app logs -f api --test      # any compose command works: ps, logs, exec, ...
+./app down                    # stop prod (data kept). --fresh is refused for prod
 ```
 
-The database and uploaded files live in memory (tmpfs), so every stop wipes them and every start re-runs the migrations on
-a blank DB. It runs as a separate project (`collections-app-fresh`), so your normal data is never touched, but it uses
-the same ports, so stop the normal stack first. Tear down with the same `-f` pair plus `down`.
+Plain `docker compose up --build` still works and starts the prod project with `backend/.env` values only.
+"Prod" here means your persistent local environment. The real deployment with built images (Caddy, GHCR) is Q-03.
 Already cloned without `--recurse-submodules`: `git submodule update --init --recursive`.
 
 The first start is slower: the `web` container runs `npm ci` into a Linux-only `node_modules` volume.

@@ -9,7 +9,9 @@ git clone --recurse-submodules https://github.com/0xfederama/collections-app.git
 ```
 
 This checks out `backend/` and `frontend-web/` (submodules, D-043). Whole app in one command: `cp backend/.env.example backend/.env`
-(set `POSTGRES_PASSWORD`), then `docker compose up --build` from the parent folder.
+(set `POSTGRES_PASSWORD`), then `./app up` from the parent folder. `./app` wraps compose with two local environments (D-067):
+`--prod` (default, persistent data, ports 8080/5173) and `--test` (own project and volumes, ports 8090/5183). Add `--fresh` to wipe the test data;
+it's refused for prod. Variables are in `env/{prod,test}.env`; secrets stay in `backend/.env`.
 
 Backend (from `backend/`): `cp .env.example .env` → `docker compose up --build` (db + migrate + api, the primary path, D-033).
 Optional fast loop: copy the opt-in override that publishes `127.0.0.1:5432`, run `docker compose up -d db`, then `make migrate` and `make run` on the host.
