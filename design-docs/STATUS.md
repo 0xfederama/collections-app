@@ -12,7 +12,7 @@ M1/M2 web rows (added by the web orchestrator):
 | Task | Repo | State | Branch | PR | Updated | Notes / blockers |
 |---|---|---|---|---|---|---|
 | W-03 | web | done | `feature/W-03-design-system` | [#2](https://github.com/0xfederama/collections-app-frontend-web/pull/2) | 2026-10-14 | Squash-merged as `320208c`; `npm run check` re-run green on main. Branch and worktrees removed |
-| W-02 | web | todo | `feature/W-02-api-client` | — | 2026-10-14 | brief: handoffs/W-02.md. Unblocked (`api-v0.1.0` = `ae8ae4e`). Then W-04 → (W-05 ∥ W-06) |
+| W-02 | web | in progress | `feature/W-02-api-client` | — | 2026-10-14 | worktree `frontend-web-W-02`. brief: handoffs/W-02.md. Unblocked (`api-v0.1.0` = `ae8ae4e`). Then W-04 → (W-05 ∥ W-06) |
 
 M1 backend rows (added by the backend orchestrator):
 
