@@ -14,7 +14,7 @@ M1/M2 web rows (added by the web orchestrator):
 | W-03 | web | done | `feature/W-03-design-system` | [#2](https://github.com/0xfederama/collections-app-frontend-web/pull/2) | 2026-10-14 | Squash-merged as `320208c`; `npm run check` re-run green on main. Branch and worktrees removed |
 | W-02 | web | done | `feature/W-02-api-client` | [#3](https://github.com/0xfederama/collections-app-frontend-web/pull/3) | 2026-10-14 | Squash-merged as `39d81ff` (D-058). Branch and worktree removed. `VITE_API_MOCKS=1` dev not yet tried in a real browser |
 | W-04 | web | done | `feature/W-04-app-shell` | [#4](https://github.com/0xfederama/collections-app-frontend-web/pull/4) | 2026-10-14 | Squash-merged as `8b6110a`. Branch and worktree removed. Breadcrumbs owned by the shell (UI_SPEC §3 amended) |
-| W-05 | web | in review | `feature/W-05-tree-actions` | [#5](https://github.com/0xfederama/collections-app-frontend-web/pull/5) | 2026-10-14 | `npm run check` green (522 tests); verified against the real backend. ListActionsMenu not yet wired into the list header (second of W-05/W-06 to merge does it). Worktree frontend-web-W-05 |
+| W-05 | web | done | `feature/W-05-tree-actions` | [#5](https://github.com/0xfederama/collections-app-frontend-web/pull/5) | 2026-10-14 | Squash-merged as `c812c9d`. Branch and worktree removed. Open: VoiceOver pass on "Picked up…" announcement; no right-click/Shift+F10 menu (More button instead) |
 | W-06 | web | in review | `feature/W-06-list-view` | [#6](https://github.com/0xfederama/collections-app-frontend-web/pull/6) | 2026-10-14 | `npm run check` green (471 tests); browser-checked against mock API. ListActionsMenu not wired (second of W-05/W-06 to merge does it). Sort semantics D-063. Worktree frontend-web-W-06 |
 
 M1 backend rows (added by the backend orchestrator):
@@ -91,6 +91,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 ## Log (newest first, one line each)
 
+- 2026-10-14: W-05 squash-merged (web `main` c812c9d), parent pointer bumped. W-06 rebases on it and wires `ListActionsMenu`.
 - 2026-10-14: W-06 PR opened (web#6): list view (3 modes, sort/filter URL state D-063, dnd-kit reorder, fallback tiles, scroll restore). Check green; waiting for the user's review.
 - 2026-10-14: W-05 PR opened (web#5): folder/list CRUD dialogs, move picker, drag reorder (dnd-kit 0.5.0), stateful dev mocks. Check green; waiting for the user's review.
 - 2026-10-14: B-07 squash-merged (backend `main` 371e0c1), parent pointer bumped. Briefs B-08, B-09, B-11 written; they run in parallel (later mergers rebase). B-10 waits for B-08 + B-09.
