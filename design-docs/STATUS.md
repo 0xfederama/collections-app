@@ -20,7 +20,7 @@ M1 backend rows (added by the backend orchestrator):
 |---|---|---|---|---|---|---|
 | B-02 | backend | done | `feature/B-02-schema-sqlc` | [#2](https://github.com/0xfederama/collections-app-backend/pull/2) | 2026-10-14 | Squash-merged as `70cb527` (tree identical to the reviewed head); C1 schema approved by the user. Branch and worktree removed |
 | B-03 | backend | done | `feature/B-03-openapi` | [#3](https://github.com/0xfederama/collections-app-backend/pull/3) | 2026-10-14 | Squash-merged as `ae8ae4e`; C1 spec approved (D-054, create with missing parent → 409). Branch and worktree removed. Tag `api-v0.1.0` pushed |
-| B-04 | backend | todo | `feature/B-04-foundations` | — | 2026-10-14 | brief: handoffs/B-04.md. Runs in parallel with W-02. After merge: B-05 ∥ B-06 |
+| B-04 | backend | in progress | `feature/B-04-foundations` | — | 2026-10-14 | brief: handoffs/B-04.md. Runs in parallel with W-02. After merge: B-05 ∥ B-06 |
 
 M0 record:
 
