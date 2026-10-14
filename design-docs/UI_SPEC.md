@@ -34,7 +34,8 @@ lists have separate order spaces (`PUT /folders/order`, `PUT /lists/order`), so 
 
 ## 3. List view
 
-Header: breadcrumbs (`Folder › Sub › List`), name, description (expandable), item count, **Add item**, the
+Header: name (the `Folder › Sub › List` breadcrumbs are rendered once by the shell above `main`, for every route, not
+by the list header), description (expandable), item count, **Add item**, the
 display mode segmented control (compact / thumbnail / grid, icons with labels for assistive tech), sort select (Manual / Title / Recently updated),
 filter field, and an overflow menu (rename, edit description, move, delete).
 

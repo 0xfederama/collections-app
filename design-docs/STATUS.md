@@ -13,7 +13,9 @@ M1/M2 web rows (added by the web orchestrator):
 |---|---|---|---|---|---|---|
 | W-03 | web | done | `feature/W-03-design-system` | [#2](https://github.com/0xfederama/collections-app-frontend-web/pull/2) | 2026-10-14 | Squash-merged as `320208c`; `npm run check` re-run green on main. Branch and worktrees removed |
 | W-02 | web | done | `feature/W-02-api-client` | [#3](https://github.com/0xfederama/collections-app-frontend-web/pull/3) | 2026-10-14 | Squash-merged as `39d81ff` (D-058). Branch and worktree removed. `VITE_API_MOCKS=1` dev not yet tried in a real browser |
-| W-04 | web | in review | `feature/W-04-app-shell` | [#4](https://github.com/0xfederama/collections-app-frontend-web/pull/4) | 2026-10-14 | Check green (425 tests), browser-verified 375–1440. Seams for W-05 ∥ W-06 in the PR. Open questions in handoffs/W-04.md (breadcrumb ownership vs UI_SPEC §3) |
+| W-04 | web | done | `feature/W-04-app-shell` | [#4](https://github.com/0xfederama/collections-app-frontend-web/pull/4) | 2026-10-14 | Squash-merged as `8b6110a`. Branch and worktree removed. Breadcrumbs owned by the shell (UI_SPEC §3 amended) |
+| W-05 | web | todo | `feature/W-05-tree-actions` | — | 2026-10-14 | brief: handoffs/W-05.md. Runs in parallel with W-06 (D-061 dnd-kit) |
+| W-06 | web | todo | `feature/W-06-list-view` | — | 2026-10-14 | brief: handoffs/W-06.md. Runs in parallel with W-05 |
 
 M1 backend rows (added by the backend orchestrator):
 
@@ -86,6 +88,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 ## Log (newest first, one line each)
 
+- 2026-10-14: W-04 squash-merged (web `main` 8b6110a), parent pointer bumped. D-061 (dnd-kit: `@dnd-kit/react`, user choice). UI_SPEC §3: the shell owns breadcrumbs. Briefs W-05 and W-06 written; they run in parallel.
 - 2026-10-14: B-06 squash-merged (backend `main` a3bc87a), parent pointer bumped. Brief B-07 (items) written.
 
 - 2026-10-14: W-04 PR opened (web#4): responsive shell, sidebar tree, breadcrumbs, route skeleton, W-05/W-06 seams. Check green; waiting for the user's review.
