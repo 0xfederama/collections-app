@@ -42,7 +42,7 @@ M1 backend rows (added by the backend orchestrator):
 | B-09 | backend | done | `feature/B-09-images` | [#10](https://github.com/0xfederama/collections-app-backend/pull/10) | 2026-10-14 | Rebased on B-08 + B-11, squash-merged as `9c583e3` (D-064; EXIF strip of originals is a future to-do, DATA_MODEL §9). Branch and worktree removed |
 | B-10 | backend | done | `feature/B-10-trash` | [#11](https://github.com/0xfederama/collections-app-backend/pull/11) | 2026-10-14 | Squash-merged as `35d5deb`. All API operations implemented; no spec change since `api-v0.1.0` (B-12 not needed). Branch and worktree removed |
 | Q-02 | backend | done | `feature/Q-02-backup-restore` | [#12](https://github.com/0xfederama/collections-app-backend/pull/12) | 2026-10-14 | Squash-merged as `d680a9a` (D-066). `make test-backup` green. Open: manual backup → reset-dev → restore on the dev stack (user). Branch and worktree removed |
-| B-12 | backend | in review | `feature/B-12-recent-items` | [#13](https://github.com/0xfederama/collections-app-backend/pull/13) | 2026-10-14 | brief: handoffs/B-12.md. `GET /recent-items` for W-13 (D-070). `make check` green. After merge: tag `api-v0.2.0` (user OK). Parallel with Q-03 |
+| B-12 | backend | done | `feature/B-12-recent-items` | [#13](https://github.com/0xfederama/collections-app-backend/pull/13) | 2026-10-14 | Squash-merged as `98d3b87` (D-070). Tag `api-v0.2.0` pushed (user OK). Branch and worktree removed |
 | Q-03 | parent + backend | in progress | `feature/Q-03-prod-deploy` (backend, if needed) | — | 2026-10-14 | brief: handoffs/Q-03.md. Prod compose in parent `deploy/`, built on the server (D-069). Final run needs Q-03w |
 | B-11 | backend | done | `feature/B-11-search` | [#9](https://github.com/0xfederama/collections-app-backend/pull/9) | 2026-10-14 | Rebased on B-08, squash-merged as `08d30ab`. Branch and worktree removed |
 
@@ -96,7 +96,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 | Repo | Remote | Local path | Latest API tag |
 |---|---|---|---|
-| backend | https://github.com/0xfederama/collections-app-backend | `/Users/federico/Developer/collections-app/backend` (submodule) | `api-v0.1.0` (`ae8ae4e`) |
+| backend | https://github.com/0xfederama/collections-app-backend | `/Users/federico/Developer/collections-app/backend` (submodule) | `api-v0.2.0` (`98d3b87`) |
 | web | https://github.com/0xfederama/collections-app-frontend-web | `/Users/federico/Developer/collections-app/frontend-web` (submodule) | pinned: — |
 | parent | https://github.com/0xfederama/collections-app | `/Users/federico/Developer/collections-app` | — |
 
@@ -105,6 +105,8 @@ Postgres, AT-18 compose exposure, `docker build`).**
 - Q-4 license (DECISIONS.md). Default applies if unanswered.
 
 ## Log (newest first, one line each)
+
+- 2026-10-14: B-12 squash-merged (backend `main` 98d3b87), tag `api-v0.2.0` pushed (user OK): `GET /recent-items` available, W-13 can sync the client. Parent pointer bumped.
 
 - 2026-10-14: B-12 PR opened (backend#13): `GET /recent-items`, spec 0.2.0, `TestB12_*`, EXPLAIN ~4 ms at 20k items (no index). Check green; waiting for the user's review, then tag `api-v0.2.0` (user OK).
 
