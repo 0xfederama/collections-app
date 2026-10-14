@@ -21,7 +21,9 @@ M1 backend rows (added by the backend orchestrator):
 |---|---|---|---|---|---|---|
 | B-02 | backend | done | `feature/B-02-schema-sqlc` | [#2](https://github.com/0xfederama/collections-app-backend/pull/2) | 2026-10-14 | Squash-merged as `70cb527` (tree identical to the reviewed head); C1 schema approved by the user. Branch and worktree removed |
 | B-03 | backend | done | `feature/B-03-openapi` | [#3](https://github.com/0xfederama/collections-app-backend/pull/3) | 2026-10-14 | Squash-merged as `ae8ae4e`; C1 spec approved (D-054, create with missing parent → 409). Branch and worktree removed. Tag `api-v0.1.0` pushed |
-| B-04 | backend | in review | `feature/B-04-foundations` | [#4](https://github.com/0xfederama/collections-app-backend/pull/4) | 2026-10-14 | brief: handoffs/B-04.md. Runs in parallel with W-02. After merge: B-05 ∥ B-06 |
+| B-04 | backend | done | `feature/B-04-foundations` | [#4](https://github.com/0xfederama/collections-app-backend/pull/4) | 2026-10-14 | Squash-merged as `d48ecc1` (D-055–D-057). Branch and worktree removed |
+| B-05 | backend | todo | `feature/B-05-workspace-settings` | — | 2026-10-14 | brief: handoffs/B-05.md. Parallel with B-06 |
+| B-06 | backend | todo | `feature/B-06-folders-lists` | — | 2026-10-14 | brief: handoffs/B-06.md. Parallel with B-05. Folder/list DELETE is B-10 |
 
 M0 record:
 
@@ -82,6 +84,8 @@ Postgres, AT-18 compose exposure, `docker build`).**
 - Q-4 license (DECISIONS.md). Default applies if unanswered.
 
 ## Log (newest first, one line each)
+
+- 2026-10-14: B-04 squash-merged (backend `main` d48ecc1), parent pointer bumped. Briefs B-05 and B-06 written; they run in parallel (shared seam `Deps.WorkspaceID`, second to merge rebases).
 
 - 2026-10-14: Web orchestrator: brief handoffs/W-04.md written; UI_SPEC §2 now states the tree order (folders, then lists).
 - 2026-10-14: W-02 squash-merged (web `main` 39d81ff), parent pointer bumped. Next web: W-04.
