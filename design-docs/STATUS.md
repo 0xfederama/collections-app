@@ -17,7 +17,9 @@ M1/M2 web rows (added by the web orchestrator):
 | W-05 | web | done | `feature/W-05-tree-actions` | [#5](https://github.com/0xfederama/collections-app-frontend-web/pull/5) | 2026-10-14 | Squash-merged as `c812c9d`. Branch and worktree removed. Open: VoiceOver pass on "Picked up…" announcement; no right-click/Shift+F10 menu (More button instead) |
 | W-06 | web | done | `feature/W-06-list-view` | [#6](https://github.com/0xfederama/collections-app-frontend-web/pull/6) | 2026-10-14 | Rebased on W-05, squash-merged as `89e045c` (D-063). Branch and worktree removed. Follow-ups (panel close keeps query, lazy routes) moved to W-07 |
 | W-07 | web | done | `feature/W-07-item-detail` | [#8](https://github.com/0xfederama/collections-app-frontend-web/pull/8) | 2026-10-14 | Squash-merged as `d64e6b6`. Lazy routes (entry 675→564 kB), panel close keeps query. Branch and worktree removed. Next: W-08 |
-| W-11 | web | in review | `feature/W-11-search` | [#7](https://github.com/0xfederama/collections-app-frontend-web/pull/7) | 2026-10-14 | Rebased on W-07 (`d64e6b6`), check green x3, checked on the real backend (B-11) incl. opening W-07's detail. Not run: `VITE_API_MOCKS=1` in a normal browser (devSearch.ts untested live) |
+| W-11 | web | done | `feature/W-11-search` | [#7](https://github.com/0xfederama/collections-app-frontend-web/pull/7) | 2026-10-14 | Rebased on W-07, squash-merged as `f65d620`; real-backend search checked. Branch and worktree removed |
+| W-08 | web | todo | `feature/W-08-item-edit` | — | 2026-10-14 | brief: handoffs/W-08.md. Parallel with W-12. Then W-09 ∥ W-10 ∥ W-13 |
+| W-12 | web | todo | `feature/W-12-trash` | — | 2026-10-14 | brief: handoffs/W-12.md. Parallel with W-08 |
 
 M1 backend rows (added by the backend orchestrator):
 
@@ -95,6 +97,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 ## Log (newest first, one line each)
 
+- 2026-10-14: W-11 squash-merged (web `main` f65d620), parent pointer bumped. Briefs W-08 and W-12 written (parallel).
 - 2026-10-14: W-11 (web#7) rebased on W-07, force-pushed with lease; real-backend check done. Ready for review.
 - 2026-10-14: Q-02 PR opened (backend#12): backup/restore/verify scripts, AT-17 `make test-backup`, shellcheck in `make check` (D-066). Waiting for the user's review.
 - 2026-10-14: W-07 squash-merged (web `main` d64e6b6), parent pointer bumped. W-11 rebases on it (conflicts in docs, mocks/browser.ts, mocks/devItems.ts). Next: W-08.
