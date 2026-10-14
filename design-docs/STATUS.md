@@ -32,7 +32,7 @@ M1 backend rows (added by the backend orchestrator):
 | B-08 | backend | done | `feature/B-08-content` | [#8](https://github.com/0xfederama/collections-app-backend/pull/8) | 2026-10-14 | Squash-merged as `4c73f85`. Branch and worktree removed |
 | B-09 | backend | done | `feature/B-09-images` | [#10](https://github.com/0xfederama/collections-app-backend/pull/10) | 2026-10-14 | Rebased on B-08 + B-11, squash-merged as `9c583e3` (D-064; EXIF strip of originals is a future to-do, DATA_MODEL §9). Branch and worktree removed |
 | B-10 | backend | done | `feature/B-10-trash` | [#11](https://github.com/0xfederama/collections-app-backend/pull/11) | 2026-10-14 | Squash-merged as `35d5deb`. All API operations implemented; no spec change since `api-v0.1.0` (B-12 not needed). Branch and worktree removed |
-| Q-02 | backend | todo | `feature/Q-02-backup-restore` | — | 2026-10-14 | brief: handoffs/Q-02.md. Parallel with web M4 |
+| Q-02 | backend | in progress | `feature/Q-02-backup-restore` | — | 2026-10-14 | brief: handoffs/Q-02.md. Parallel with web M4. Worktree `collections-app-backend-Q-02` |
 | B-11 | backend | done | `feature/B-11-search` | [#9](https://github.com/0xfederama/collections-app-backend/pull/9) | 2026-10-14 | Rebased on B-08, squash-merged as `08d30ab`. Branch and worktree removed |
 
 M0 record:
