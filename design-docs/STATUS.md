@@ -29,7 +29,7 @@ M1 backend rows (added by the backend orchestrator):
 | B-07 | backend | done | `feature/B-07-items` | [#7](https://github.com/0xfederama/collections-app-backend/pull/7) | 2026-10-14 | Squash-merged as `371e0c1` (D-062). Branch and worktree removed |
 | B-08 | backend | in review | `feature/B-08-content` | [#8](https://github.com/0xfederama/collections-app-backend/pull/8) | 2026-10-14 | `make check` green; no curl session against compose (covered by router tests). Worktree collections-app-backend-B-08 |
 | B-09 | backend | in progress | `feature/B-09-images` | — | 2026-10-14 | brief: handoffs/B-09.md. Parallel with B-08, B-11. Worktree collections-app-backend-B-09 |
-| B-11 | backend | in progress | `feature/B-11-search` | — | 2026-10-14 | brief: handoffs/B-11.md. Parallel with B-08, B-09. Worktree collections-app-backend-B-11 |
+| B-11 | backend | in review | `feature/B-11-search` | [#9](https://github.com/0xfederama/collections-app-backend/pull/9) | 2026-10-14 | `make check` green; AT-12 tests. Trigram index used from ~55k rows. No spec change. Worktree collections-app-backend-B-11 |
 
 M0 record:
 
@@ -91,6 +91,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 ## Log (newest first, one line each)
 
+- 2026-10-14: B-11 PR opened (backend#9): search endpoint with paths, AT-12 tests, EXPLAIN notes. Check green; waiting for the user's review.
 - 2026-10-14: B-08 PR opened (backend#8): content get/save/versions/restore/retention. Check green; waiting for the user's review.
 - 2026-10-14: W-05 squash-merged (web `main` c812c9d), parent pointer bumped. W-06 rebases on it and wires `ListActionsMenu`.
 - 2026-10-14: W-06 PR opened (web#6): list view (3 modes, sort/filter URL state D-063, dnd-kit reorder, fallback tiles, scroll restore). Check green; waiting for the user's review.
