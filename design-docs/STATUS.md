@@ -26,7 +26,10 @@ M1 backend rows (added by the backend orchestrator):
 | B-04 | backend | done | `feature/B-04-foundations` | [#4](https://github.com/0xfederama/collections-app-backend/pull/4) | 2026-10-14 | Squash-merged as `d48ecc1` (D-055–D-057). Branch and worktree removed |
 | B-05 | backend | done | `feature/B-05-workspace-settings` | [#5](https://github.com/0xfederama/collections-app-backend/pull/5) | 2026-10-14 | Squash-merged as `67e5f17` (D-059). Branch and worktree removed |
 | B-06 | backend | done | `feature/B-06-folders-lists` | [#6](https://github.com/0xfederama/collections-app-backend/pull/6) | 2026-10-14 | Rebased on B-05, squash-merged as `a3bc87a` (D-060). Branch and worktree removed |
-| B-07 | backend | in review | `feature/B-07-items` | [#7](https://github.com/0xfederama/collections-app-backend/pull/7) | 2026-10-14 | `make check` green, compose session in the PR (D-062). Runs alone; after merge B-08 ∥ B-09 ∥ B-11 |
+| B-07 | backend | done | `feature/B-07-items` | [#7](https://github.com/0xfederama/collections-app-backend/pull/7) | 2026-10-14 | Squash-merged as `371e0c1` (D-062). Branch and worktree removed |
+| B-08 | backend | todo | `feature/B-08-content` | — | 2026-10-14 | brief: handoffs/B-08.md. Parallel with B-09, B-11 |
+| B-09 | backend | todo | `feature/B-09-images` | — | 2026-10-14 | brief: handoffs/B-09.md. Parallel with B-08, B-11 |
+| B-11 | backend | todo | `feature/B-11-search` | — | 2026-10-14 | brief: handoffs/B-11.md. Parallel with B-08, B-09 |
 
 M0 record:
 
@@ -87,6 +90,8 @@ Postgres, AT-18 compose exposure, `docker build`).**
 - Q-4 license (DECISIONS.md). Default applies if unanswered.
 
 ## Log (newest first, one line each)
+
+- 2026-10-14: B-07 squash-merged (backend `main` 371e0c1), parent pointer bumped. Briefs B-08, B-09, B-11 written; they run in parallel (later mergers rebase). B-10 waits for B-08 + B-09.
 
 - 2026-10-14: B-07 PR opened (backend#7): items CRUD, 6 kind validators, list/sort/filter, move, reorder. Check green; waiting for the user's review.
 - 2026-10-14: W-04 squash-merged (web `main` 8b6110a), parent pointer bumped. D-061 (dnd-kit: `@dnd-kit/react`, user choice). UI_SPEC §3: the shell owns breadcrumbs. Briefs W-05 and W-06 written; they run in parallel.
