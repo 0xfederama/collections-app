@@ -1,6 +1,6 @@
 # F-003 — Brief e2e safety net
 
-Status: approved    Release: none (tests only, no version bump)    Roadmap: ROADMAP.md §6
+Status: **done** (backend#19, web#29 merged 2026-10-15)    Release: none (tests only, no version bump)    Roadmap: ROADMAP.md §6
 Repos: backend | web    Approved by the user: 2026-10-15
 
 ## Why
@@ -87,3 +87,4 @@ None.
 - 2026-10-15: brief written and approved (scope set by the user: very brief, one PR per repo).
 - 2026-10-15: F003-B1 merged (backend#19, squash). `make smoke` passed on a fresh ./deploy/test.
 - 2026-10-15: F003-W1 merged (web#29): gate green, `npm run e2e` 14/14 twice on fresh ./deploy/test.
+- 2026-10-15: parent: web pointer bumped to f3fd8d7. Done.

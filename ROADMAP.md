@@ -34,9 +34,9 @@ version history, a trash with restore, and backups. It should be quick to use on
 | — | **1.0 MVP** | Organize, describe and protect a shared collection | ✅ Released `v1.0.0` (2026-10-15) | Oct 2026 |
 | 1 | **1.0.1** | Polish from the release checks (F-006) | ✅ Released `v1.0.1` (2026-10-15) | Oct 2026 |
 | 2 | — | Exploration session: you used the fresh test env and listed what to change | ✅ Done (2026-10-15) | Oct 2026 |
-| 3 | **1.1.0** | Lists and items restructure + exploration fixes (F-007): one kind per list, trimmed fields, addable price, list description, 6 UI fixes. Last shared version (D-080) | ✅ Merged (tag `v1.1.0` after your check) | Oct 2026 |
-| 4 | — | Brief e2e safety net (F-003): `make smoke` + ~8 Playwright specs | 🟢 Now | Q4 2026 |
-| 5 | **web 2.0.0** | UI refresh with your design (F-002) | 🟡 Next | Q4 2026 |
+| 3 | **1.1.0** | Lists and items restructure + exploration fixes (F-007): one kind per list, trimmed fields, addable price, list description, 6 UI fixes. Last shared version (D-080) | ✅ Released `v1.1.0` (2026-10-15) | Oct 2026 |
+| 4 | — | Brief e2e safety net (F-003): `make smoke` + ~8 Playwright specs | ✅ Done (2026-10-15) | Oct 2026 |
+| 5 | **web 2.0.0** | UI refresh with your design (F-002), run from a sister session | 🟢 Now (design) | Q4 2026 |
 | — | later | Pool, in this order: CI and upkeep → ops hardening → list icons + product gaps → TMDB + auto images → user-defined kinds → collaborative Markdown → accounts (backend 2.0) → security review → internet exposure + public API | ⚪ Pool | 2027 |
 | — | future | List import, advanced search | 🔭 Future | — |
 
@@ -119,7 +119,7 @@ Contract: `api-v0.2.0`. Decisions D-001 to D-073 are in [`design-docs/DECISIONS.
 
 ## 5. Now
 
-### F-003 · Brief e2e safety net 🟢
+### F-003 · Brief e2e safety net ✅
 `make smoke` on the backend (one HTTP pass over the running stack) and about 8 Playwright specs on the web (organize,
 item with price, description history, image, conflict, trash, search and links, a reduced axe pass in both themes).
 Not part of the gate; run on user-flow changes and before a release (D-076). Lean workflow (D-081).
@@ -149,7 +149,7 @@ Fresh-clone check (Q-04), scope and security review (Q-05: no critical or high f
 
 ## 6. Next (in this order)
 
-### F-002 · UI refresh 🟡 · web 2.0.0
+### F-002 · UI refresh 🟢 · web 2.0.0
 **What:** a large refactor of the web app: a new visual design applied across every screen, plus the interaction changes
 below. The API stays as it is unless the design needs something small. The web becomes 2.0.0; the backend keeps its own
 version (D-080). The design comes from you (D-075).
@@ -231,6 +231,7 @@ Committed, in this order (set by you, 2026-10-15), after the UI refresh. The re-
 - This file is updated when a feature ships, starts, or changes horizon. Detailed task history stays in STATUS.md.
 
 ## Changelog
+- 2026-10-15: **v1.1.0 released** (parent + web tags; backend tagged earlier). **F-003 done** (backend#19 `make smoke`, web#29 Playwright). F-002 UI rework is Now, in a sister session (design first).
 - 2026-10-15: **Pool order set by you:** UI refresh → CI & upkeep → ops hardening → list icons + gaps → TMDB + auto images → user-defined kinds → collaborative Markdown → accounts → security review. List import moves to Future. F-002 gets the inputs collected so far (no edit mode, edit in the item side page) and is run from a sister session.
 - 2026-10-15: **Pool re-shaped.** Proposed order: CI & upkeep → ops hardening → list icons + gaps → TMDB + auto images → list import → user-defined kinds → collaborative Markdown → accounts (backend 2.0) → security review & hardening, which gates internet exposure and the public API. Advanced search is Future. Compare + AI assist becomes one uncertain future concept. Mobile app and multiple images per item are off the roadmap for now.
 - 2026-10-15: **F-007 merged** (1.1.0, `api-v0.3.0`); PRODUCT and DATA_MODEL updated. **F-003 approved and Now**: `make smoke` + ~8 Playwright specs, lean workflow (D-081).
