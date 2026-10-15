@@ -152,6 +152,10 @@ to `api-v0.3.0` once it's tagged.
 ## Repo breakdown (filled by the repo orchestrators)
 ### Backend
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
+| T1 schema + queries + spec: migration 000002 (kind on lists, drops, data move/split), sqlc queries, `openapi.yaml` 0.3.0, regenerate | B1 B2 B3 B4 B5 | `feature/F007-lists-items-restructure` | | | |
+| T2 services + handlers: list kind, kind change, move check, trimmed kinds, price `amount`, `website`, settings currency removal, search kind | B1 B2 | same | | | |
+| T3 sort by kind key + list Markdown description | B3 B4 | same | | | |
+| T4 migration fixture test + docs (docs-keeper) | B5 | same | | | |
 ### Web
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
 
