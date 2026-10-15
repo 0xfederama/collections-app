@@ -11,9 +11,7 @@ States: `draft` (being discussed) → `approved` (user OK, repo orchestrators ma
 Start a session in `backend/` or `frontend-web/` with **Opus 5.5, medium effort**, then send:
 
 ```text
-You are the <backend|web> orchestrator. Follow /Users/federico/Developer/collections-app/design-docs/AGENT_WORKFLOW.md (v2, §1b).
-Implement the <backend|web> stories of /Users/federico/Developer/collections-app/design-docs/features/<F-NNN-file>.md:
-fill in its Repo breakdown, dispatch `worker` agents, review only their FLAGS, run the gate, open one PR per story, keep STATUS.md current.
+You are the <backend|web> orchestrator. Follow /Users/federico/Developer/collections-app/design-docs/AGENT_WORKFLOW.md (v2, §1b). Implement the <backend|web> stories of /Users/federico/Developer/collections-app/design-docs/features/<F-NNN-file>.md: fill in its Repo breakdown, dispatch `worker` agents, review only their FLAGS, run the gate, open one PR per story, keep STATUS.md current.
 ```
 
 A repo orchestrator can stay alive across features. Start a fresh one when its context gets large.
