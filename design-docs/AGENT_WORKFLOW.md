@@ -17,7 +17,9 @@ rules, and this file has the full version.
 
 ---
 
-## 1b. Session types (v2, from 2026-10-15, D-074)
+## 1b. Session types (v2, D-074: takes effect after the 1.0 release checks Q-05 + C4)
+
+> Until Q-05 and C4 are done, the **v1** model below (History) is still in use by the current repo orchestrators.
 
 Three levels. Only the top two are sessions the user starts. Workers are **internal subagents** of a repo orchestrator,
 not separate sessions.
@@ -60,7 +62,7 @@ not separate sessions.
 - Design docs are always referenced by absolute path, which works from any worktree.
 
 ### History
-v1 (M0–M5, until 2026-10-15): setup session → repo orchestrators writing `handoffs/<ID>.md` → one **worker session** per
+v1 (M0–M5 and the 1.0 release checks Q-04, Q-05, C4): setup session → repo orchestrators writing `handoffs/<ID>.md` → one **worker session** per
 task in its own worktree. Superseded by v2 (D-074). The `handoffs/` folder is kept as a record.
 
 ---

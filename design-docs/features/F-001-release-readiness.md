@@ -1,7 +1,11 @@
 # F-001 — 1.0 release readiness
 
-Status: approved    Release: 1.0    Roadmap: ROADMAP.md §5
-Repos: backend, web, parent    Approved by the user: 2026-10-15 (carried over from the v1 plan: Q-04, Q-05, C4)
+Status: **run with v1**, not v2 (user, 2026-10-15)    Release: 1.0    Roadmap: ROADMAP.md §5
+Repos: backend, web, parent
+
+> The v1 orchestrators finish this feature as Q-04 (done), Q-05 and C4, tracked in STATUS.md "Now: 1.0 release checks".
+> This brief is only a summary and a checklist source for Q-05. Stories B0/W0 (adopting the v2 agents) become the first
+> step of the **first v2 feature** instead.
 
 ## Why
 The MVP is feature-complete (all B-, W- and Q-03 tasks merged). Before real data goes on the home server, we need

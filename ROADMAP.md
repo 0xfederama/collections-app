@@ -91,9 +91,8 @@ flowchart LR
 ```
 
 **Why this order.**
-1.0 ships first. The UI refresh comes right after, because the product works and the next big lever is how it *feels*.
-End-to-end tests (F-003) ideally land first, so the refactor has a safety net. TMDB (2.0) builds on the refreshed item
-detail screen. Accounts (3.0) gate everything that goes beyond two people on a private network.
+1.0 ships first. The UI refresh comes right after, because the product works and the next big lever is how it *looks*.
+End-to-end tests (F-003) ideally land first, so the refactor has a safety net. TMDB (2.0) builds on the refreshed UI. Accounts (3.0) gate everything that goes beyond two people on a private network.
 
 ---
 
@@ -119,47 +118,33 @@ Contract: `api-v0.2.0`. Decisions D-001 to D-073 are in [`design-docs/DECISIONS.
 ## 5. Now
 
 ### F-001 · 1.0 release readiness 🟢
-**Outcome:** you can trust the app with real data on the home server.
+**Outcome:** you can trust the app with real data on the home server. Run by the current (v1) orchestrators.
 
-| Story | Owner | Status |
+| Check | Owner | Status |
 |---|---|---|
-| As a new maintainer, I can clone the repo and reach a working app by following only the READMEs (AT-01, was Q-04) | backend orchestrator | 🟡 |
-| As the owner, I know nothing out of scope or insecure shipped (scope fence AT-19 + ARCHITECTURE §5 security review, was Q-05) | backend + web orchestrators | 🟡 |
-| As the owner, I walk the smoke checklist on desktop and phone, in both themes (C4) | **you** | 🟡 |
-| As the owner, my first real backup → wipe → restore on the dev stack works (open from Q-02) | **you** | 🟡 |
+| Fresh clone: a new maintainer reaches a working dev, test and prod app from the READMEs only (Q-04, AT-01) | backend orchestrator | ✅ 2026-10-15 |
+| Scope fence and security review of both repos (Q-05, AT-19, ARCHITECTURE §5) | backend + web orchestrators | 🟡 |
+| Smoke checklist on desktop and phone, light and dark (C4) | web orchestrator + **you** | 🟢 |
+| First real backup → wipe → restore on the dev stack | **you** | 🟡 |
 
 **Exit:** every checklist line passes, then release tag `v1.0.0` in both repos and production goes live on the home server.
+After that, development switches to the v2 workflow (AGENT_WORKFLOW §1b) with fresh orchestrators.
 
 ---
 
 ## 6. Next
 
 ### F-002 · UI refresh (frontend refactor) 🟡 · 1.1
-**Problem.** The MVP UI was built quickly, screen by screen, by many parallel sessions. It works and is accessible, but
-spacing, density, hierarchy and motion aren't fully consistent across screens, and the item detail screen (the heart of the
-app, and what TMDB will extend) deserves a stronger visual identity.
+**What:** a large, mostly **aesthetic** refactor of the web app: a new visual design applied across every screen.
+Behavior and the API stay as they are.
 
-**Outcomes**
-- One coherent visual language: the same spacing scale, type ramp, surfaces and interaction states on every screen.
-- An image-forward feel: richer cards and grid, a hero image on item detail, better empty states.
-- Faster to use on a phone: thumb-reachable primary actions, bottom sheets instead of dialogs where it fits.
-- Subtle, purposeful motion (respecting `prefers-reduced-motion`), and no layout shift on load.
-- No new heavy dependencies (D-034). The bundle doesn't grow beyond today's ~564 kB entry, and ideally shrinks.
+**Status:** the design is still to come. You'll provide it, and only then does this become a feature brief with
+user stories (D-075). Until then, nothing about mood, colors, typography or layout is decided.
 
-**Approach (phased, each phase is shippable)**
-
-| Phase | Scope |
-|---|---|
-| 1. Audit | Screenshot every screen × light/dark × phone/desktop, list inconsistencies, agree on the direction with you (mood board) |
-| 2. Foundations | Tokens v2 (spacing, type ramp, elevation, radii, motion), primitives updated in `components/ui/` |
-| 3. Shell & navigation | Sidebar, breadcrumbs, mobile navigation and actions |
-| 4. Key screens | Item detail (hero), list grid and cards, Home, empty and loading states |
-| 5. Polish | Motion, focus styles, performance budget, a11y re-check (axe + VoiceOver) |
-
-**Success measures:** your visual sign-off per phase; zero axe violations in both themes; entry bundle ≤ today's;
-no regressions in the 1,200-test suite.
-**Dependencies:** F-001 done. F-003's e2e smoke suite is recommended before phase 3.
-**Needs from you:** what bothers you most today, and a mood (keep "warm stone + teal" or explore).
+**Guardrails that apply whatever the design:**
+- Lean (D-034): no heavy UI kits, and the bundle shouldn't grow without a reason.
+- Accessibility holds: both themes stay at zero axe violations, with keyboard paths intact.
+- Behavior doesn't change, and the existing test suite stays green. F-003's end-to-end tests make a good safety net first.
 
 ### F-003 · Quality & delivery 🟡 · 1.1
 - **End-to-end tests** with Playwright + axe against the real backend (deferred Q-01a/Q-01b, D-068). These are the safety net for F-002.
@@ -218,16 +203,16 @@ exposure beyond the private network.**
 | ID | Question | Default |
 |---|---|---|
 | Q-4 | License for the repos? | No LICENSE (all rights reserved) |
-| Q-8 | F-002: what to change first, and keep or change the visual mood? | Audit first, keep the mood |
 
 ---
 
 ## How this roadmap is maintained
-- The **top-level orchestrator** (a session in this parent repo) owns this file. It turns an initiative into a feature brief
+- From the v2 workflow on (after 1.0), the **top-level orchestrator** (a session in this parent repo) owns this file. It turns an initiative into a feature brief
   in `design-docs/features/F-NNN-*.md` with user stories per repo, when it moves to **Next** and you approve it.
 - The **repo orchestrators** split stories into tasks and run them with internal worker agents
   ([`design-docs/AGENT_WORKFLOW.md`](design-docs/AGENT_WORKFLOW.md) §1b). Progress is tracked in [`design-docs/STATUS.md`](design-docs/STATUS.md).
 - This file is updated when a feature ships, starts, or changes horizon. Detailed task history stays in STATUS.md.
 
 ## Changelog
+- 2026-10-15: Q-04 done. F-002 made generic: the design comes from you later (D-075). The v2 workflow starts after Q-05 + C4.
 - 2026-10-15: Roadmap created. 1.0 feature-complete; F-001 to F-005 defined; UI refresh (F-002) added.
