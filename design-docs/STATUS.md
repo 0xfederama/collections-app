@@ -13,7 +13,7 @@ The v1 repo orchestrators finish Q-05 and C4. **Workflow v2 (D-074) starts after
 | Task | Owner | State | Branch | PR | Updated | Notes |
 |---|---|---|---|---|---|---|
 | Q-04 fresh clone (AT-01) | v1 backend orch. | done | `docs/Q-04-readme-fixes` | [backend#14](https://github.com/0xfederama/collections-app-backend/pull/14) | 2026-10-15 | Test + prod modes and both gates OK. Parent doc fixes `cb6e5b7`, backend README `2fc516f`. Web README gaps + flaky ItemEditForm test → web orchestrator (handoffs/Q-04.md Questions) |
-| Q-05 scope fence (AT-19) + security review | v1 backend + web orch. | todo | | | 2026-10-15 | IMPLEMENTATION_PLAN Q-05. Checklist ideas in features/F-001-release-readiness.md (B2, W1) |
+| Q-05 scope fence (AT-19) + security review | v1 backend orch. → reviewer session | todo | `fix/Q-05-review` (if needed) | | 2026-10-15 | brief: handoffs/Q-05.md (both repos; web non-trivial fixes → web orch.) |
 | C4 smoke checklist (D-068) | v1 web orch. + user | in progress | | | 2026-10-15 | ACCEPTANCE_TESTS.md smoke checklist on `./deploy/test up -d --fresh` |
 | Backup → wipe → restore on dev | user | todo | — | — | 2026-10-15 | Open since Q-02 |
 | Tag `v1.0.0`, roadmap update, start v2 | top-level orch. | todo | — | — | 2026-10-15 | After Q-05 + C4 |
@@ -119,6 +119,8 @@ Postgres, AT-18 compose exposure, `docker build`).**
 - Q-4 license (DECISIONS.md). Default applies if unanswered.
 
 ## Log (newest first, one line each)
+
+- 2026-10-15: Brief handoffs/Q-05.md written (reviewer session, both repos). Runs in parallel with the C4 smoke checklist.
 
 - 2026-10-15: **v2 switch postponed** (user): the v1 orchestrators finish Q-05 and C4 first; v2 (D-074) starts after. The F-001 brief is a summary only. ROADMAP F-002 (UI refresh) kept generic: a large, mostly aesthetic refactor, designed by the user later (D-075).
 
