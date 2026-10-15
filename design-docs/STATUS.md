@@ -5,7 +5,23 @@ own rows, and use dates. Task IDs and dependencies are in [IMPLEMENTATION_PLAN.m
 
 States: `todo` · `in progress` · `in review` (PR open) · `blocked` · `done` (PR merged)
 
-## Current milestone: M1 — Contracts (C0 reached 2026-10-14)
+## Now: F-001 · 1.0 release readiness (workflow v2 from 2026-10-15, D-074)
+
+Roadmap: [`ROADMAP.md`](../ROADMAP.md). Feature briefs: [`features/`](features/). The v1 repo orchestrators were dismissed on
+2026-10-15. Start fresh v2 ones with the prompt in `features/README.md`. Repo orchestrators add their task rows here.
+
+| Feature | Story | Owner | State | Branch | PR | Updated | Notes |
+|---|---|---|---|---|---|---|---|
+| F-001 | F001-B0 adopt v2 agents | backend orch. | todo | `chore/adopt-workflow-v2` | | 2026-10-15 | First, before B1/B2 |
+| F-001 | F001-W0 adopt v2 agents | web orch. | todo | `chore/adopt-workflow-v2` | | 2026-10-15 | First, before W1 |
+| F-001 | F001-B1 fresh clone (was Q-04) | v1 Q-04 worker, then backend orch. | in progress | `docs/Q-04-readme-fixes` (backend) | | 2026-10-15 | A v1 worker session is mid-run (fresh clone in /tmp, stack `collections-app-q04`). Let it finish and open its PR; the v2 backend orchestrator picks up from there. Spec: handoffs/Q-04.md |
+| F-001 | F001-B2 backend scope + security review (was Q-05) | backend orch. | todo | | | 2026-10-15 | Orchestrator work, not workers' |
+| F-001 | F001-W1 web scope + security review (was Q-05) | web orch. | todo | | | 2026-10-15 | Orchestrator work, not workers' |
+| F-001 | F001-U1 smoke checklist (C4) | **user** | todo | — | — | 2026-10-15 | After B1, B2, W1 |
+| F-001 | F001-U2 backup → wipe → restore on dev | **user** | todo | — | — | 2026-10-15 | Open since Q-02 |
+| F-001 | F001-P1 tag v1.0.0, roadmap update | top-level orch. | todo | — | — | 2026-10-15 | After U1 |
+
+## v1 record: M0–M5 tasks (closed 2026-10-15)
 
 M1/M2 web rows (added by the web orchestrator):
 
@@ -44,7 +60,7 @@ M1 backend rows (added by the backend orchestrator):
 | Q-02 | backend | done | `feature/Q-02-backup-restore` | [#12](https://github.com/0xfederama/collections-app-backend/pull/12) | 2026-10-14 | Squash-merged as `d680a9a` (D-066). `make test-backup` green. Open: manual backup → reset-dev → restore on the dev stack (user). Branch and worktree removed |
 | B-12 | backend | done | `feature/B-12-recent-items` | [#13](https://github.com/0xfederama/collections-app-backend/pull/13) | 2026-10-14 | Squash-merged as `98d3b87` (D-070). Tag `api-v0.2.0` pushed (user OK). Branch and worktree removed |
 | Q-03 | parent + backend | done | — (parent, no backend PR) | — | 2026-10-15 | Parent `deploy/server/` (compose, check.sh), `./deploy/prod` wrapper, README, D-071. Final run with the real web image passed (deep link, CSP 0 violations, upload, backup→wipe→restore→verify, exposure); details in handoffs/Q-03.md |
-| Q-04 | parent + backend | todo | `docs/Q-04-readme-fixes` (backend, if needed) | — | 2026-10-15 | brief: handoffs/Q-04.md. Fresh clone following README.md → deploy/README.md. Start after W-13 and T-01 merge |
+| Q-04 | parent + backend | todo | `docs/Q-04-readme-fixes` (backend, if needed) | — | 2026-10-15 | **Moved to F-001 (F001-B1)** on 2026-10-15. Spec stays in handoffs/Q-04.md |
 | B-11 | backend | done | `feature/B-11-search` | [#9](https://github.com/0xfederama/collections-app-backend/pull/9) | 2026-10-14 | Rebased on B-08, squash-merged as `08d30ab`. Branch and worktree removed |
 
 M0 record:
@@ -106,6 +122,8 @@ Postgres, AT-18 compose exposure, `docker build`).**
 - Q-4 license (DECISIONS.md). Default applies if unanswered.
 
 ## Log (newest first, one line each)
+
+- 2026-10-15: **Workflow v2** (D-074): top-level orchestrator + repo orchestrators (Opus 5.5 medium) + internal `worker` agents (Sonnet 5.5 medium, flag-only review). v1 orchestrators dismissed. `ROADMAP.md` created (1.0 → F-001 to F-005, 2.0 TMDB, 3.0 accounts). Q-04/Q-05 folded into F-001.
 
 - 2026-10-15: T-01 squash-merged (web `main` 2b9e7a6), full gate green on main incl. image build. **Web MVP feature-complete.** Next: C4 manual smoke checklist (D-068).
 - 2026-10-15: W-13 squash-merged, parent pointer bumped; web contract now `api-v0.2.0`. Only T-01 left in the web batch, then C4 (manual smoke checklist).

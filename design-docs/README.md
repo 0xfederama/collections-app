@@ -38,7 +38,8 @@ GitHub repo names keep the `collections-app-` prefix.** Wherever these docs say 
 
 | # | Document | Read when |
 |---|---|---|
-| 1 | [AGENT_WORKFLOW.md](AGENT_WORKFLOW.md) | **Every session, first.** Git/PR rules, model dispatch policy, docs upkeep |
+| 0 | [../ROADMAP.md](../ROADMAP.md) | Where the product is going: shipped, now, next, later |
+| 1 | [AGENT_WORKFLOW.md](AGENT_WORKFLOW.md) | **Every session, first.** Session levels (v2: top-level → repo orchestrators → worker agents), git/PR rules, dispatch policy, docs upkeep |
 | 2 | [ORCHESTRATOR_BRIEF.md](ORCHESTRATOR_BRIEF.md) | Every orchestrator session; scope rules, roles, checkpoints |
 | 3 | [DECISIONS.md](DECISIONS.md) | Before deviating from anything; decisions + open questions |
 | 3b | [STATUS.md](STATUS.md) | Every session: who is doing what, PRs, blockers. Update it as you work |
@@ -48,10 +49,11 @@ GitHub repo names keep the `collections-app-` prefix.** Wherever these docs say 
 | 7 | [API.md](API.md) | Both: endpoints, ETags, errors, pagination |
 | 8 | [UI_SPEC.md](UI_SPEC.md) | Frontend: screens, states, design system |
 | 9 | [ACCEPTANCE_TESTS.md](ACCEPTANCE_TESTS.md) | Writing tests; definition of done |
-| 10 | [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) | Picking up work; milestones, task IDs, dependencies |
+| 10 | [features/](features/) | **Current work:** one brief per feature with user stories per repo (v2). Template + orchestrator prompt in `features/README.md` |
+| 10b | [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) | v1 record: M0–M5 milestones and task IDs (closed) |
 | 11 | [BACKUP_AND_DEPLOYMENT.md](BACKUP_AND_DEPLOYMENT.md) | Compose, env vars, backup/restore, deployment |
 
-`handoffs/` holds per-task briefs written by repo orchestrators for worker sessions (AGENT_WORKFLOW §1b).
+`features/` holds the v2 feature briefs. `handoffs/` holds the v1 per-task briefs (a record; v2 workers are agents dispatched inside the repo orchestrator).
 `templates/` contains files to copy into the repos at bootstrap (CLAUDE.md, subagent definitions, PR template).
 
 ## Precedence when documents disagree

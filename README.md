@@ -12,6 +12,7 @@ whole-app local setup. The service code lives in the submodules.
 | `backend/` | Go API + PostgreSQL + the canonical OpenAPI contract | [collections-app-backend](https://github.com/0xfederama/collections-app-backend) (submodule) |
 | `frontend-web/` | React + TypeScript + Vite web app | [collections-app-frontend-web](https://github.com/0xfederama/collections-app-frontend-web) (submodule) |
 | `design-docs/` | Product, architecture, API, data model, decisions, status, agent workflow | this repo |
+| `ROADMAP.md` | What shipped, what's next, ideas for later. See [ROADMAP.md](ROADMAP.md) | this repo |
 | `deploy/` | How to run it: `./deploy/dev`, `./deploy/test` (local) and `./deploy/prod` (home server). See [deploy/README.md](deploy/README.md) | this repo |
 
 ## Quick start

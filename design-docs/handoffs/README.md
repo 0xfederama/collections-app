@@ -1,4 +1,8 @@
-# Handoff Briefs
+# Handoff Briefs (v1 record)
+
+> **Since 2026-10-15 (D-074) no new handoff briefs are written.** New work starts from a feature brief in
+> [`../features/`](../features/), and the repo orchestrator dispatches internal `worker` agents. Existing briefs stay as a record
+> (and as specs where a feature brief links to them, e.g. Q-04.md).
 
 The repo orchestrator writes one file per task, `<TASK-ID>.md` (e.g. `B-06.md`), before a worker session starts it.
 See AGENT_WORKFLOW §1b. Workers read their brief first and update its **Progress** and **Questions** sections.

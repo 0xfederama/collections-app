@@ -33,7 +33,8 @@ Clean extension points (DATA_MODEL §9, ARCHITECTURE §7) are allowed. Speculati
 
 ## 4. Roles
 
-One orchestrator session per repo is typical. A session may play several roles sequentially.
+Since 2026-10-15 the session levels are defined in AGENT_WORKFLOW §1b (v2, D-074): a top-level orchestrator (parent repo, owns ROADMAP.md
+and feature briefs), one repo orchestrator per repo, and internal `worker` agents. The roles below are the hats those sessions wear.
 
 | Role | Owns | Repo |
 |---|---|---|

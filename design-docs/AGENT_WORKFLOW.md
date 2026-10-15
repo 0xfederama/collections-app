@@ -10,54 +10,78 @@ rules, and this file has the full version.
 
 1. Read the repo's `CLAUDE.md` (auto-loaded) and this file.
 2. Read `STATUS.md` (what's in progress, blocked, or next) and `DECISIONS.md` (at minimum the open questions and the last ~10 entries).
-3. Identify the task ID from `IMPLEMENTATION_PLAN.md` (or the user's request), mark it `in progress` in `STATUS.md`, and read only the design docs it references.
+3. Find your work: a **feature brief** in `features/F-NNN-*.md` (repo orchestrators), or the task prompt from your orchestrator
+   (workers). Mark it `in progress` in `STATUS.md` (orchestrators only), and read only the design docs it references.
 4. Run `git fetch origin && git status`. If you are on `main`, create a branch before editing anything (§3).
-5. Plan the work and decide which parts to **dispatch to cheaper subagents** (§2) before you start.
+5. Plan the work and decide which parts go to **worker agents** (§2) before you start.
 
 ---
 
-## 1b. Session types: setup → repo orchestrators → workers
+## 1b. Session types (v2, from 2026-10-15, D-074)
 
-| Session | Where | Lifetime | Does |
-|---|---|---|---|
-| **Setup** | `/Users/federico/Developer/collections-app` (both repos) | Once | M0 for both repos (research, skeletons, local gates, CLAUDE.md, agents), with one PR per repo task |
-| **Repo orchestrator** | one per repo, started in `backend/` or `frontend-web/` | Long-lived, one per milestone if context grows | Plans the next tasks, writes **handoff briefs**, gives the user worker prompts, reviews worker PRs against the design docs, keeps STATUS.md, coordinates cross-repo contract changes. Implements only small glue or fixes itself |
-| **Worker** | one per task, in its **own git worktree** | One task = one branch = one PR | Reads its brief, implements, tests, opens the PR, updates STATUS.md, then ends |
+Three levels. Only the top two are sessions the user starts. Workers are **internal subagents** of a repo orchestrator,
+not separate sessions.
 
-### Handoff briefs
-- The orchestrator writes one brief per task to `design-docs/handoffs/<TASK-ID>.md` (template: `handoffs/README.md`) **before** the user starts the worker. The brief has to be complete on its own: the worker has no context except CLAUDE.md, the design docs, and the brief.
-- Only hand off tasks whose dependencies are **merged** (or explicitly noted as "branch from X"). Tasks running in parallel must not touch the same foundational files (ORCHESTRATOR_BRIEF §5).
-- The orchestrator records each handed-off task in STATUS.md as `todo` with `brief: handoffs/<ID>.md`. The worker flips it to `in progress` → `in review`.
-- When a worker hits a design gap, it writes the question in the brief's "Questions" section and in STATUS.md (`blocked`), then asks the user. It does not guess.
+| Level | Where | Model | Does | Does not |
+|---|---|---|---|---|
+| **Top-level orchestrator** | parent repo root (`/Users/federico/Developer/collections-app`) | Opus 5.5, medium effort | Owns [`ROADMAP.md`](../ROADMAP.md). Analyzes each new feature with the user, writes the **feature brief** (`features/F-NNN-*.md`): why, user stories per repo, contract impact, out of scope. Keeps cross-repo order (backend contract first). Parent-repo changes (`deploy/`, docs, pointer bumps) | Split stories into tasks, write code in the service repos, review worker output |
+| **Repo orchestrator** | one per repo, started in `backend/` or `frontend-web/` | Opus 5.5, **medium** effort | Turns its repo's stories into small tasks, dispatches **worker** agents, reviews **only what workers flag**, runs the repo gate, opens the PRs, updates STATUS.md and the brief's "Repo breakdown". Asks the top-level orchestrator (via the user) or the user about design gaps | Re-review unflagged work line by line |
+| **Worker** (agent `worker`) | inside the repo orchestrator's session (Agent tool) | Sonnet 5.5, medium effort (set in `.claude/agents/worker.md`) | Implements one task with its tests, runs the gate, commits on the given branch, and ends with a report whose **FLAGS** section lists deviations, decisions, crucial points and anything unverified | Push, open PRs, edit CLAUDE.md or design docs, widen its scope |
 
-### Parallel sessions in one repo
-- Every worker runs in its **own git worktree** (the desktop app's worktree option, or `git worktree add ../<repo>-<task> -b <branch> origin/main`, run from inside the submodule (`backend/` or `frontend-web/`)). Never have two sessions share a working tree.
+### Flow of a feature
+1. **You and the top-level orchestrator** discuss the idea. It writes `features/F-NNN-<slug>.md` (template: `features/README.md`)
+   with user stories per repo, adds the feature to STATUS.md and ROADMAP.md, and you approve it.
+2. **You start (or reuse) the repo orchestrators** with a one-line prompt: "Implement F-NNN, your stories" (see `features/README.md`).
+3. **Each repo orchestrator** splits its stories into tasks (a few hours of work each), writes them into the brief's
+   "Repo breakdown", and dispatches workers: one branch and PR per story by default, sequentially on that branch, or in
+   parallel with `isolation: "worktree"` when tasks don't touch the same files. Backend contract changes merge (and get tagged)
+   before the web stories that need them.
+4. **Workers report.** `FLAGS: none` → the orchestrator only runs the repo gate (`make check` / `npm run check`) once
+   before the PR, and doesn't read the diff. Flagged items → it reviews exactly those points, fixes or accepts them, and
+   records a D-entry when a flag is a real decision.
+5. **PRs** go to the user for review and merge. After the merge the repo orchestrator bumps the parent pointer (D-044) and updates STATUS.md.
+   When all stories are done, the top-level orchestrator marks the feature shipped in ROADMAP.md.
+
+### Rules that keep it cheap
+- Worker prompts are **self-contained and short**: the story, the task, files to start from, acceptance criteria, the branch,
+  and "end with the report format in your agent definition". Don't paste design docs; give their absolute paths and sections.
+- The repo orchestrator never re-derives what a worker did unless it's flagged. If a worker's result is wrong twice, the
+  orchestrator does that task itself.
+- Security-sensitive, schema, contract (`api/openapi.yaml`), migration, concurrency, trash and storage work: the worker
+  **must** flag it as `[CRUCIAL]`, and the orchestrator reviews those parts.
+- `docs-keeper` (haiku) still updates `docs/` before every PR. `researcher` (sonnet) still handles version and library research.
+- Running the app for a check: `./deploy/test up -d --fresh` from the parent, never the user's dev data.
+
+### Parallel work in one repo
+- Parallel workers use `isolation: "worktree"`. The orchestrator merges their branches into the story branch. Never let
+  two agents edit the same working tree at once.
+- Two **sessions** never share a working tree either. If the user runs a second session in a repo, it uses its own worktree,
+  created from inside the submodule (`git worktree add ../<repo>-<task> -b <branch> origin/main`).
 - Design docs are always referenced by absolute path, which works from any worktree.
-- After a PR merges, other open branches rebase onto `origin/main` before continuing.
+
+### History
+v1 (M0–M5, until 2026-10-15): setup session → repo orchestrators writing `handoffs/<ID>.md` → one **worker session** per
+task in its own worktree. Superseded by v2 (D-074). The `handoffs/` folder is kept as a record.
 
 ---
 
 ## 2. Model dispatch policy (cost control)
 
-The main session (the orchestrator, normally the most capable model) owns design judgment, complex
-implementation, integration, and final review. It **delegates** cheaper work to subagents defined in
-each repo's `.claude/agents/` (templates in `design-docs/templates/agents/`).
-
-| Work | Agent | Model | Notes |
+| Work | Who | Model / effort | Notes |
 |---|---|---|---|
-| Codebase search ("where is X", "what calls Y") | built-in `Explore` or `researcher` | haiku / sonnet | Ask for conclusions plus file:line, not file dumps |
-| Web/doc research (current versions, library status, API docs, TMDB terms later) | `researcher` | **sonnet** | Must cite sources and give the date checked. Never guess versions |
-| Writing unit/integration tests for existing or just-written code | `test-writer` | **sonnet** | Main session reviews the tests and **runs them itself**. Never accept "tests pass" without running them |
-| Updating the repo's simple service docs (`docs/`), README sections, CHANGELOG lines | `docs-keeper` | **haiku** | Runs before every PR is opened (§5) |
-| Mechanical, well-specified edits (renames, boilerplate from a clear pattern) | `general-purpose` with `model: sonnet` | sonnet | Give exact files and the pattern to follow |
-| Architecture, schema, API design, concurrency/trash/storage logic, security-sensitive code, PR self-review | main session | top model | Do not delegate |
+| Feature analysis, user stories, cross-repo order, roadmap | top-level orchestrator | Opus 5.5 / medium | Session in the parent repo |
+| Task breakdown, flagged-item review, contract and schema design, PRs | repo orchestrator | Opus 5.5 / medium | Session in `backend/` or `frontend-web/` |
+| Implementation + its tests, mechanical edits, test fixes | `worker` | Sonnet 5.5 / medium | Ends with a FLAGS report |
+| Web/doc research (versions, library status, API docs, TMDB terms) | `researcher` | sonnet | Must cite sources and give the date checked. Never guess versions |
+| Codebase search ("where is X") | built-in `Explore` | haiku | Conclusions plus file:line, not file dumps |
+| `docs/` module docs before every PR | `docs-keeper` | haiku | §5 |
 
 Dispatch rules:
-- **Prompts must be self-contained.** A subagent starts with no context. Include file paths, the relevant design-doc section, acceptance criteria, and the expected output format.
-- Run independent subagents **in parallel** (e.g. researcher plus test-writer on different modules).
-- Do not delegate tasks whose output you would need to fully re-derive to trust.
-- If a cheap agent's output is wrong twice, do the task in the main session instead.
-- Subagents do not push, open PRs, or edit `CLAUDE.md`. The main session does those.
+- **Prompts must be self-contained.** A subagent starts with no context.
+- Run independent workers **in parallel** (worktree isolation).
+- Subagents do not push, open PRs, or edit `CLAUDE.md` or design docs. The repo orchestrator does those.
+- **Never claim tests pass without running them:** the orchestrator runs the repo gate itself once before each PR.
+- `test-writer` is retired in v2: workers write the tests for their own task.
 
 ---
 
