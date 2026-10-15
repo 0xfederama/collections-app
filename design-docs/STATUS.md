@@ -16,7 +16,7 @@ Feature briefs: [`features/`](features/). Repo orchestrators add their task rows
 | F-000 | F000-W1 install v2 agents + rules | web orch. | done | `chore/adopt-workflow-v2` | [web#16](https://github.com/0xfederama/collections-app-frontend-web/pull/16) | 2026-10-15 | Squash-merged `5dc2586`, pointer bumped. Gate green (1200 tests). Smoke worker ran on Sonnet 5.5. The running session picks up a new agent file after a short delay (no restart needed) |
 | F-006 | 1.0.1 polish (W1–W9) | web orch. | done (web) | one per story (see brief) | web#18–#25 | 2026-10-15 | All web stories merged, plus version 1.0.1 ([web#26](https://github.com/0xfederama/collections-app-frontend-web/pull/26)); pointer → `51db3dc`. W8 CSP PASS on the prod web image + test backend (trial `./deploy/prod` refused by auto mode). Next: top-level orch. tags v1.0.1; U1 is the user's |
 | F-007 | Lists & items restructure + exploration fixes (1.1.0) | top-level orch. + user | **done** 2026-10-15 (backend#18, web#28; pointers bumped; PRODUCT/DATA_MODEL updated); parent tag `v1.1.0` pending your check | | [backend#18](https://github.com/0xfederama/collections-app-backend/pull/18) | 2026-10-15 | One kind per list, trimmed fields, addable price, list description, 6 UI fixes (D-079), `api-v0.3.0` |
-| F-003 | Brief e2e safety net | top-level orch. + user | **approved** 2026-10-15 | | | 2026-10-15 | `make smoke` (backend) + ~8 Playwright specs (web); lean workflow (D-081) |
+| F-003 | Brief e2e safety net | top-level orch. + user (backend orch.: F003-B1) | **in progress** (F003-B1 started 2026-10-15) | `test/F003-B1-api-smoke` (backend) | | 2026-10-15 | `make smoke` (backend) + ~8 Playwright specs (web); lean workflow (D-081) |
 
 ## 1.0 release checks (done, v1 workflow)
 

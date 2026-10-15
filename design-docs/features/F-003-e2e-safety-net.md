@@ -73,6 +73,9 @@ None.
 ## Repo breakdown (filled by the repo orchestrators)
 ### Backend
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
+|---|---|---|---|---|---|
+| T1 `scripts/smoke.sh` + `make smoke` (curl+jq, shell, no new deps; shellcheck-clean) | F003-B1 | `test/F003-B1-api-smoke` | dispatched | | |
+| T2 README "when to run" + CLAUDE.md command row + `docs/` | F003-B1 | same | | | |
 ### Web
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
 
