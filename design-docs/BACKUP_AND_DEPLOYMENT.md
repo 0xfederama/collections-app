@@ -9,9 +9,10 @@ git clone --recurse-submodules https://github.com/0xfederama/collections-app.git
 ```
 
 This checks out `backend/` and `frontend-web/` (submodules, D-043). Whole app in one command: `cp backend/.env.example backend/.env`
-(set `POSTGRES_PASSWORD`), then `./app up` from the parent folder. `./app` wraps compose with two local environments (D-067):
-`--prod` (default, persistent data, ports 8080/5173) and `--test` (own project and volumes, ports 8090/5183). Add `--fresh` to wipe the test data;
-it's refused for prod. Variables are in `env/{prod,test}.env`; secrets stay in `backend/.env`.
+(set `POSTGRES_PASSWORD`), then `./deploy/dev up -d` from the parent folder. Three environments, one command each (D-073,
+guide in `deploy/README.md`): `./deploy/dev` (persistent local, ports 8080/5173), `./deploy/test` (own project and volumes,
+ports 8090/5183, `--fresh` wipes its data) and `./deploy/prod` (home server, §5). Local settings are in `deploy/local/{dev,test}.env`
+(committed, no secrets); local secrets stay in `backend/.env`.
 
 Backend (from `backend/`): `cp .env.example .env` → `docker compose up --build` (db + migrate + api, the primary path, D-033).
 Optional fast loop: copy the opt-in override that publishes `127.0.0.1:5432`, run `docker compose up -d db`, then `make migrate` and `make run` on the host.
@@ -77,7 +78,7 @@ Keep at least 7 daily and 4 weekly copies off the device (user's choice of locat
 
 ## 5. Production / home-server deployment (Raspberry Pi or Linux)
 
-- `deploy/compose.prod.yaml` lives in the **parent repo** and **builds** both images on the server from the `backend/` and `frontend-web/` submodules (D-069: no registry, native arch, arm64 on a Pi), plus `db` and `migrate`.
+- `deploy/server/compose.yaml` (run through `./deploy/prod`, D-073) lives in the **parent repo** and **builds** both images on the server from the `backend/` and `frontend-web/` submodules (D-069: no registry, native arch, arm64 on a Pi), plus `db` and `migrate`.
 - The `web` container (Caddy) serves the SPA and reverse-proxies `/api/*` to `api:8080`, so it's same-origin and needs no CORS. It's published on `127.0.0.1:8081` by default, or on the LAN interface or a Tailscale IP **by explicit opt-in**.
 - **Recommended remote access:** Tailscale (or equivalent private VPN) on the host, with no router port-forwarding. **Never** expose to the public internet until Phase 3 auth exists.
 - Persistent data: Docker named volumes `pgdata` and `appdata` (D-071); only backups are a host path, `/srv/collection/backups`. See `deploy/README.md`.

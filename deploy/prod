@@ -1,35 +1,41 @@
 #!/usr/bin/env bash
-# Operate the production stack (deploy/compose.prod.yaml, project collections-app-prod).
+# prod: the real app on your home server. Images are built here (Caddy web + api); only web publishes a port.
 #
-#   ./deploy/prod up -d --build        any docker compose command: ps, logs -f api, down, ...
-#   ./deploy/prod backup [dest]        Postgres + images (default $BACKUP_DIR, /srv/collection/backups)
-#   ./deploy/prod restore <dir> [--force]
-#   ./deploy/prod verify <dir>         check a backup against the running database
-#   ./deploy/prod prune [dest]         keep the newest 7 daily + 4 weekly backups, delete the rest
-#   ./deploy/prod check                exposure check (AT-18 for prod)
+#   ./deploy/prod check                   exposure check: run it first and after every deploy/server/.env edit
+#   ./deploy/prod up -d --build           build and start (any docker compose command works: ps, logs -f api, down)
+#   ./deploy/prod backup [dest]           Postgres + images (default $BACKUP_DIR, /srv/collection/backups)
+#   ./deploy/prod restore <dir> [--force] restore a backup (asks before replacing data)
+#   ./deploy/prod verify <dir>            compare a backup with the running database
+#   ./deploy/prod prune [dest]            keep the newest backup of each of the last 7 days and 4 weeks
 #
-# backup/restore/verify reuse the backend scripts (backend/scripts) pointed at this compose project.
+# web http://127.0.0.1:8081 (or WEB_BIND)   settings + secrets: deploy/server/.env   guide: deploy/README.md
 set -euo pipefail
-here="$(cd "$(dirname "$0")" && pwd)"
-root="$(dirname "$here")"
-[ -f "$here/.env" ] || { echo "missing deploy/.env: cp deploy/.env.example deploy/.env and set POSTGRES_PASSWORD" >&2; exit 1; }
+ENV_NAME="prod"
+# shellcheck source=deploy/lib.sh
+. "$(dirname "$0")/lib.sh"
+case "${1:-}" in
+  "") usage 1 ;;
+  -h | --help | help) usage ;;
+esac
+here="$DEPLOY/server"
+root="$ROOT"
+need_file "$here/.env" "cp deploy/server/.env.example deploy/server/.env and set POSTGRES_PASSWORD"
 
-# Compose reads deploy/.env itself; the backend scripts also need the values in the environment
+# Compose reads deploy/server/.env itself; the backend scripts also need the values in the environment
 # (they would otherwise pick up backend/.env, which is the dev password).
 set -a
 # shellcheck disable=SC1091
 . "$here/.env"
 set +a
-export COMPOSE_FILE="$here/compose.prod.yaml" COMPOSE_PROJECT_NAME=collections-app-prod
+export COMPOSE_FILE="$here/compose.yaml" COMPOSE_PROJECT_NAME=collections-app-prod
 backups="${BACKUP_DIR:-/srv/collection/backups}"
 
-usage() { sed -n '2,10p' "$0" | sed 's/^# \{0,1\}//'; exit "${1:-0}"; }
 
 # Newest backup per day (first 7 days) and per ISO week (first 4 weeks); everything else goes.
 prune() {
   local dest="${1:-$backups}" dir name day week kept=0 removed=0
   local -a seen_days=() seen_weeks=()
-  [ -d "$dest" ] || { echo "no such directory: $dest" >&2; exit 1; }
+  [ -d "$dest" ] || die "no such directory: $dest"
   while IFS= read -r name; do
     [[ "$name" =~ ^[0-9]{8}T[0-9]{6}Z$ ]] || continue
     day="${name:0:8}"
@@ -54,7 +60,7 @@ prune() {
       echo "removed $dir"
     fi
   done < <(cd "$dest" && printf '%s\n' * | sort -r)
-  echo "prune: kept $kept, removed $removed"
+  ok "prune: kept $kept, removed $removed"
 }
 
 cmd="${1:-}"

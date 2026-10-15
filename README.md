@@ -12,8 +12,7 @@ whole-app local setup. The service code lives in the submodules.
 | `backend/` | Go API + PostgreSQL + the canonical OpenAPI contract | [collections-app-backend](https://github.com/0xfederama/collections-app-backend) (submodule) |
 | `frontend-web/` | React + TypeScript + Vite web app | [collections-app-frontend-web](https://github.com/0xfederama/collections-app-frontend-web) (submodule) |
 | `design-docs/` | Product, architecture, API, data model, decisions, status, agent workflow | this repo |
-| `compose.yaml` | Whole-app local dev: db + migrate + api + Vite dev server | this repo |
-| `deploy/` | Production on a home server: `compose.prod.yaml`, backups, exposure check. See [deploy/README.md](deploy/README.md) | this repo |
+| `deploy/` | How to run it: `./deploy/dev`, `./deploy/test` (local) and `./deploy/prod` (home server). See [deploy/README.md](deploy/README.md) | this repo |
 
 ## Quick start
 
@@ -23,48 +22,25 @@ Prerequisites: Git, Docker with Compose v2. (Go 1.27 and Node 24 are only needed
 git clone --recurse-submodules https://github.com/0xfederama/collections-app.git
 cd collections-app
 cp backend/.env.example backend/.env      # set POSTGRES_PASSWORD (URL-safe characters only)
-./app up                                  # prod environment (the default)
+./deploy/dev up -d                        # web http://localhost:5173, api http://localhost:8080
 ```
 
-| Service | URL | Exposure |
+There are three environments, one command each. The full guide is [deploy/README.md](deploy/README.md):
+
+| Command | What | Web |
 |---|---|---|
-| Web (Vite dev server) | http://localhost:5173 | `127.0.0.1` only (`WEB_PORT` overrides the port) |
-| API | http://localhost:8080 (`/healthz`, `/readyz`) | `127.0.0.1` only (`API_PORT` in `backend/.env` overrides) |
-| Postgres | `db:5432` | Docker network only, not published |
+| `./deploy/dev` | Everyday development: persistent data, Vite hot reload | http://localhost:5173 |
+| `./deploy/test` | Disposable copy next to dev. `./deploy/test up -d --fresh` starts on a blank database | http://localhost:5183 |
+| `./deploy/prod` | The real app on a home server: built images, backups, exposure check | http://127.0.0.1:8081 |
 
-### Environments: `./app`
-
-`./app` wraps `docker compose` (it can't take custom flags itself) with two environments. Their variables are in `env/`:
-
-| | `--prod` (default) | `--test` |
-|---|---|---|
-| Purpose | Your real, persistent data | Playing and testing; wipe any time |
-| Web / API | http://localhost:5173 / :8080 | http://localhost:5183 / :8090 |
-| Compose project (own volumes) | `collections-app` | `collections-app-test` |
-| Settings | `APP_ENV=production`, JSON logs, password from `backend/.env` | `APP_ENV=development`, debug text logs, workspace "Test Collection" |
-
-Both can run at the same time.
-
-```bash
-./app up --test -d            # start test in the background (omit -d for foreground logs)
-./app up --test --fresh -d    # wipe test's DB + uploaded files, then start on a blank DB
-./app down --test             # stop test (keeps its data)
-./app down --test --fresh     # stop test and wipe its data
-./app logs -f api --test      # any compose command works: ps, logs, exec, ...
-./app down                    # stop prod (data kept). --fresh is refused for prod
-```
-
-Plain `docker compose up --build` still works and starts the prod project with `backend/.env` values only.
-"Prod" here means your persistent local environment. The real home-server deployment (images built on the server, Caddy) is in [deploy/README.md](deploy/README.md).
+Each takes any `docker compose` command (`./deploy/dev logs -f api`, `./deploy/test down --fresh`, ...) and `--help`.
 Already cloned without `--recurse-submodules`: `git submodule update --init --recursive`.
-
-The first start is slower: the `web` container runs `npm ci` into a Linux-only `node_modules` volume.
-The header of the web app shows `Backend: ready` once the dev proxy reaches the API.
+The web app's header shows `Backend: ready` once it reaches the API.
 
 ## How the app fits together
 
 ```text
- Browser ──► Vite dev server :5173 (dev)   or   Caddy (prod, later: Q-03)
+ Browser ──► Vite dev server (dev, test)   or   Caddy (prod)
                │  relative /api, /healthz, /readyz are proxied: same origin, so no CORS anywhere
                ▼
             Go API :8080  (chi router, pgx)

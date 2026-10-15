@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# dev: your everyday local environment. Data persists; the web app is the Vite dev server (hot reload).
+#
+#   ./deploy/dev up -d            build and start in the background (omit -d to follow the logs)
+#   ./deploy/dev down             stop; the data is kept
+#   ./deploy/dev <compose cmd>    anything docker compose does: ps, logs -f api, restart web, ...
+#
+# web http://localhost:5173   api http://localhost:8080   settings: deploy/local/dev.env
+set -euo pipefail
+ENV_NAME="dev"
+# shellcheck source=deploy/lib.sh
+. "$(dirname "$0")/lib.sh"
+
+use_local_stack
+run_local "$@"

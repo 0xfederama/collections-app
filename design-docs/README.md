@@ -10,7 +10,8 @@ Canonical design package for the Collection App. Every agent session working on
 
 ```text
 /Users/federico/Developer/collections-app/
-├── README.md, compose.yaml, .env.example, .gitignore   ← parent repo files (whole-app local dev)
+├── README.md, CLAUDE.md, .gitignore   ← parent repo files
+├── deploy/                        ← environments: ./deploy/dev, ./deploy/test (local), ./deploy/prod (home server), D-073
 ├── design-docs/                   ← this folder: living plan, decisions, status, templates (tracked in the PARENT repo)
 │   └── collection_app_detailed_conversation_archive.md  ← original source conversation (historical)
 ├── backend/                       ← git submodule → github.com/0xfederama/collections-app-backend

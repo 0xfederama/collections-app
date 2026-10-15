@@ -1,8 +1,8 @@
 # Production stack for a home server (BACKUP_AND_DEPLOYMENT §5, D-069, D-071).
 # Images are built here, on the server, from the submodules: no registry.
 #
-#   cp deploy/.env.example deploy/.env      # set POSTGRES_PASSWORD
-#   ./deploy/prod up -d --build             # same as: docker compose -f deploy/compose.prod.yaml up -d --build
+#   cp deploy/server/.env.example deploy/server/.env   # set POSTGRES_PASSWORD
+#   ./deploy/prod up -d --build              # same as: docker compose -f deploy/server/compose.yaml up -d --build
 #
 # Only `web` publishes a port: 127.0.0.1:${WEB_PORT:-8081} unless WEB_BIND names another address (opt-in).
 # `db` and `api` are reachable only inside the compose network.
@@ -24,7 +24,7 @@ services:
     environment:
       POSTGRES_USER: collection
       POSTGRES_DB: collection
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in deploy/.env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in deploy/server/.env}
     volumes:
       - pgdata:/var/lib/postgresql
     healthcheck:
@@ -44,13 +44,13 @@ services:
     environment:
       DATABASE_URL: postgres://db:5432/collection?user=collection&password=${POSTGRES_PASSWORD:?}&sslmode=disable
     volumes:
-      - ../backend/db/migrations:/migrations:ro
+      - ../../backend/db/migrations:/migrations:ro
     entrypoint: ["/bin/sh", "-c"]
     command: ['exec migrate -path /migrations -database "$$DATABASE_URL" up']
     restart: "no"
 
   api:
-    build: ../backend
+    build: ../../backend
     <<: *hardening
     # Distroless image, user 65532 (nonroot). Only /data (the volume) is writable.
     read_only: true
@@ -79,7 +79,7 @@ services:
 
   # Caddy: serves the SPA and proxies /api and /readyz to api:8080 (image: Q-03w, frontend-web/Dockerfile).
   web:
-    build: ../frontend-web
+    build: ../../frontend-web
     <<: *hardening
     # The official Caddy binary carries the file capability cap_net_bind_service; with every capability
     # dropped, exec fails ("operation not permitted"). Caddy listens on 8080, so it never uses it.
@@ -88,7 +88,7 @@ services:
       api:
         condition: service_healthy
     ports:
-      # WEB_BIND is the explicit opt-in for a LAN or Tailscale address (never 0.0.0.0, deploy/check.sh refuses it).
+      # WEB_BIND is the explicit opt-in for a LAN or Tailscale address (never 0.0.0.0, ./deploy/prod check refuses it).
       - "${WEB_BIND:-127.0.0.1}:${WEB_PORT:-8081}:8080"
     healthcheck:
       test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/"]

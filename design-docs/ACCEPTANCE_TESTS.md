@@ -37,7 +37,7 @@ Each test name or describe block references the AT id (e.g. `TestAT07_ImageSourc
 
 ## Smoke checklist (MVP, D-068)
 
-Run once before C4 against the real stack (`./app up --test --fresh` from the parent repo, or the production compose), in a desktop
+Run once before C4 against the real stack (`./deploy/test up -d --fresh` from the parent repo, or `./deploy/prod`), in a desktop
 browser and at phone width (375 px), in light and dark theme. Note pass/fail per line in STATUS.md.
 
 1. Home loads; the empty state guides to create a first list. Create a folder, a nested folder and two lists (AT-03).

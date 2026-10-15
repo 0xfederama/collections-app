@@ -5,14 +5,14 @@
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
 
-# Values from deploy/.env, unless already in the environment (so tests can override WEB_BIND).
+# Values from deploy/server/.env, unless already in the environment (so tests can override WEB_BIND).
 if [ -f "$here/.env" ]; then
   while IFS='=' read -r key value; do
     if [ -z "${!key:-}" ]; then export "$key=$value"; fi
   done < <(grep -E '^(WEB_BIND|WEB_PORT)=' "$here/.env" || true)
 fi
 
-rendered="$(POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-check}" docker compose -f "$here/compose.prod.yaml" config --format json)"
+rendered="$(POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-check}" docker compose -f "$here/compose.yaml" config --format json)"
 
 bad=0
 while IFS=$'\t' read -r service host_ip published; do

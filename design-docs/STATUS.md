@@ -87,8 +87,8 @@ Postgres, AT-18 compose exposure, `docker build`).**
 - TypeScript stays on 6.x until typescript-eslint supports 7 (D-040). React Router 8: import from `react-router`.
 
 **Both / parent.**
-- The parent `compose.yaml` (web on `127.0.0.1:5173`) is not covered by the AT-18 script, which only renders the backend
-  compose. Q-03's production compose must get its own exposure check.
+- The parent local stack (`deploy/local/compose.yaml`, web on `127.0.0.1:5173`) is not covered by the AT-18 script, which only renders the backend
+  compose. Prod has its own exposure check (`./deploy/prod check`).
 - GitGuardian scans every push: no `user:pass@host` strings, blank secrets in examples (see backend CLAUDE.md gotchas).
 - Parent commits go straight to `main` by pathspec (D-044). Service repos are PR-only; the user merges.
 
@@ -105,6 +105,8 @@ Postgres, AT-18 compose exposure, `docker build`).**
 - Q-4 license (DECISIONS.md). Default applies if unanswered.
 
 ## Log (newest first, one line each)
+
+- 2026-10-14: Parent: environments moved into `deploy/` (D-073): `./deploy/dev`, `./deploy/test [--fresh]`, `./deploy/prod`; `deploy/local/` and `deploy/server/` hold the compose and env files. `./app`, `env/`, root `compose.yaml` and `.env.example` removed; `deploy/.env` is now `deploy/server/.env`.
 
 - 2026-10-14: W-09 squash-merged (web `main` 162faab), parent pointer bumped. W-10, W-13, T-01, Q-03w rebase on it.
 - 2026-10-14: W-09 PR opened (web#11): item image dropzone/picker/URL/remove with XHR progress, base-version snapshot in the edit form, dev fake. Real-backend acceptance done; waiting for the user's review.
