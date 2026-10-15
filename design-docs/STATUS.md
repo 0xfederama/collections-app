@@ -26,7 +26,7 @@ M1/M2 web rows (added by the web orchestrator):
 | T-01 | web | in progress | `chore/T-01-test-stability` | — | 2026-10-14 | brief: handoffs/T-01.md. Flaky ItemView/ItemActions tests under load |
 | Q-01a | web | deferred | — | — | 2026-10-14 | Post-MVP (D-068). C4 uses the smoke checklist in ACCEPTANCE_TESTS.md |
 | Q-01b | web | deferred | — | — | 2026-10-14 | Post-MVP (D-068) |
-| Q-03w | web | in review | `feature/Q-03w-web-image` | [PR #12](https://github.com/0xfederama/collections-app-frontend-web/pull/12) | 2026-10-15 | brief: handoffs/Q-03w.md (D-069). Parallel with W-09, W-10, W-13, T-01. Needed by Q-03 |
+| Q-03w | web | done | `feature/Q-03w-web-image` | [#12](https://github.com/0xfederama/collections-app-frontend-web/pull/12) | 2026-10-15 | Squash-merged as `f1df021` (D-072). Orchestrator spot-checked CSP/headers/Dockerfile. `npm run check` now builds the image (needs Docker). Branch and worktree removed. Unblocks Q-03 |
 
 M1 backend rows (added by the backend orchestrator):
 
@@ -106,6 +106,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 ## Log (newest first, one line each)
 
+- 2026-10-15: Q-03w squash-merged (web `main` f1df021), parent pointer bumped. Q-03 (backend orchestrator) can do its final prod-compose run. `npm run check` needs Docker from now on.
 - 2026-10-14: Parent: environments moved into `deploy/` (D-073): `./deploy/dev`, `./deploy/test [--fresh]`, `./deploy/prod`; `deploy/local/` and `deploy/server/` hold the compose and env files. `./app`, `env/`, root `compose.yaml` and `.env.example` removed; `deploy/.env` is now `deploy/server/.env`.
 
 - 2026-10-14: W-09 squash-merged (web `main` 162faab), parent pointer bumped. W-10, W-13, T-01, Q-03w rebase on it.
