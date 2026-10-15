@@ -165,6 +165,13 @@ web stories need nothing from the backend.
 | T2 migration 000006: generic price → "From 1.2" content block, clear price columns, strip `price` from generic pinned_fields, reset price sort; up/down test | F008-B1 | same | same worker, after T1 | pending | pending |
 ### Web
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
+|---|---|---|---|---|---|
+| T1 top bar (search + quick add + theme), no "Library" heading, hide sidebar "+ New" on empty tree | W1, W2 | `feature/F008-ui-polish` | dispatched 2026-10-15 | pending | pending |
+| T2 sidebar keyboard selection/focus, drag and drop into folders, e2e spec | W3, W4 | same | after T1 | pending | pending |
+| T3 list header, toolbar radii/consistency, empty-list CTA, description in place | W5–W8 | same | after T2 | pending | pending |
+| T4 inline add item (draft row + side page) | W9 | same | after T3 | pending | pending |
+| T5 item title block, links row and icons, price field, initials placeholders | W10–W13 | same | after T4 | pending | pending |
+| T6 generic lists have no fields (pin `api-v0.6.0`) | W14 | same | waits for backend tag | pending | pending |
 
 ## Log
 - 2026-10-15: written from the user's first look at 2.0.0 (4 screenshots), with an HIG review; inserted before pool item 3.
