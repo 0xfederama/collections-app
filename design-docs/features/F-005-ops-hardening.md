@@ -53,6 +53,9 @@ None.
 ## Repo breakdown (filled by the repo orchestrators)
 ### Backend
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
+|---|---|---|---|---|---|
+| T1 `images.Strip` (JPEG/PNG/WebP lossless; JPEG keeps a minimal orientation-only EXIF) + use in `Process` + tests | F005-B1 | `feature/F005-B1-strip-image-metadata` | dispatched 2026-10-15 | | |
+| T2 `api strip-images` backfill subcommand (sqlc queries, idempotent, size/sha fix) + tests + README | F005-B1 | same | dispatched 2026-10-15 (same worker) | | |
 
 ## Log
 - 2026-10-15: brief written with the user (pool items 1+2 merged into one round, no CI, D-084); parent stories P1–P3 done.
