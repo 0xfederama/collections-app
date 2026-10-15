@@ -120,7 +120,8 @@ Contract: `api-v0.2.0`. Decisions D-001 to D-073 are in [`design-docs/DECISIONS.
 ## 5. Now
 
 ### F-006 · 1.0.1 polish 🟢 (draft, waiting for your OK)
-Small fixes found by the 1.0 checks, all in the web app: Home "Recently updated" goes stale after deleting a folder; Tab
+Small fixes found by the 1.0 checks and by you, all in the web app: Home and Trash go stale after a delete until reload; the
+"Backend: ready" indicator moves into Settings (with the API address and contract version); Tab
 reachability of the sidebar tree; focus return after Esc; delete-confirm vs Trash counts; a client-side IMDb URL check;
 an up-to-date web README; a flaky `ItemEditForm` test; the prod CSP verified in a real browser.
 Brief: [`design-docs/features/F-006-1.0.1-polish.md`](design-docs/features/F-006-1.0.1-polish.md). It's the first feature
