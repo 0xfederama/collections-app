@@ -130,8 +130,13 @@ other behavior change not listed above.
 
 ## Repo breakdown (filled by the repo orchestrators)
 ### Backend
+One branch `feature/F002-backend-contract`, one PR, workers run in sequence (they share `openapi.yaml`, `kinds.go` and the list code). Orchestrator: backend, 2026-10-15.
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
 |---|---|---|---|---|---|
+| T1 `paid_platforms` next to `streaming.platforms` (additive), spec 0.4.0 | F002-B1 | `feature/F002-backend-contract` | todo | | |
+| T2 kind field changes + migration 000003 ("From 1.1" block) | F002-B2 | same | todo | | |
+| T3 `pinned_fields` on lists (migration 000004) | F002-B3 | same | todo | | |
+| T4 sort mode `price` (migration 000005) | F002-B4 | same | todo | | |
 ### Web
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
 |---|---|---|---|---|---|
