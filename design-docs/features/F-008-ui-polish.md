@@ -161,6 +161,8 @@ web stories need nothing from the backend.
 ## Repo breakdown (filled by the repo orchestrators)
 ### Backend
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
+| T1 spec 0.6.0 + service: reject price on generic items and lists' price pin/sort; clear price on kind change to generic | F008-B1 | `feature/F008-B1-generic-no-price` | dispatched 2026-10-15 | pending | pending |
+| T2 migration 000006: generic price → "From 1.2" content block, clear price columns, strip `price` from generic pinned_fields, reset price sort; up/down test | F008-B1 | same | same worker, after T1 | pending | pending |
 ### Web
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
 
