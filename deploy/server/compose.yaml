@@ -81,9 +81,10 @@ services:
   web:
     build: ../../frontend-web
     <<: *hardening
-    # The official Caddy binary carries the file capability cap_net_bind_service; with every capability
-    # dropped, exec fails ("operation not permitted"). Caddy listens on 8080, so it never uses it.
-    cap_add: [NET_BIND_SERVICE]
+    # The image (D-072) runs as UID 10001 with the Caddy file capability removed, so no capability is needed.
+    read_only: true
+    tmpfs:
+      - /tmp
     depends_on:
       api:
         condition: service_healthy
@@ -91,7 +92,7 @@ services:
       # WEB_BIND is the explicit opt-in for a LAN or Tailscale address (never 0.0.0.0, ./deploy/prod check refuses it).
       - "${WEB_BIND:-127.0.0.1}:${WEB_PORT:-8081}:8080"
     healthcheck:
-      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/"]
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/healthz"]
       interval: 10s
       timeout: 4s
       retries: 6

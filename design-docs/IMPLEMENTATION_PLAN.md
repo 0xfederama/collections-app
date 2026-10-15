@@ -75,7 +75,7 @@ Wherever a later task says "in CI", read it as "in the local `make check` / `npm
 | Q-01 | ~~Playwright e2e in web CI: checkout backend at `openapi.lock.json` ref, `docker compose up`, run AT-03/06/09/11/12/13/14/22~~ **Deferred to post-MVP (D-068)**; C4 uses the manual smoke checklist (ACCEPTANCE_TESTS.md) | W-12, B-10 |
 | Q-02 | `scripts/backup.sh`, `restore.sh`, `verify-restore.sh` + an integration test for AT-17 | B-10 |
 | Q-03w | Web production image: multi-stage `Dockerfile` (Node build → Caddy), `Caddyfile` (SPA fallback, `/api/*` + `/readyz` proxy to `api:8080`, CSP and security headers, immutable caching for hashed assets), image built in `npm run check` (D-069) | W-00 |
-| Q-03 | Parent `deploy/compose.prod.yaml` building both images on the server (D-069: no registry, native arch), host paths, prod backup/restore wiring, exposure check for the prod compose, deployment + upgrade README | B-10, Q-02, Q-03w |
+| Q-03 | Parent `deploy/server/compose.yaml` (`./deploy/prod`) building both images on the server (D-069: no registry, native arch), host paths, prod backup/restore wiring, exposure check for the prod compose, deployment + upgrade README | B-10, Q-02, Q-03w |
 | Q-04 | Fresh-clone verification (AT-01) by an agent following only the READMEs; fix the docs | Q-03 |
 | Q-05 | Final review against AT-19 scope fence + security checklist (ARCHITECTURE §5) by a reviewer session | Q-04 |
 

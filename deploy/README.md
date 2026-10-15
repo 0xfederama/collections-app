@@ -92,8 +92,8 @@ Named volumes (D-071) rather than `/srv/collection/{pgdata,data}` bind mounts: D
 and the backup/restore scripts wipe and refill volumes by name. To inspect them: `docker volume inspect collections-app-prod_appdata`.
 Do not `chown` or edit inside them by hand. `docker compose down` keeps them; `down --volumes` **deletes your data**.
 
-Container hardening: all capabilities dropped (except what Postgres and Caddy need to start), `no-new-privileges`,
-the api runs as 65532 with a read-only root filesystem.
+Container hardening: all capabilities dropped (Postgres gets back the few it needs to start), `no-new-privileges`;
+the api (UID 65532) and web (UID 10001) run with a read-only root filesystem.
 
 ### Reaching it from your other devices
 

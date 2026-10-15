@@ -27,7 +27,8 @@ set -a
 # shellcheck disable=SC1091
 . "$here/.env"
 set +a
-export COMPOSE_FILE="$here/compose.yaml" COMPOSE_PROJECT_NAME=collections-app-prod
+# PROD_PROJECT is only for trial runs next to a real prod stack (own containers and volumes); leave it unset on the server.
+export COMPOSE_FILE="$here/compose.yaml" COMPOSE_PROJECT_NAME="${PROD_PROJECT:-collections-app-prod}"
 backups="${BACKUP_DIR:-/srv/collection/backups}"
 
 

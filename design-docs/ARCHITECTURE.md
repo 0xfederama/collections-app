@@ -55,7 +55,7 @@ collections-app-backend/
 ├── db/queries/                 # sqlc .sql per domain
 ├── api/openapi.yaml            # canonical contract
 ├── scripts/                    # backup.sh, restore.sh, verify-restore.sh, dev helpers
-├── deploy/                     # compose.prod.yaml example, Caddyfile example
+├── deploy/                     # local + server compose files, wrappers (D-073)
 ├── docs/                       # minimal module docs (AGENT_WORKFLOW §5)
 ├── .claude/agents/             # researcher, test-writer, docs-keeper
 ├── compose.yaml                # local dev: postgres + migrate + api

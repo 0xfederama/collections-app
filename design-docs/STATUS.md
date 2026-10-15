@@ -43,7 +43,7 @@ M1 backend rows (added by the backend orchestrator):
 | B-10 | backend | done | `feature/B-10-trash` | [#11](https://github.com/0xfederama/collections-app-backend/pull/11) | 2026-10-14 | Squash-merged as `35d5deb`. All API operations implemented; no spec change since `api-v0.1.0` (B-12 not needed). Branch and worktree removed |
 | Q-02 | backend | done | `feature/Q-02-backup-restore` | [#12](https://github.com/0xfederama/collections-app-backend/pull/12) | 2026-10-14 | Squash-merged as `d680a9a` (D-066). `make test-backup` green. Open: manual backup → reset-dev → restore on the dev stack (user). Branch and worktree removed |
 | B-12 | backend | done | `feature/B-12-recent-items` | [#13](https://github.com/0xfederama/collections-app-backend/pull/13) | 2026-10-14 | Squash-merged as `98d3b87` (D-070). Tag `api-v0.2.0` pushed (user OK). Branch and worktree removed |
-| Q-03 | parent + backend | done | — (parent `4c41afc`, no backend PR) | — | 2026-10-14 | Parent `deploy/` (compose.prod.yaml, `prod` wrapper, check.sh, README), D-071; tested on arm64 with a stand-in web image. **Open:** re-run with the real web image after Q-03w merges (deep-link reload, CSP in the browser) — folded into Q-04 |
+| Q-03 | parent + backend | done | — (parent, no backend PR) | — | 2026-10-15 | Parent `deploy/server/` (compose, check.sh), `./deploy/prod` wrapper, README, D-071. Final run with the real web image passed (deep link, CSP 0 violations, upload, backup→wipe→restore→verify, exposure); details in handoffs/Q-03.md |
 | B-11 | backend | done | `feature/B-11-search` | [#9](https://github.com/0xfederama/collections-app-backend/pull/9) | 2026-10-14 | Rebased on B-08, squash-merged as `08d30ab`. Branch and worktree removed |
 
 M0 record:
