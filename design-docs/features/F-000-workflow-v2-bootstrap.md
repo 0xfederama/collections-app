@@ -35,6 +35,8 @@ None.
 ### Backend
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
 |---|---|---|---|---|---|
+| B1a copy `worker.md`, delete `test-writer.md`, swap the CLAUDE.md dispatch block (orchestrator, no worker) | F000-B1 | `chore/adopt-workflow-v2` | — | — | [backend#16](https://github.com/0xfederama/collections-app-backend/pull/16) merged `f918264` |
+| B1b smoke dispatch (read-only Makefile targets) | F000-B1 | — | DONE, report format OK, ran on `claude-sonnet-5-5`, `FLAGS: none` | Equivalent dispatch (general-purpose + `worker.md` body, sonnet/medium), because the agent registry didn't reload mid-session. `effort` is a documented frontmatter key, kept. Open: the next backend session confirms that a native `worker` dispatch resolves | — |
 ### Web
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
 |---|---|---|---|---|---|
