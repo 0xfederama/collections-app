@@ -151,6 +151,7 @@ One branch `feature/F002-backend-contract`, one PR, workers run in sequence (the
 | T8 specs, docs-keeper, DESIGN.md, full gate + e2e | W5 | same | done, flags reviewed (migrations, contract) | yes | [#20](https://github.com/0xfederama/collections-app-backend/pull/20) |
 
 ## Log
+- 2026-10-15: web orchestrator: all web stories shipped in web#30 (squash `893da29`), on `api-v0.5.0`. Decisions to record: guard dialog is Discard/Keep editing (no Save); per-field `If-Match` snapshot rule; kind label above the item title; "Edit description" removed from sidebar menus; toolbar compacts by container query.
 - 2026-10-15: final round: favicon-style local icons, TV links Google + IMDb only, TV triple seasons/episodes/duration; custom fields and types recorded in the roadmap; brief **approved**.
 - 2026-10-15: refinement round: pen on hover only, ✓ at the end of the field, links per kind (TV like movies), real logos, pinned fields (two slots) with kind defaults, price text and sortable, kind field changes, display-mode sketches. Backend stories B2 to B4 added.
 - 2026-10-15: design direction **Frosted Gallery** chosen by the user (Apple-style reference, layered and soft); non-visual changes and decisions agreed in chat; brief written.
