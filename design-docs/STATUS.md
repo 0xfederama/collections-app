@@ -26,7 +26,7 @@ M1/M2 web rows (added by the web orchestrator):
 | T-01 | web | in progress | `chore/T-01-test-stability` | — | 2026-10-14 | brief: handoffs/T-01.md. Flaky ItemView/ItemActions tests under load |
 | Q-01a | web | deferred | — | — | 2026-10-14 | Post-MVP (D-068). C4 uses the smoke checklist in ACCEPTANCE_TESTS.md |
 | Q-01b | web | deferred | — | — | 2026-10-14 | Post-MVP (D-068) |
-| Q-03w | web | in progress | `feature/Q-03w-web-image` | — | 2026-10-14 | brief: handoffs/Q-03w.md (D-069). Parallel with W-09, W-10, W-13, T-01. Needed by Q-03 |
+| Q-03w | web | in review | `feature/Q-03w-web-image` | [PR #12](https://github.com/0xfederama/collections-app-frontend-web/pull/12) | 2026-10-15 | brief: handoffs/Q-03w.md (D-069). Parallel with W-09, W-10, W-13, T-01. Needed by Q-03 |
 
 M1 backend rows (added by the backend orchestrator):
 
