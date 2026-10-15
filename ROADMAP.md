@@ -32,8 +32,8 @@ version history, a trash with restore, and backups. It should be quick to use on
 | # | Release | Theme | Status | Window |
 |---|---|---|---|---|
 | — | **1.0 MVP** | Organize, describe and protect a shared collection | ✅ Released `v1.0.0` (2026-10-15) | Oct 2026 |
-| 1 | **1.0.1** | Polish from the release checks (F-006) | 🟢 In progress | Oct 2026 |
-| 2 | — | Exploration session: you use the fresh test env and list what to change | 🟡 Next | after 1.0.1 |
+| 1 | **1.0.1** | Polish from the release checks (F-006) | ✅ Done (web#18–#27), tag pending | Oct 2026 |
+| 2 | — | Exploration session: you use the fresh test env and list what to change | 🟢 Now | Oct 2026 |
 | 3 | **1.1** | Lists and items restructure (F-007): one item type per list, fewer predefined fields, list descriptions, plus the exploration findings | 🟡 Next | Q4 2026 |
 | 4 | — | Brief e2e safety net (F-003) | 🟡 Next | Q4 2026 |
 | 5 | **1.2** | UI refresh with your design (F-002) | 🟡 Next | Q4 2026 |
@@ -50,9 +50,9 @@ timeline
                : M5 Ops : backups, production deploy, test stabilization
         15 Oct : v1.0.0 released
     section Now
-        1.0.1 : polish from the release checks
-    section Next (in this order)
+        1.0.1 : polish (done)
         Exploration : you test the fresh env
+    section Next (in this order)
         1.1 : lists and items restructure
         e2e : brief safety net
         1.2 : UI refresh
@@ -67,10 +67,10 @@ timeline
 ```mermaid
 flowchart LR
     subgraph NOW["🟢 Now"]
-        F006["F-006 · 1.0.1 polish"]
+        F006["F-006 · 1.0.1 polish ✅"]
+        EXP["Exploration session<br/>(you, fresh test env)"]
     end
     subgraph NEXT["🟡 Next, in order"]
-        EXP["Exploration session<br/>(you, fresh test env)"]
         F007["F-007 · 1.1 Lists & items restructure<br/>one type per list · fewer fields · list description"]
         F003["F-003 · Brief e2e safety net"]
         F002["F-002 · 1.2 UI refresh<br/>(your design)"]
@@ -115,7 +115,10 @@ Contract: `api-v0.2.0`. Decisions D-001 to D-073 are in [`design-docs/DECISIONS.
 
 ## 5. Now
 
-### F-006 · 1.0.1 polish 🟢
+### Exploration session 🟢
+You're using `./deploy/test` (fresh) and listing what to change. The findings go into F-007.
+
+### F-006 · 1.0.1 polish ✅
 Small fixes found by the 1.0 checks and by you, all in the web app: Home and Trash go stale after a delete until reload; the
 "Backend: ready" indicator moves into Settings (with the API address and contract version); Tab reachability of the
 sidebar tree; focus return after Esc; delete-confirm vs Trash counts; a client-side IMDb URL check; an up-to-date web
@@ -127,10 +130,6 @@ with the v2 workflow.
 Fresh-clone check (Q-04), scope and security review (Q-05: no critical or high findings), smoke checklist (C4). Tagged `v1.0.0`.
 
 ## 6. Next (in this order)
-
-### Exploration session 🟡 · after 1.0.1
-You run `./deploy/test up -d --fresh`, use the app, and list what to change. The top-level orchestrator turns the list into
-F-007 stories (or into the pool, if it isn't needed before the UI refresh).
 
 ### F-007 · Lists and items restructure 🟡 · 1.1
 **What:** reshape the model before anything is built on top of it. Known so far:
@@ -164,7 +163,7 @@ No commitment on order until then. IDs exist only for briefs already written.
 |---|---|
 | **List import** | Create a list from text, e.g. a Markdown bullet list (one item per bullet). Format and rules to be defined |
 | **F-004 · Product gaps** | Paste an image from the clipboard onto an item; "Empty trash" with confirmation; optional trash auto-purge after N days (off by default) |
-| **F-005 · Ops hardening** | Strip EXIF (GPS) from uploads; your backup → wipe → restore drill (unless done in F-006); `make audit` / `npm run audit` before each tag; scheduled backup on the Pi plus a quarterly restore drill; exposure check for the local stack; 40 MP and slow-network upload checks |
+| **F-005 · Ops hardening** | Strip EXIF (GPS) from uploads; your backup → wipe → restore drill (moved from F-006 U1); `make audit` / `npm run audit` before each tag; scheduled backup on the Pi plus a quarterly restore drill; exposure check for the local stack; 40 MP and slow-network upload checks |
 | **CI & upkeep** | GitHub Actions running the gates + Dependabot (D-031 deferred it); Node 26 LTS (from 2026-10-28, D-042) and TypeScript 7 when typescript-eslint supports it (D-040); VoiceOver pass on drag-and-drop and a keyboard context menu on tree rows (W-05); verify `VITE_API_MOCKS=1` in a browser (W-02) |
 | **2.0 · TMDB + automatic refresh** | Movie and TV lookup when creating an item, metadata refresh, streaming availability by country, attribution, rate limits. User-entered values are never silently overwritten. No IMDb scraping. Starts with a check of current TMDB terms. Fits the F-007 model (a movie list gets TMDB lookup) |
 | **3.0 · Accounts & access control** | Users, memberships, authorization; every table already carries `workspace_id` (revisit `item_content_versions`, Q-05 finding 5). **The gate before any exposure beyond the private network** |
@@ -204,6 +203,7 @@ No commitment on order until then. IDs exist only for briefs already written.
 - This file is updated when a feature ships, starts, or changes horizon. Detailed task history stays in STATUS.md.
 
 ## Changelog
+- 2026-10-15: F-006 (1.0.1 polish) done; the exploration session starts. Backup drill (U1) moved to F-005.
 - 2026-10-15: **Re-plan.** Next is now, in order: exploration session → F-007 lists and items restructure (1.1) → brief e2e (F-003, cut to e2e only) → UI refresh (F-002, 1.2). List import added. F-004, F-005, CI and upkeep, 2.0 and 3.0 move to a pool ordered after 1.2 (D-078).
 - 2026-10-15: **v1.0.0 released.** Workflow v2 started. F-006 (1.0.1 polish) is Now; F-001 done.
 - 2026-10-15: Q-04 done. F-002 made generic: the design comes from you later (D-075). The v2 workflow starts after Q-05 + C4.
