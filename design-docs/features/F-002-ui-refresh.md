@@ -82,6 +82,7 @@ The static ✎ drawn in the main-screen and menu sketches is **wrong**: the pen 
 - **F002-B4**: As the user, I want to sort a list by price, so that I can compare what things cost.
   Acceptance: a new list sort mode `price` (ascending, no-price last, ties by title); works with the existing sort mode storage and the per-session override; openapi and tests updated.
 
+- **F002-B5 (gap found by the web orchestrator, 2026-10-15)**: list rows and search results (`ItemSummary`, "no `metadata`") carry no kind fields and no streaming, so pinned fields (runtime, `5×7 · 45 min`, displacement, year, camera type, streaming icons with `$`) cannot show in real rows; only price can. Needs `ItemSummary` to carry the metadata (or a `pinned` object with the fields the list pins, incl. streaming and `paid_platforms`), additive, new tag `api-v0.5.0`. Blocks the pinned-fields part of F002-W2 against the real backend.
 ### Web
 - **F002-W1 — Foundation and shell**: As a user, I want the new look on every screen, in light and dark, so that the app feels
   like one polished product. Tokens, materials, system font stack, restyled primitives (Button, IconButton, TextField, Select,
@@ -140,13 +141,13 @@ One branch `feature/F002-backend-contract`, one PR, workers run in sequence (the
 ### Web
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
 |---|---|---|---|---|---|
-| T1 tokens, materials, fonts, primitives | W1 | `feature/F-002-ui-refresh` | running | | |
+| T1 tokens, materials, fonts, primitives | W1 | `feature/F-002-ui-refresh` | done (fd2807d) | | |
 | T2 shell, Home, Search, Trash, Settings | W1 | same | done, flags reviewed (migrations, contract) | yes | [#20](https://github.com/0xfederama/collections-app-backend/pull/20) |
 | T3 Quick add + `N` | W4 | same | done, flags reviewed (migrations, contract) | yes | [#20](https://github.com/0xfederama/collections-app-backend/pull/20) |
 | T4 list view rows/grid, ＋New, drag anywhere, kind chip + confirm, list description in place | W2 (no backend) | same | done, flags reviewed (migrations, contract) | yes | [#20](https://github.com/0xfederama/collections-app-backend/pull/20) |
 | T5 favicon assets (after researcher F002-Q1) | W3 | same | done, flags reviewed (migrations, contract) | yes | [#20](https://github.com/0xfederama/collections-app-backend/pull/20) |
 | T6 item detail in place (pens, ✓/✕, description, +Add field, hero, links row, no-cents price) | W3 (no backend) | same | done, flags reviewed (migrations, contract) | yes | [#20](https://github.com/0xfederama/collections-app-backend/pull/20) |
-| T7 contract adoption: paid streaming, kind field changes, pinned fields, price sort | W2/W3 | same | blocked on backend tag | | |
+| T7a api-v0.4.0 sync, kind fields, price sort | W2/W3 | same | done (c9397d1) | | |
 | T8 specs, docs-keeper, DESIGN.md, full gate + e2e | W5 | same | done, flags reviewed (migrations, contract) | yes | [#20](https://github.com/0xfederama/collections-app-backend/pull/20) |
 
 ## Log
