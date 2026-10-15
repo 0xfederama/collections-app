@@ -79,10 +79,11 @@ None.
 ### Web
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
 |---|---|---|---|---|---|
-| T1 Playwright setup (`@playwright/test` 1.64.0, `@axe-core/playwright` 4.13.0 pinned, chromium, `e2e/` dir, `npm run e2e`, excluded from vitest/tsc/gate) + small helpers | F003-W1 | `test/F003-W1-playwright-e2e` | dispatched | | |
-| T2 Specs 1-8 in `e2e/*.spec.ts` (independent, unique names, no `waitForTimeout`) | F003-W1 | same | dispatched | | |
-| T3 README "e2e" section + CLAUDE.md command row + `docs/` | F003-W1 | same | | | |
+| T1 Playwright setup (`@playwright/test` 1.64.0, `@axe-core/playwright` 4.13.0 pinned, chromium, `e2e/` dir, `npm run e2e`, excluded from vitest/tsc/gate) + small helpers | F003-W1 | `test/F003-W1-playwright-e2e` | done (14 tests, 2 fixes by orchestrator) | yes | [web#29](https://github.com/0xfederama/collections-app-frontend-web/pull/29) merged |
+| T2 Specs 1-8 in `e2e/*.spec.ts` (independent, unique names, no `waitForTimeout`) | F003-W1 | same | done | yes | same |
+| T3 README "e2e" section + CLAUDE.md command row + `docs/` | F003-W1 | same | done (docs/ needed no change) | yes | same |
 
 ## Log
 - 2026-10-15: brief written and approved (scope set by the user: very brief, one PR per repo).
 - 2026-10-15: F003-B1 merged (backend#19, squash). `make smoke` passed on a fresh ./deploy/test.
+- 2026-10-15: F003-W1 merged (web#29): gate green, `npm run e2e` 14/14 twice on fresh ./deploy/test.
