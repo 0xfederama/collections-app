@@ -54,8 +54,9 @@ None.
 ### Backend
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
 |---|---|---|---|---|---|
-| T1 `images.Strip` (JPEG/PNG/WebP lossless; JPEG keeps a minimal orientation-only EXIF) + use in `Process` + tests | F005-B1 | `feature/F005-B1-strip-image-metadata` | dispatched 2026-10-15 | | |
-| T2 `api strip-images` backfill subcommand (sqlc queries, idempotent, size/sha fix) + tests + README | F005-B1 | same | dispatched 2026-10-15 (same worker) | | |
+| T1 `images.Strip` (JPEG/PNG/WebP lossless; JPEG keeps a minimal orientation-only EXIF) + use in `Process` + tests | F005-B1 | `feature/F005-B1-strip-image-metadata` | done, gate green | [CRUCIAL] reviewed (storage write, SQL, upload path); one test expectation fixed by me | [#22](https://github.com/0xfederama/collections-app-backend/pull/22) |
+| T2 `api strip-images` backfill subcommand (sqlc queries, idempotent, size/sha fix) + tests + README | F005-B1 | same | done (same worker) | same | #22 |
 
 ## Log
 - 2026-10-15: brief written with the user (pool items 1+2 merged into one round, no CI, D-084); parent stories P1–P3 done.
+- 2026-10-15: B1 merged (backend#22, `12bdd81`), `make audit` clean, tag `v1.2.1`. Left for the parent: runbook step for `./deploy/prod exec api /app/api strip-images`, run on server.
