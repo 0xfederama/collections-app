@@ -1,6 +1,6 @@
 # F-001 — 1.0 release readiness
 
-Status: **run with v1**, not v2 (user, 2026-10-15)    Release: 1.0    Roadmap: ROADMAP.md §5
+Status: **done** (run with v1; v1.0.0 tagged 2026-10-15)    Release: 1.0    Roadmap: ROADMAP.md §5
 Repos: backend, web, parent
 
 > The v1 orchestrators finish this feature as Q-04 (done), Q-05 and C4, tracked in STATUS.md "Now: 1.0 release checks".
@@ -73,3 +73,4 @@ None. `api-v0.2.0` stays.
 
 ## Log
 - 2026-10-15: Brief written by the top-level orchestrator; v1 tasks Q-04 and Q-05 folded in.
+- 2026-10-15: Done. Q-04 (backend#14), Q-05 (backend#15), C4 (items 1–13 PASS). v1.0.0 tagged. Findings → F-006.

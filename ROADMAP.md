@@ -30,7 +30,8 @@ version history, a trash with restore, and backups. It should be quick to use on
 
 | Release | Theme | Status | Window |
 |---|---|---|---|
-| **1.0 MVP** | Organize, describe and protect a shared collection | 🟢 Feature-complete, release checks in progress | Oct 2026 |
+| **1.0 MVP** | Organize, describe and protect a shared collection | ✅ Released `v1.0.0` (2026-10-15) | Oct 2026 |
+| **1.0.1** | Polish: C4 and Q-05 findings | 🟡 Next (first v2 feature) | Oct 2026 |
 | **1.1** | UI refresh + quality and delivery | 🟡 Next | Q4 2026 |
 | **1.2** | Small product gaps and ops hardening | 🟡 Next | Q4 2026 – Q1 2027 |
 | **2.0** | Movies come alive: TMDB lookup and automatic refresh | 🟡 Later | Q1 2027 |
@@ -46,8 +47,9 @@ timeline
                : M2 Core : tree, lists, items, design system
         15 Oct : M3–M4 Features : content, images, trash, search, settings
                : M5 Ops : backups, production deploy, test stabilization
+        15 Oct : v1.0.0 released : fresh clone, security review, smoke checklist passed
     section Now
-        1.0 release : fresh-clone check : final review : your smoke checklist
+        1.0.1 : polish from the release checks
     section Next
         1.1 : UI refresh : e2e tests + CI
         1.2 : product gaps : ops hardening
@@ -63,7 +65,7 @@ timeline
 ```mermaid
 flowchart LR
     subgraph NOW["🟢 Now"]
-        F001["F-001 · 1.0 release readiness<br/>fresh clone · final review · smoke checklist"]
+        F006["F-006 · 1.0.1 polish<br/>focus · keyboard · stale Home · README"]
     end
     subgraph NEXT["🟡 Next"]
         F002["F-002 · UI refresh<br/>(frontend refactor)"]
@@ -81,7 +83,7 @@ flowchart LR
         X3["Mobile app"]
         X4["AI assist"]
     end
-    F001 --> F002 & F003 & F004 & F005
+    F006 --> F002 & F003 & F004 & F005
     F003 -.->|e2e safety net first| F002
     F002 --> P2
     F003 --> P2
@@ -96,7 +98,7 @@ End-to-end tests (F-003) ideally land first, so the refactor has a safety net. T
 
 ---
 
-## 4. Shipped: 1.0 MVP (feature-complete 2026-10-15)
+## 4. Shipped: 1.0 MVP (`v1.0.0`, 2026-10-15)
 
 | Area | What you can do | Backend | Web |
 |---|---|---|---|
@@ -117,20 +119,16 @@ Contract: `api-v0.2.0`. Decisions D-001 to D-073 are in [`design-docs/DECISIONS.
 
 ## 5. Now
 
-### F-001 · 1.0 release readiness 🟢
-**Outcome:** you can trust the app with real data on the home server. Run by the current (v1) orchestrators.
+### F-006 · 1.0.1 polish 🟢 (draft, waiting for your OK)
+Small fixes found by the 1.0 checks, all in the web app: Home "Recently updated" goes stale after deleting a folder; Tab
+reachability of the sidebar tree; focus return after Esc; delete-confirm vs Trash counts; a client-side IMDb URL check;
+an up-to-date web README; a flaky `ItemEditForm` test; the prod CSP verified in a real browser.
+Brief: [`design-docs/features/F-006-1.0.1-polish.md`](design-docs/features/F-006-1.0.1-polish.md). It's the first feature
+run with the v2 workflow, after F-000 installs the v2 agents.
 
-| Check | Owner | Status |
-|---|---|---|
-| Fresh clone: a new maintainer reaches a working dev, test and prod app from the READMEs only (Q-04, AT-01) | backend orchestrator | ✅ 2026-10-15 |
-| Scope fence and security review of both repos (Q-05, AT-19, ARCHITECTURE §5) | backend + web orchestrators | 🟡 |
-| Smoke checklist on desktop and phone, light and dark (C4) | web orchestrator + **you** | 🟢 |
-| First real backup → wipe → restore on the dev stack | **you** | 🟡 |
-
-**Exit:** every checklist line passes, then release tag `v1.0.0` in both repos and production goes live on the home server.
-After that, development switches to the v2 workflow (AGENT_WORKFLOW §1b) with fresh orchestrators.
-
----
+### F-001 · 1.0 release readiness ✅
+Fresh-clone check (Q-04), scope and security review (Q-05: no critical or high findings), smoke checklist (C4: 13/13
+manual items pass, backup/restore covered by the automated round trip). Tagged `v1.0.0`.
 
 ## 6. Next
 
@@ -161,6 +159,8 @@ Small, high-value items from the deferred list (PRODUCT §13):
 
 ### F-005 · Ops hardening 🟡 · 1.2
 - Strip EXIF metadata (GPS) from uploaded originals (B-09 to-do, DATA_MODEL §9).
+- Your own backup → wipe → restore drill on the dev stack (open since Q-02), unless done in F-006.
+- `make audit` / `npm run audit` before each release tag (Q-05: one x/crypto advisory with no fix yet, not called).
 - A scheduled backup on the Pi, plus a documented quarterly restore drill.
 - An exposure check for the local stack too (today it covers only backend and prod compose).
 - Big-image (40 MP) and slow-network upload checks in the UI (W-09 not checked).
@@ -176,7 +176,8 @@ overwritten.** No IMDb scraping. Starts with a check of current TMDB terms. Seam
 registry and `metadata` JSONB (ARCHITECTURE §7).
 
 ### 3.0 · Accounts & access control 🟡
-Users, memberships, authorization; every table already carries `workspace_id` for this. **This is the gate before any
+Users, memberships, authorization; every table already carries `workspace_id` for this (revisit `item_content_versions`, which
+relies on item-level workspace checks, Q-05 finding 5). **This is the gate before any
 exposure beyond the private network.**
 
 ---
@@ -207,12 +208,13 @@ exposure beyond the private network.**
 ---
 
 ## How this roadmap is maintained
-- From the v2 workflow on (after 1.0), the **top-level orchestrator** (a session in this parent repo) owns this file. It turns an initiative into a feature brief
+- The **top-level orchestrator** (a session in this parent repo) owns this file. It turns an initiative into a feature brief
   in `design-docs/features/F-NNN-*.md` with user stories per repo, when it moves to **Next** and you approve it.
 - The **repo orchestrators** split stories into tasks and run them with internal worker agents
   ([`design-docs/AGENT_WORKFLOW.md`](design-docs/AGENT_WORKFLOW.md) §1b). Progress is tracked in [`design-docs/STATUS.md`](design-docs/STATUS.md).
 - This file is updated when a feature ships, starts, or changes horizon. Detailed task history stays in STATUS.md.
 
 ## Changelog
+- 2026-10-15: **v1.0.0 released.** Workflow v2 started. F-006 (1.0.1 polish) is Now; F-001 done.
 - 2026-10-15: Q-04 done. F-002 made generic: the design comes from you later (D-075). The v2 workflow starts after Q-05 + C4.
 - 2026-10-15: Roadmap created. 1.0 feature-complete; F-001 to F-005 defined; UI refresh (F-002) added.

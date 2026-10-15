@@ -1,6 +1,6 @@
 # Handoff Briefs (v1 record)
 
-> **Once workflow v2 starts (D-074, after Q-05 + C4), no new handoff briefs are written.** New work starts from a feature brief in
+> **Since workflow v2 (D-074, from v1.0.0 on 2026-10-15) no new handoff briefs are written.** New work starts from a feature brief in
 > [`../features/`](../features/), and the repo orchestrator dispatches internal `worker` agents. Existing briefs stay as a record
 > (and as specs where a feature brief links to them, e.g. Q-04.md).
 

@@ -17,9 +17,7 @@ rules, and this file has the full version.
 
 ---
 
-## 1b. Session types (v2, D-074: takes effect after the 1.0 release checks Q-05 + C4)
-
-> Until Q-05 and C4 are done, the **v1** model below (History) is still in use by the current repo orchestrators.
+## 1b. Session types (v2, D-074, in effect since v1.0.0 on 2026-10-15)
 
 Three levels. Only the top two are sessions the user starts. Workers are **internal subagents** of a repo orchestrator,
 not separate sessions.

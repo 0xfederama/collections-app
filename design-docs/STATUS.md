@@ -5,18 +5,26 @@ own rows, and use dates. Task IDs and dependencies are in [IMPLEMENTATION_PLAN.m
 
 States: `todo` · `in progress` · `in review` (PR open) · `blocked` · `done` (PR merged)
 
-## Now: 1.0 release checks (v1 workflow until they're done)
+## Now: workflow v2 (from 2026-10-15, D-074)
 
-The v1 repo orchestrators finish Q-05 and C4. **Workflow v2 (D-074) starts after that**, with fresh orchestrators
-(`features/README.md`). Roadmap: [`ROADMAP.md`](../ROADMAP.md).
+**v1.0.0 is tagged** (backend `ea0b1c5`, web `2b9e7a6`, parent). Roadmap: [`ROADMAP.md`](../ROADMAP.md).
+Feature briefs: [`features/`](features/). Repo orchestrators add their task rows under their feature.
+
+| Feature | Story | Owner | State | Branch | PR | Updated | Notes |
+|---|---|---|---|---|---|---|---|
+| F-000 | F000-B1 install v2 agents + rules | backend orch. | todo | `chore/adopt-workflow-v2` | | 2026-10-15 | First thing a new backend orchestrator does |
+| F-000 | F000-W1 install v2 agents + rules | web orch. | todo | `chore/adopt-workflow-v2` | | 2026-10-15 | First thing a new web orchestrator does |
+| F-006 | 1.0.1 polish (W1–W8) | web orch. | **draft**, waiting for the user's OK | | | 2026-10-15 | C4 + Q-05 + Q-04 findings |
+
+## 1.0 release checks (done, v1 workflow)
 
 | Task | Owner | State | Branch | PR | Updated | Notes |
 |---|---|---|---|---|---|---|
 | Q-04 fresh clone (AT-01) | v1 backend orch. | done | `docs/Q-04-readme-fixes` | [backend#14](https://github.com/0xfederama/collections-app-backend/pull/14) | 2026-10-15 | Test + prod modes and both gates OK. Parent doc fixes `cb6e5b7`, backend README `2fc516f`. Web README gaps + flaky ItemEditForm test → web orchestrator (handoffs/Q-04.md Questions) |
 | Q-05 scope fence (AT-19) + security review | v1 backend orch. → reviewer session | done | `fix/Q-05-review` | [backend#15](https://github.com/0xfederama/collections-app-backend/pull/15) | 2026-10-15 | Scope fence clean, no critical/high. govulncheck fixes squash-merged as `ea0b1c5`; findings table in handoffs/Q-05.md. Web follow-up: IMDb link scheme check (low). Live CSP check → C4 smoke |
-| C4 smoke checklist (D-068) | v1 web orch. + user | in progress | | | 2026-10-15 | ACCEPTANCE_TESTS.md smoke checklist on `./deploy/test up -d --fresh` |
-| Backup → wipe → restore on dev | user | todo | — | — | 2026-10-15 | Open since Q-02 |
-| Tag `v1.0.0`, roadmap update, start v2 | top-level orch. | todo | — | — | 2026-10-15 | After Q-05 + C4 |
+| C4 smoke checklist (D-068) | v1 web orch. + user | done | | | 2026-10-15 | Items 1–13 PASS on `./deploy/test --fresh`; 14 (backup/restore) covered by AT-17 + the Q-03 prod run. Non-blocking findings → F-006 |
+| Backup → wipe → restore on dev | user | carried over | — | — | 2026-10-15 | → F-006 U1 (or F-005) |
+| Tag `v1.0.0`, roadmap update, start v2 | top-level orch. | done | — | — | 2026-10-15 | Tags pushed in backend, web, parent |
 
 ## v1 record: M0–M5 tasks
 
@@ -119,6 +127,8 @@ Postgres, AT-18 compose exposure, `docker build`).**
 - Q-4 license (DECISIONS.md). Default applies if unanswered.
 
 ## Log (newest first, one line each)
+
+- 2026-10-15: **v1.0.0 released**: tags in backend (`ea0b1c5`), web (`2b9e7a6`) and parent. **Workflow v2 starts**: v1 orchestrators dismissed; F-000 (install v2 agents) approved; F-006 (1.0.1 polish) drafted for the user's OK.
 
 - 2026-10-15: C4 smoke checklist (web, D-068) run in the browser pane against `./deploy/test --fresh` on web main 2b9e7a6 / backend api-v0.2.0: items 1–13 PASS, 14 (backup/restore) left to the backend prod drill. Non-blocking findings for a web polish task: Home "Recently updated" stale after deleting a folder (needs reload); sidebar tree may not be reachable by Tab alone (to confirm); focus not returned after Esc on Add item; delete-confirm vs Trash counts wording differ (root folder counted only in Trash).
 - 2026-10-15: Q-05 done: backend#15 (govulncheck dependency bumps) squash-merged (`ea0b1c5`), parent pointer bumped. Scope fence clean, no critical/high findings. Remaining for 1.0: C4 smoke checklist (incl. live CSP check), dev restore drill, then `v1.0.0` tags.
