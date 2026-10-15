@@ -36,7 +36,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 2 | — | Exploration session: you used the fresh test env and listed what to change | ✅ Done (2026-10-15) | Oct 2026 |
 | 3 | **1.1.0** | Lists and items restructure + exploration fixes (F-007): one kind per list, trimmed fields, addable price, list description, 6 UI fixes. Last shared version (D-080) | ✅ Released `v1.1.0` (2026-10-15) | Oct 2026 |
 | 4 | — | Brief e2e safety net (F-003): `make smoke` + ~8 Playwright specs | ✅ Done (2026-10-15) | Oct 2026 |
-| 5 | **web 2.0.0** | UI refresh with your design (F-002), run from a sister session | 🟢 Now (design) | Q4 2026 |
+| 5 | **web 2.0.0** | UI refresh (F-002): Frosted Gallery design, in-place item editing, quick add, streaming icons; run from a sister session | 🟢 Now (approved, repo orchestrators next) | Q4 2026 |
 | — | later | Pool, in this order: CI and upkeep → ops hardening → list icons + product gaps → TMDB + auto images → user-defined kinds → collaborative Markdown → accounts (backend 2.0) → security review → internet exposure + public API | ⚪ Pool | 2027 |
 | — | future | List import, advanced search | 🔭 Future | — |
 
@@ -150,6 +150,8 @@ Fresh-clone check (Q-04), scope and security review (Q-05: no critical or high f
 ## 6. Next (in this order)
 
 ### F-002 · UI refresh 🟢 · web 2.0.0
+**Status 2026-10-15:** design direction **Frosted Gallery** chosen (Apple-inspired, layered, plain colour) and the brief written: [`design-docs/features/F-002-ui-refresh.md`](design-docs/features/F-002-ui-refresh.md) (stories per repo; one backend story for paid streaming platforms, the rest web). The inputs below are all folded into it.
+
 **What:** a large refactor of the web app: a new visual design applied across every screen, plus the interaction changes
 below. The API stays as it is unless the design needs something small. The web becomes 2.0.0; the backend keeps its own
 version (D-080). The design comes from you (D-075).
