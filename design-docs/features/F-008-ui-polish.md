@@ -166,12 +166,13 @@ web stories need nothing from the backend.
 ### Web
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
 |---|---|---|---|---|---|
-| T1 top bar (search + quick add + theme), no "Library" heading, hide sidebar "+ New" on empty tree | W1, W2 | `feature/F008-ui-polish` | dispatched 2026-10-15 | pending | pending |
-| T2 sidebar keyboard selection/focus, drag and drop into folders, e2e spec | W3, W4 | same | after T1 | pending | pending |
-| T3 list header, toolbar radii/consistency, empty-list CTA, description in place | W5–W8 | same | after T2 | pending | pending |
-| T4 inline add item (draft row + side page) | W9 | same | after T3 | pending | pending |
-| T5 item title block, links row and icons, price field, initials placeholders | W10–W13 | same | after T4 | pending | pending |
-| T6 generic lists have no fields (pin `api-v0.6.0`) | W14 | same | waits for backend tag | pending | pending |
+| T1 top bar (search + quick add + theme), no "Library" heading, hide sidebar "+ New" on empty tree | W1, W2 | `feature/F008-ui-polish` | done 2026-10-15 | accepted | [#32](https://github.com/0xfederama/collections-app-frontend-web/pull/32) |
+| T2 sidebar keyboard selection/focus, drag and drop into folders, e2e spec | W3, W4 | same | done 2026-10-15 | accepted | [#32](https://github.com/0xfederama/collections-app-frontend-web/pull/32) |
+| T3 list header, toolbar radii/consistency, empty-list CTA, description in place | W5–W8 | same | done 2026-10-15 | accepted | [#32](https://github.com/0xfederama/collections-app-frontend-web/pull/32) |
+| T4 inline add item (draft row + side page) | W9 | same | done 2026-10-15 | accepted | [#32](https://github.com/0xfederama/collections-app-frontend-web/pull/32) |
+| T5 item title block, links row and icons, price field, initials placeholders | W10–W13 | same | done 2026-10-15 | accepted | [#32](https://github.com/0xfederama/collections-app-frontend-web/pull/32) |
+| T6 generic lists have no fields (pin `api-v0.6.0`) | W14 | same | done 2026-10-15 (tag api-v0.6.0) | accepted | [#32](https://github.com/0xfederama/collections-app-frontend-web/pull/32) |
 
 ## Log
 - 2026-10-15: written from the user's first look at 2.0.0 (4 screenshots), with an HIG review; inserted before pool item 3.
+- 2026-10-15: web 2.1.0 shipped (PR #32, tag v2.1.0): 3 gate failures fixed (drop-into zone broke keyboard drag → enabled only for pointer drags), e2e specs updated, tree-dnd spec added.
