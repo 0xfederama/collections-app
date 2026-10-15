@@ -17,8 +17,8 @@ product, not an admin dashboard and not a project-management tool.
 |---|---|
 | Workspace | Exactly one in MVP, auto-created on first start. Has a name and settings |
 | Folder | Nestable without a depth limit. Lives at the root or inside a folder. Manually ordered among siblings |
-| List | Lives at the workspace root or inside a folder. Has a name, an optional description, a display mode, and a sort mode. Manually ordered among sibling lists |
-| Item | Belongs to exactly one list. Manually ordered within the list |
+| List | Lives at the workspace root or inside a folder. Has a name, a **kind** (one per list, F-007), an optional Markdown description (≤ 64 KiB, no history), a display mode, and a sort mode. Manually ordered among sibling lists |
+| Item | Belongs to exactly one list and has that list's kind. Manually ordered within the list |
 
 - Folders and lists are separate sibling groups inside a parent. In the sidebar, folders show first and then lists, each in its own manual order.
 - IDs are UUIDs and stay stable across move, rename, trash, and restore.
@@ -30,34 +30,32 @@ product, not an admin dashboard and not a project-management tool.
 | Field | Required | Rules |
 |---|---|---|
 | Title | yes | 1–300 chars, trimmed |
-| Kind | yes | `generic` (default), `movie`, `tv_show`, `motorcycle`, `car`, `camera` (see §4.2) |
-| Summary | no | ≤ 1000 chars, plain text |
-| Status | no | Free text ≤ 100 chars (e.g. "want", "watched", "test-ridden"). No workflows |
+| Kind | — | Not set on the item: it's the list's kind (§4.2) |
 | Image | no | One primary image: **either** an external URL **or** an uploaded file, never both |
 | Price | no | `min`/`max` decimals ≥ 0 with 2 decimal places. A single price means min = max, and either bound may be omitted. Currency (ISO 4217) is required if any bound is set |
-| Official website | no | `http`/`https` URL ≤ 2048 chars |
+| Website | no | `http`/`https` URL ≤ 2048 chars |
 | Description | no | Markdown ≤ 1 MiB with version history (§5) |
 | Kind metadata | depends on kind | Validated per kind by the backend |
 
-Workspace default currency is EUR and pre-fills new items.
+Price is never shown by default: the user adds it ("+ Add price") as a single price or a range, and can remove it. Summary and status were removed in 1.1.0 (their 1.0 values were moved into the description).
 
 ### 4.2 Kinds
 
 MVP kinds (D-028). Every kind-specific field is **optional**. Exact types and ranges are in DATA_MODEL §2.1.
 
-| Kind | UI label | Kind fields |
-|---|---|---|
-| `generic` | Item | none |
-| `movie` | Movie | release year, runtime (min), IMDb URL, streaming platforms + country |
-| `tv_show` | TV show | first-air year, end year (empty = ongoing), seasons, IMDb URL, streaming platforms + country |
-| `motorcycle` | Motorcycle | make, model, model year, segment, displacement (cc), power (hp), torque (Nm), wet weight (kg), seat height (mm), licence class (AM/A1/A2/A) |
-| `car` | Car | make, model, model year, trim, body type, fuel type, transmission, power (hp), seats, electric range (km) |
-| `camera` | Photo camera | make, model, release year, camera type, sensor format, megapixels, lens mount, weight (g) |
+| Kind | UI label | Kind fields | Sort key |
+|---|---|---|---|
+| `generic` | Item | none | — |
+| `movie` | Movie | release year, runtime (min), IMDb URL, streaming platforms + country | release year |
+| `tv_show` | TV show | first-air year, end year (empty = ongoing), seasons, IMDb URL, streaming platforms + country | first-air year |
+| `motorcycle` | Motorcycle | make, model, model year, displacement (cc), power (hp), licence class (AM/A1/A2/A) | displacement |
+| `car` | Car | make, model, model year, fuel type, power (hp) | power |
+| `camera` | Photo camera | make, model, release year, sensor format, megapixels | megapixels |
 
 - Units are metric. The streaming country defaults to the workspace setting (`IT`).
 - The item title stays free text (e.g. "Ducati Monster 937 SP"). Make and model are separate structured fields and are not derived from the title.
 - Adding a kind later means adding a Go validator and a UI section, with no schema migration.
-- Changing an item's kind replaces its metadata. The UI warns that kind-specific fields will be cleared.
+- The kind belongs to the list (F-007). Changing a list's kind clears its items' kind fields; the UI warns first. Items move only between lists of the same kind.
 
 ## 5. Markdown description & history
 
@@ -73,7 +71,7 @@ MVP kinds (D-028). Every kind-specific field is **optional**. Exact types and ra
 - **Move:** folders into another folder or the root (never into themselves or their descendants), lists into a folder or the root, items into another list. A moved resource goes to the **end** of its destination.
 - **Manual reorder** with drag-and-drop, plus a keyboard alternative.
 - **List display mode** (shared): `compact`, `thumbnail`, or `grid`.
-- **List sort mode** (shared): `manual` (default), `title` (A→Z), or `updated` (newest first). Switching never destroys the manual order. Drag-reorder is available only in `manual` mode.
+- **List sort mode** (shared): `manual` (default), `title` (A→Z), `updated` (newest first), or `kind_key` (the kind's sort key, ascending, empty last; not on generic lists). Switching never destroys the manual order. Drag-reorder is available only in `manual` mode.
 - **In-list filter:** a client-side or server-side title filter for the current list.
 
 ## 7. Security boundary (mandatory)
@@ -93,7 +91,7 @@ MVP kinds (D-028). Every kind-specific field is **optional**. Exact types and ra
 Exactly three buttons, always in this order:
 1. **Google**: `https://www.google.com/search?q=<query>`. The query is the title, plus context by kind: movie → `<title> <release_year> film` (year only if set), TV show → `<title> TV series`, all other kinds → title only.
 2. **Reddit**: same query plus ` site:reddit.com`, via Google.
-3. **Official site**: the stored URL. If none is stored, the button is **disabled** with the label "No official site". It never falls back to a search.
+3. **Website**: the stored URL. If none is stored, the button is **disabled**. It never falls back to a search.
 
 Links open in a new tab with `rel="noopener noreferrer"`. URLs are built with proper encoding.
 

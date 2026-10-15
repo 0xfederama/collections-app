@@ -1,6 +1,6 @@
 # F-007 — Lists and items restructure + exploration fixes
 
-Status: approved    Release: 1.1.0 (backend and web; versions diverge after this, D-080)    Roadmap: ROADMAP.md §6
+Status: **done** (backend#18, web#28 merged 2026-10-15)    Release: 1.1.0 (backend and web; versions diverge after this, D-080)    Roadmap: ROADMAP.md §6
 Repos: backend | web | parent    Approved by the user: 2026-10-15
 
 ## Why
@@ -170,3 +170,4 @@ to `api-v0.3.0` once it's tagged.
 - 2026-10-15: exploration findings and the user's decisions added; approved.
 - 2026-10-15: backend B1–B5 shipped in one PR (backend#18, squash `be8a532`); gate and `make test-backup` green; tags `api-v0.3.0`, `v1.1.0`. Deviations: JSON body limit 2 MiB on list create/update (64 KiB description); a PATCH of kind plus other fields bumps the list version twice; each trashed piece of a split list gets its own trash batch.
 - 2026-10-15: web W1–W10 delivered in one PR, squash merged (web#28, version 1.1.0, contract api-v0.3.0). Gate green after fixing 4 stale test assertions. Follow-ups: AT-21 reorder web test lost with the menu items; price shows `€1,200` (not `€ 1,200`); list kind is changed via the Rename dialog.
+- 2026-10-15: parent: pointers bumped, PRODUCT §3/§4/§6/§9 and DATA_MODEL updated. Done.

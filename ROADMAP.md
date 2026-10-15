@@ -34,8 +34,8 @@ version history, a trash with restore, and backups. It should be quick to use on
 | — | **1.0 MVP** | Organize, describe and protect a shared collection | ✅ Released `v1.0.0` (2026-10-15) | Oct 2026 |
 | 1 | **1.0.1** | Polish from the release checks (F-006) | ✅ Released `v1.0.1` (2026-10-15) | Oct 2026 |
 | 2 | — | Exploration session: you used the fresh test env and listed what to change | ✅ Done (2026-10-15) | Oct 2026 |
-| 3 | **1.1.0** | Lists and items restructure + exploration fixes (F-007): one kind per list, trimmed fields, addable price, list description, 6 UI fixes. Last shared version (D-080) | 🟢 Now | Q4 2026 |
-| 4 | — | Brief e2e safety net (F-003) | 🟡 Next | Q4 2026 |
+| 3 | **1.1.0** | Lists and items restructure + exploration fixes (F-007): one kind per list, trimmed fields, addable price, list description, 6 UI fixes. Last shared version (D-080) | ✅ Merged (tag `v1.1.0` after your check) | Oct 2026 |
+| 4 | — | Brief e2e safety net (F-003): `make smoke` + ~8 Playwright specs | 🟢 Now | Q4 2026 |
 | 5 | **web 2.0.0** | UI refresh with your design (F-002) | 🟡 Next | Q4 2026 |
 | — | later | Re-planned after the UI refresh from the pool: list icons, auto image lookup, list import, product gaps, ops hardening, CI and upkeep, TMDB (backend 1.x), accounts (backend 2.0) | ⚪ Pool | 2027 |
 
@@ -51,10 +51,10 @@ timeline
         15 Oct : v1.0.0 released
         15 Oct : v1.0.1 polish
                : exploration session
+        15 Oct : 1.1.0 lists and items restructure + fixes
     section Now
-        1.1.0 : lists and items restructure + fixes
-    section Next (in this order)
         e2e : brief safety net
+    section Next
         web 2.0.0 : UI refresh
     section After the UI refresh
         Re-plan : icons, auto images, import, gaps, ops, TMDB, accounts
@@ -67,10 +67,10 @@ timeline
 ```mermaid
 flowchart LR
     subgraph NOW["🟢 Now"]
-        F007["F-007 · 1.1.0 Lists & items restructure<br/>one kind per list · fewer fields · list description · UI fixes"]
-    end
-    subgraph NEXT["🟡 Next, in order"]
+        F007["F-007 · 1.1.0 restructure ✅"]
         F003["F-003 · Brief e2e safety net"]
+    end
+    subgraph NEXT["🟡 Next"]
         F002["F-002 · web 2.0.0 UI refresh<br/>(your design, inline editing)"]
     end
     subgraph POOL["⚪ Pool, ordered after the UI refresh"]
@@ -115,8 +115,14 @@ Contract: `api-v0.2.0`. Decisions D-001 to D-073 are in [`design-docs/DECISIONS.
 
 ## 5. Now
 
-### F-007 · Lists and items restructure + exploration fixes 🟢 · 1.1.0
-Approved 2026-10-15. One kind per list (no per-item kind), common fields trimmed to title, image, website and description,
+### F-003 · Brief e2e safety net 🟢
+`make smoke` on the backend (one HTTP pass over the running stack) and about 8 Playwright specs on the web (organize,
+item with price, description history, image, conflict, trash, search and links, a reduced axe pass in both themes).
+Not part of the gate; run on user-flow changes and before a release (D-076). Lean workflow (D-081).
+Brief: [`design-docs/features/F-003-e2e-safety-net.md`](design-docs/features/F-003-e2e-safety-net.md).
+
+### F-007 · Lists and items restructure + exploration fixes ✅ · 1.1.0
+Merged 2026-10-15 (backend#18, web#28, `api-v0.3.0`). One kind per list (no per-item kind), common fields trimmed to title, image, website and description,
 price addable on demand (single or range), essential kind fields with a per-kind sort key, Markdown list description, and
 the 6 exploration fixes (no "collections" wording, folder rows without arrow, no move up/down on folders, one description,
 no breadcrumbs, appearance toggle in the sidebar). Contract `api-v0.3.0`. Run with the one-off lean workflow (D-079).
@@ -138,11 +144,6 @@ with the v2 workflow.
 Fresh-clone check (Q-04), scope and security review (Q-05: no critical or high findings), smoke checklist (C4). Tagged `v1.0.0`.
 
 ## 6. Next (in this order)
-
-### F-003 · Brief e2e safety net 🟡
-A **small** set of Playwright end-to-end tests against the real backend (`./deploy/test`), covering only the main flows
-(create folder/list/item, edit, image, trash and restore, search) plus an axe check in both themes. Deliberately short: this
-is a two-person app, not a test framework project. Written after F-007 so it targets the final model.
 
 ### F-002 · UI refresh 🟡 · web 2.0.0
 **What:** a large, mostly **aesthetic** refactor of the web app: a new visual design applied across every screen. It also
@@ -206,6 +207,7 @@ No commitment on order until then. IDs exist only for briefs already written.
 - This file is updated when a feature ships, starts, or changes horizon. Detailed task history stays in STATUS.md.
 
 ## Changelog
+- 2026-10-15: **F-007 merged** (1.1.0, `api-v0.3.0`); PRODUCT and DATA_MODEL updated. **F-003 approved and Now**: `make smoke` + ~8 Playwright specs, lean workflow (D-081).
 - 2026-10-15: **Exploration done, F-007 approved** (1.1.0, Now): restructure + 6 UI fixes, one-off lean workflow (D-079). Versions diverge after 1.1.0: UI refresh = web 2.0.0, TMDB stays backend 1.x, accounts = backend 2.0 (D-080). Pool gains list icons and automatic image lookup; F-002 gains inline editing and drag-from-anywhere; user-defined kinds in Exploring.
 - 2026-10-15: **v1.0.1 released** (F-006 polish); the exploration session starts. Backup drill (U1) moved to F-005.
 - 2026-10-15: **Re-plan.** Next is now, in order: exploration session → F-007 lists and items restructure (1.1) → brief e2e (F-003, cut to e2e only) → UI refresh (F-002, 1.2). List import added. F-004, F-005, CI and upkeep, 2.0 and 3.0 move to a pool ordered after 1.2 (D-078).

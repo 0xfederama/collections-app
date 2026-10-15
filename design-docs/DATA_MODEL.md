@@ -31,7 +31,6 @@ CREATE TABLE workspaces (
 CREATE TABLE workspace_settings (
   workspace_id           UUID PRIMARY KEY REFERENCES workspaces(id) ON DELETE CASCADE,
   streaming_country_code CHAR(2) NOT NULL DEFAULT 'IT'  CHECK (streaming_country_code ~ '^[A-Z]{2}$'),
-  default_currency       CHAR(3) NOT NULL DEFAULT 'EUR' CHECK (default_currency ~ '^[A-Z]{3}$'),
   markdown_history_limit INTEGER NOT NULL DEFAULT 20 CHECK (markdown_history_limit BETWEEN 0 AND 200),
   version                INTEGER NOT NULL DEFAULT 1,
   created_at, updated_at
@@ -84,9 +83,10 @@ CREATE TABLE lists (
   workspace_id   UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
   folder_id      UUID NULL,
   name           TEXT NOT NULL CHECK (char_length(name) BETWEEN 1 AND 200),
-  description    TEXT NULL CHECK (char_length(description) <= 2000),
+  kind           TEXT NOT NULL CHECK (kind ~ '^[a-z][a-z0-9_]{0,31}$'),  -- every item in the list has this kind (F-007)
+  description    TEXT NULL CHECK (char_length(description) <= 65536),        -- Markdown, no history
   display_mode   TEXT NOT NULL DEFAULT 'thumbnail' CHECK (display_mode IN ('compact','thumbnail','grid')),
-  sort_mode      TEXT NOT NULL DEFAULT 'manual'    CHECK (sort_mode IN ('manual','title','updated')),
+  sort_mode      TEXT NOT NULL DEFAULT 'manual'    CHECK (sort_mode IN ('manual','title','updated','kind_key')),
   sort_order     INTEGER NOT NULL,
   version        INTEGER NOT NULL DEFAULT 1,
   created_at, updated_at, deleted_at, trash_batch_id  -- as folders
@@ -124,15 +124,12 @@ CREATE TABLE items (
   workspace_id         UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
   list_id              UUID NOT NULL,
   title                TEXT NOT NULL CHECK (char_length(title) BETWEEN 1 AND 300),
-  kind                 TEXT NOT NULL DEFAULT 'generic' CHECK (kind ~ '^[a-z][a-z0-9_]{0,31}$'),
-  summary              TEXT NULL CHECK (char_length(summary) <= 1000),
-  status               TEXT NULL CHECK (char_length(status) <= 100),
   image_url            TEXT NULL CHECK (char_length(image_url) <= 2048),
   image_attachment_id  UUID NULL UNIQUE,
   price_min            NUMERIC(12,2) NULL CHECK (price_min >= 0),
   price_max            NUMERIC(12,2) NULL CHECK (price_max >= 0),
   currency             CHAR(3) NULL CHECK (currency ~ '^[A-Z]{3}$'),
-  official_website_url TEXT NULL CHECK (char_length(official_website_url) <= 2048),
+  website_url TEXT NULL CHECK (char_length(website_url) <= 2048),
   metadata             JSONB NOT NULL DEFAULT '{}' CHECK (jsonb_typeof(metadata) = 'object'),
   sort_order           INTEGER NOT NULL,
   version              INTEGER NOT NULL DEFAULT 1,      -- "metadata version" (everything except Markdown)
@@ -146,7 +143,6 @@ CREATE TABLE items (
   CHECK ((deleted_at IS NULL) = (trash_batch_id IS NULL))
 );
 CREATE INDEX ON items (list_id, sort_order) WHERE deleted_at IS NULL;
-CREATE INDEX ON items (workspace_id, kind) WHERE deleted_at IS NULL;
 CREATE INDEX ON items USING gin (lower(title) gin_trgm_ops) WHERE deleted_at IS NULL;
 CREATE INDEX ON items (trash_batch_id) WHERE trash_batch_id IS NOT NULL;
 ```
@@ -154,6 +150,8 @@ CREATE INDEX ON items (trash_batch_id) WHERE trash_batch_id IS NOT NULL;
 rejects a price without a currency (422) rather than guessing.
 
 ### 2.1 Kind metadata (`items.metadata`)
+
+Since 1.1.0 (migration `000002_restructure`, F-007) the kind lives on the list, the item's metadata is validated against its list's kind, and each kind has a sort key (`release_year`, `first_air_year`, `displacement_cc`, `power_hp`, `megapixels`; none for generic). Prices are stored as `min`/`max`; the API also accepts a single `amount` (stored as `min` = `max`).
 
 Metadata is validated in Go by a per-kind validator registry (`internal/items/kinds`). Unknown keys are rejected (400 `unknown_field`, or 422 for a wrong kind),
 all keys are optional, and `null` is not stored (the key is omitted). Text fields are trimmed and limited to 100 chars unless noted.
@@ -173,28 +171,17 @@ Shared sub-shapes:
 | | `imdb_url`, `streaming` | shared |
 | `motorcycle` | `make`, `model` | text |
 | | `model_year` | int 1885–2100 |
-| | `segment` | text ≤ 50 (e.g. naked, adventure, sport-touring) |
 | | `displacement_cc` | int 1–5000 |
 | | `power_hp` | number 0–1000, 1 decimal |
-| | `torque_nm` | number 0–1000, 1 decimal |
-| | `wet_weight_kg` | int 1–1000 |
-| | `seat_height_mm` | int 300–1200 |
 | | `license_class` | `AM` \| `A1` \| `A2` \| `A` |
-| `car` | `make`, `model`, `trim` | text |
+| `car` | `make`, `model` | text |
 | | `model_year` | int 1885–2100 |
-| | `body_type` | text ≤ 50 (e.g. hatchback, SUV, estate) |
 | | `fuel_type` | `petrol` \| `diesel` \| `hybrid` \| `plugin_hybrid` \| `electric` \| `lpg` \| `cng` \| `hydrogen` \| `other` |
-| | `transmission` | `manual` \| `automatic` |
 | | `power_hp` | number 0–2000, 1 decimal |
-| | `seats` | int 1–9 |
-| | `electric_range_km` | int 1–2000; only allowed when `fuel_type` is `electric` or `plugin_hybrid` (or absent) |
 | `camera` | `make`, `model` | text |
 | | `release_year` | int 1900–2100 |
-| | `camera_type` | `mirrorless` \| `dslr` \| `compact` \| `rangefinder` \| `medium_format` \| `film` \| `action` \| `other` |
 | | `sensor_format` | `full_frame` \| `aps_c` \| `micro_four_thirds` \| `one_inch` \| `medium_format` \| `film_35mm` \| `other` |
 | | `megapixels` | number 0.1–500, 1 decimal |
-| | `lens_mount` | text ≤ 50 (e.g. Sony E, Fujifilm X) |
-| | `weight_g` | int 1–10000 |
 
 Example:
 ```json
