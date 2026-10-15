@@ -1,6 +1,6 @@
 # F-000 — Workflow v2 bootstrap
 
-Status: approved    Release: — (tooling)    Roadmap: — (process, D-074)
+Status: **done** (backend#16, web#16 merged 2026-10-15)    Release: — (tooling)    Roadmap: — (process, D-074)
 Repos: backend, web    Approved by the user: 2026-10-15 ("start v2")
 
 ## Why
