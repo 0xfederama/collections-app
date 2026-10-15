@@ -158,6 +158,12 @@ to `api-v0.3.0` once it's tagged.
 | T4 migration fixture test + docs (docs-keeper) | B5 | same | | | |
 ### Web
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
+| T1 sidebar: no "collections", folder rows (icon toggles), no folder move up/down, theme toggle in sidebar | W1 W2 W3 W6 | `feature/lists-items-restructure` | | | |
+| T2 list view: no description text on rows, no breadcrumbs | W4 W5 | same | | | |
+| T3 pin `api-v0.3.0` (api:sync), list kind in create/settings, move picker by kind | W7 | same | | | |
+| T4 item fields: trimmed kinds, price add/range/remove, website, no status/summary/kind label | W8 | same | | | |
+| T5 sort by kind key + list Markdown description | W9 W10 | same | | | |
+| T6 version 1.1.0, docs-keeper, gate, PR | release | same | | | |
 
 ## Log
 - 2026-10-15: draft created from the user's re-plan.
