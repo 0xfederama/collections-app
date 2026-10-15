@@ -36,7 +36,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 2 | — | Exploration session: you used the fresh test env and listed what to change | ✅ Done (2026-10-15) | Oct 2026 |
 | 3 | **1.1.0** | Lists and items restructure + exploration fixes (F-007): one kind per list, trimmed fields, addable price, list description, 6 UI fixes. Last shared version (D-080) | ✅ Released `v1.1.0` (2026-10-15) | Oct 2026 |
 | 4 | — | Brief e2e safety net (F-003): `make smoke` + ~8 Playwright specs | ✅ Done (2026-10-15) | Oct 2026 |
-| 5 | **web 2.0.0** | UI refresh (F-002): Frosted Gallery design, in-place item editing, quick add, streaming icons; run from a sister session | 🟢 Now (design being refined, brief is a draft) | Q4 2026 |
+| 5 | **web 2.0.0** | UI refresh (F-002): Frosted Gallery design, in-place item editing, quick add, streaming icons; run from a sister session | 🟢 Now (brief approved, repo orchestrators next) | Q4 2026 |
 | — | later | Pool, in this order: CI and upkeep → ops hardening → list icons + product gaps → TMDB + auto images → user-defined kinds → collaborative Markdown → accounts (backend 2.0) → security review → internet exposure + public API | ⚪ Pool | 2027 |
 | — | future | List import, advanced search | 🔭 Future | — |
 
@@ -150,7 +150,7 @@ Fresh-clone check (Q-04), scope and security review (Q-05: no critical or high f
 ## 6. Next (in this order)
 
 ### F-002 · UI refresh 🟢 · web 2.0.0
-**Status 2026-10-15:** design direction **Frosted Gallery** chosen (Apple-inspired, layered, plain colour) and the brief drafted (not approved yet, design still being refined): [`design-docs/features/F-002-ui-refresh.md`](design-docs/features/F-002-ui-refresh.md) (stories per repo; one backend story for paid streaming platforms, the rest web). The inputs below are all folded into it.
+**Status 2026-10-15:** design direction **Frosted Gallery** chosen (Apple-inspired, layered, plain colour) and the brief approved (design finished with the user): [`design-docs/features/F-002-ui-refresh.md`](design-docs/features/F-002-ui-refresh.md) (stories per repo; one backend story for paid streaming platforms, the rest web). The inputs below are all folded into it.
 
 **What:** a large refactor of the web app: a new visual design applied across every screen, plus the interaction changes
 below. The API stays as it is unless the design needs something small. The web becomes 2.0.0; the backend keeps its own
@@ -189,7 +189,7 @@ Committed, in this order (set by you, 2026-10-15), after the UI refresh. The re-
 | 2 | **F-005 · Ops hardening** | Strip EXIF (GPS) from uploads; your backup → wipe → restore drill (moved from F-006 U1); `make audit` / `npm run audit` before each tag; scheduled backup on the Pi plus a quarterly restore drill; exposure check for the local stack; 40 MP and slow-network upload checks | backend 1.1.x |
 | 3 | **List icons + F-004 product gaps** | An interchangeable icon per list: an emoji or one from a built-in icon set (Notion-style, no photos), the current icon as default. Paste an image from the clipboard (copy an image or take a screenshot, then Cmd+V on an item to set it as its image, without saving a file first); "Empty trash" with confirmation; optional trash auto-purge after N days (off by default) | backend 1.2 / web 2.1 |
 | 4 | **TMDB + automatic image lookup** | Movie and TV lookup when creating an item, metadata refresh, streaming availability by country, attribution, rate limits; an image fetched automatically when an item is added (TMDB for movies and TV, another provider to check for the other kinds). User-entered values are never silently overwritten. No IMDb scraping. Starts with a check of the providers' terms | backend 1.3 / web 2.2 |
-| 5 | **User-defined kinds** | Create your own item types with custom fields and a sort key. Fits the validator registry + `metadata` JSONB, but needs kind definitions stored per workspace | backend 1.4 / web 2.3 |
+| 5 | **Custom fields + custom types** | Two steps, wanted by the user (2026-10-15): **(a) custom fields on any list**, e.g. a *Director* on a movie list, shown in the item, **pinnable** in rows (F-002 stores pinned fields by key for this) and usable to **filter and sort** (today the filter is title-only); **(b) custom types**: create your own item kinds with their own fields, sort key, default pinned fields and links, replacing the fixed kind list. Fits the validator registry + `metadata` JSONB, but needs field and kind definitions stored per workspace/list | backend 1.4 / web 2.3 |
 | 6 | **Real-time collaborative Markdown** | Two people editing the same description live. Path kept open: Yjs + CodeMirror 6, content already versioned in Postgres (ARCHITECTURE §7) | backend 1.5 / web 2.4 |
 | 7 | **Accounts & access control** | Users, memberships, authorization; every table already carries `workspace_id` (revisit `item_content_versions`, Q-05 finding 5) | **backend 2.0** / web 3.0 |
 | 8 | **Security review & hardening → internet exposure + public API** | A thorough security review and hardening pass (threat model, auth/session review, rate limiting, headers, dependency and container audit, pentest-style checks). Internet exposure and a public API happen only after it, or within it. The public API needs a full re-discussion first (PRODUCT §13, Phase 4) | after backend 2.0 |
