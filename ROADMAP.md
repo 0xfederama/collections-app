@@ -4,7 +4,7 @@
 |---|---|
 | **Owner** | Top-level orchestrator (parent repo session), approved by the product owner (you) |
 | **Last updated** | 2026-10-15 |
-| **Horizons** | **Now**: in flight · **Next**: committed, in order · **Pool**: committed or likely, ordered at the next re-plan · **Exploring**: ideas, no commitment |
+| **Horizons** | **Now**: in flight · **Next**: committed, in order · **Pool**: committed, proposed order fixed at the next re-plan · **Future**: on the roadmap, not ordered · **Exploring**: uncertain concepts, no commitment |
 | **Status** | ✅ shipped · 🟢 in progress · 🟡 planned · ⚪ idea · ⛔ not doing |
 
 Target windows are **indicative**, not promises. Order within a horizon is the priority order.
@@ -20,7 +20,7 @@ motorcycles to consider, things to buy. It's private and self-hosted on a home s
 version history, a trash with restore, and backups. It should be quick to use on a phone or a desktop.
 
 **Product principles**
-1. **Private by default.** The app is never exposed to the internet without accounts (Phase 3). Data stays on your hardware.
+1. **Private by default.** The app is never exposed to the internet before accounts and a thorough security review and hardening. Data stays on your hardware.
 2. **Never lose user data.** Edits are versioned, deletes are restorable, conflicts never discard a draft, and backups are verified.
 3. **Calm and lean.** Clean UI, few dependencies, no features that need maintenance without being used.
 4. **Contract first.** The backend owns the OpenAPI contract, and the web app follows a pinned version.
@@ -37,7 +37,8 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 3 | **1.1.0** | Lists and items restructure + exploration fixes (F-007): one kind per list, trimmed fields, addable price, list description, 6 UI fixes. Last shared version (D-080) | ✅ Merged (tag `v1.1.0` after your check) | Oct 2026 |
 | 4 | — | Brief e2e safety net (F-003): `make smoke` + ~8 Playwright specs | 🟢 Now | Q4 2026 |
 | 5 | **web 2.0.0** | UI refresh with your design (F-002) | 🟡 Next | Q4 2026 |
-| — | later | Re-planned after the UI refresh from the pool: list icons, auto image lookup, list import, product gaps, ops hardening, CI and upkeep, TMDB (backend 1.x), accounts (backend 2.0) | ⚪ Pool | 2027 |
+| — | later | Pool, ordered at the re-plan after the UI refresh: CI and upkeep, ops hardening, list icons + product gaps, TMDB + auto images, list import, user-defined kinds, collaborative Markdown, accounts (backend 2.0), then security review → internet exposure + public API | ⚪ Pool | 2027 |
+| — | future | Advanced search (inside descriptions and fields) | 🔭 Future | — |
 
 ```mermaid
 timeline
@@ -57,7 +58,9 @@ timeline
     section Next
         web 2.0.0 : UI refresh
     section After the UI refresh
-        Re-plan : icons, auto images, import, gaps, ops, TMDB, accounts
+        Pool : CI, ops, icons + gaps, TMDB + images, import
+             : user-defined kinds, collaborative Markdown
+             : accounts, security review → exposure + public API
 ```
 
 ---
@@ -73,15 +76,17 @@ flowchart LR
     subgraph NEXT["🟡 Next"]
         F002["F-002 · web 2.0.0 UI refresh<br/>(your design, inline editing)"]
     end
-    subgraph POOL["⚪ Pool, ordered after the UI refresh"]
-        ICO["List icons (emoji / icon set)"]
-        AIMG["Auto image lookup on add"]
-        IMP["List import<br/>(e.g. Markdown bullets)"]
-        F004["F-004 · Product gaps"]
+    subgraph POOL["⚪ Pool, proposed order, confirmed after the UI refresh"]
+        UPK["CI & upkeep"]
         F005["F-005 · Ops hardening"]
-        UPK["CI & upkeep<br/>CI · upgrades · a11y"]
-        P2["backend 1.x · TMDB + auto refresh"]
-        P3["backend 2.0 · Accounts & access control"]
+        ICO["List icons + F-004 product gaps"]
+        P2["TMDB + auto image lookup"]
+        IMP["List import"]
+        UDK["User-defined kinds"]
+        COL["Collaborative Markdown"]
+        P3["backend 2.0 · Accounts"]
+        SEC["Security review & hardening<br/>→ internet exposure + public API"]
+        UPK --> F005 --> ICO --> P2 --> IMP --> UDK --> COL --> P3 --> SEC
     end
     F007 --> F003 --> F002 --> POOL
 ```
@@ -156,39 +161,42 @@ row** (no grip handle). The API stays as it is. The web becomes 2.0.0; the backe
 - Accessibility holds: both themes stay at zero axe violations, with keyboard paths intact.
 - Behavior doesn't change; the unit tests and the F-003 e2e tests stay green.
 
-## 7. Pool (ordered at the re-plan after the UI refresh)
+## 7. Pool (proposed order, confirmed at the re-plan after the UI refresh)
 
-No commitment on order until then. IDs exist only for briefs already written.
+Committed. The order below is a proposal; it's fixed at the re-plan after F-002. Web and backend version independently (D-080).
 
-| Initiative | What |
-|---|---|
-| **List icons** | An interchangeable icon per list: an emoji or one from a built-in icon set (Notion-style, no photos). The current icon stays the default. Small backend field + picker |
-| **Automatic image lookup** | When an item is added, fetch an image automatically by searching with its title (provider and terms to check first; for movies and TV, TMDB covers it) |
-| **List import** | Create a list from text, e.g. a Markdown bullet list (one item per bullet). Format and rules to be defined |
-| **F-004 · Product gaps** | Paste an image from the clipboard onto an item; "Empty trash" with confirmation; optional trash auto-purge after N days (off by default) |
-| **F-005 · Ops hardening** | Strip EXIF (GPS) from uploads; your backup → wipe → restore drill (moved from F-006 U1); `make audit` / `npm run audit` before each tag; scheduled backup on the Pi plus a quarterly restore drill; exposure check for the local stack; 40 MP and slow-network upload checks |
-| **CI & upkeep** | GitHub Actions running the gates + Dependabot (D-031 deferred it); Node 26 LTS (from 2026-10-28, D-042) and TypeScript 7 when typescript-eslint supports it (D-040); VoiceOver pass on drag-and-drop and a keyboard context menu on tree rows (W-05); verify `VITE_API_MOCKS=1` in a browser (W-02) |
-| **Backend 1.x · TMDB + automatic refresh** | Movie and TV lookup when creating an item, metadata refresh, streaming availability by country, attribution, rate limits. User-entered values are never silently overwritten. No IMDb scraping. Starts with a check of current TMDB terms. Fits the F-007 model (a movie list gets TMDB lookup) |
-| **Backend 2.0 · Accounts & access control** | Users, memberships, authorization; every table already carries `workspace_id` (revisit `item_content_versions`, Q-05 finding 5). **The gate before any exposure beyond the private network** |
+| # | Initiative | What | Likely version |
+|---|---|---|---|
+| a | **CI & upkeep** | GitHub Actions running the gates + Dependabot (D-031 deferred it); Node 26 LTS (from 2026-10-28, D-042) and TypeScript 7 when typescript-eslint supports it (D-040); VoiceOver pass on drag-and-drop and a keyboard context menu on tree rows (W-05); verify `VITE_API_MOCKS=1` in a browser (W-02) | no user-facing bump |
+| b | **F-005 · Ops hardening** | Strip EXIF (GPS) from uploads; your backup → wipe → restore drill (moved from F-006 U1); `make audit` / `npm run audit` before each tag; scheduled backup on the Pi plus a quarterly restore drill; exposure check for the local stack; 40 MP and slow-network upload checks | backend 1.1.x |
+| c | **List icons + F-004 product gaps** | An interchangeable icon per list: an emoji or one from a built-in icon set (Notion-style, no photos), the current icon as default. Paste an image from the clipboard; "Empty trash" with confirmation; optional trash auto-purge after N days (off by default) | backend 1.2 / web 2.1 |
+| d | **TMDB + automatic image lookup** | Movie and TV lookup when creating an item, metadata refresh, streaming availability by country, attribution, rate limits; an image fetched automatically when an item is added (TMDB for movies and TV, another provider to check for the other kinds). User-entered values are never silently overwritten. No IMDb scraping. Starts with a check of the providers' terms | backend 1.3 / web 2.2 |
+| e | **List import** | Create a list from text, e.g. a Markdown bullet list (one item per bullet). Format and rules to be defined | backend 1.4 / web 2.3 |
+| f | **User-defined kinds** | Create your own item types with custom fields and a sort key. Fits the validator registry + `metadata` JSONB, but needs kind definitions stored per workspace | backend 1.5 / web 2.4 |
+| g | **Real-time collaborative Markdown** | Two people editing the same description live. Path kept open: Yjs + CodeMirror 6, content already versioned in Postgres (ARCHITECTURE §7) | backend 1.6 / web 2.5 |
+| h | **Accounts & access control** | Users, memberships, authorization; every table already carries `workspace_id` (revisit `item_content_versions`, Q-05 finding 5) | **backend 2.0** / web 3.0 |
+| i | **Security review & hardening → internet exposure + public API** | A thorough security review and hardening pass (threat model, auth/session review, rate limiting, headers, dependency and container audit, pentest-style checks). Internet exposure and a public API happen only after it, or within it. The public API needs a full re-discussion first (PRODUCT §13, Phase 4) | after backend 2.0 |
 
----
-
-## 8. Exploring (no commitment)
+## 8. Future (on the roadmap, not yet ordered)
 
 | Idea | Notes |
 |---|---|
-| Public API | Needs a full re-discussion first (PRODUCT §13, Phase 4) |
-| Real-time collaborative Markdown | Path kept open: Yjs + CodeMirror 6, content already versioned in Postgres (ARCHITECTURE §7) |
-| Mobile app | Same pinned OpenAPI contract, separate repo |
-| AI assist | Description drafts, comparisons, Q&A. Only with explicit approval before anything is saved. Very distant |
-| Multiple images per item | `attachments` is already independent of `items`, so it's additive |
-| Advanced search | Search inside Markdown and metadata, saved filters |
-| Offline mode, rich-text editor, version diffs, custom workflows | Deferred since the MVP, no current demand |
-| User-defined kinds | Create your own item types with custom fields (fits the validator registry + JSONB, but needs a schema-per-kind store) |
-| Comparison view | Side by side of 2–4 items in a list (fits "things we are comparing") |
+| Advanced search | Search inside Markdown descriptions and kind fields, saved filters |
 
-## 9. Not doing ⛔
-- Exposing the app to the internet before accounts (backend 2.0).
+## 9. Exploring and not on the roadmap
+
+**Exploring (a possible new concept, not sure yet):**
+| Idea | Notes |
+|---|---|
+| Compare & AI assist | A separate, future concept: side-by-side comparison of 2–4 items, with AI help (drafts, comparisons, Q&A) only with explicit approval before anything is saved. To be defined from scratch, if ever |
+
+**Not on the roadmap for now:**
+- **Mobile app.** Only after accounts and once the app is public; same pinned OpenAPI contract, separate repo.
+- **Multiple images per item.**
+- Offline mode, rich-text editor, version diffs, custom workflows (deferred since the MVP, no demand).
+
+**Not doing ⛔**
+- Exposing the app to the internet, or publishing an API, before the security review and hardening (pool item i), which itself comes after accounts.
 - A monorepo, microservices, Redis, queues, an ORM (ORCHESTRATOR_BRIEF §2).
 - Scraping IMDb or any provider that doesn't allow it.
 
@@ -207,6 +215,7 @@ No commitment on order until then. IDs exist only for briefs already written.
 - This file is updated when a feature ships, starts, or changes horizon. Detailed task history stays in STATUS.md.
 
 ## Changelog
+- 2026-10-15: **Pool re-shaped.** Proposed order: CI & upkeep → ops hardening → list icons + gaps → TMDB + auto images → list import → user-defined kinds → collaborative Markdown → accounts (backend 2.0) → security review & hardening, which gates internet exposure and the public API. Advanced search is Future. Compare + AI assist becomes one uncertain future concept. Mobile app and multiple images per item are off the roadmap for now.
 - 2026-10-15: **F-007 merged** (1.1.0, `api-v0.3.0`); PRODUCT and DATA_MODEL updated. **F-003 approved and Now**: `make smoke` + ~8 Playwright specs, lean workflow (D-081).
 - 2026-10-15: **Exploration done, F-007 approved** (1.1.0, Now): restructure + 6 UI fixes, one-off lean workflow (D-079). Versions diverge after 1.1.0: UI refresh = web 2.0.0, TMDB stays backend 1.x, accounts = backend 2.0 (D-080). Pool gains list icons and automatic image lookup; F-002 gains inline editing and drag-from-anywhere; user-defined kinds in Exploring.
 - 2026-10-15: **v1.0.1 released** (F-006 polish); the exploration session starts. Backup drill (U1) moved to F-005.
