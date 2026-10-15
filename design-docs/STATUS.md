@@ -44,6 +44,7 @@ M1 backend rows (added by the backend orchestrator):
 | Q-02 | backend | done | `feature/Q-02-backup-restore` | [#12](https://github.com/0xfederama/collections-app-backend/pull/12) | 2026-10-14 | Squash-merged as `d680a9a` (D-066). `make test-backup` green. Open: manual backup → reset-dev → restore on the dev stack (user). Branch and worktree removed |
 | B-12 | backend | done | `feature/B-12-recent-items` | [#13](https://github.com/0xfederama/collections-app-backend/pull/13) | 2026-10-14 | Squash-merged as `98d3b87` (D-070). Tag `api-v0.2.0` pushed (user OK). Branch and worktree removed |
 | Q-03 | parent + backend | done | — (parent, no backend PR) | — | 2026-10-15 | Parent `deploy/server/` (compose, check.sh), `./deploy/prod` wrapper, README, D-071. Final run with the real web image passed (deep link, CSP 0 violations, upload, backup→wipe→restore→verify, exposure); details in handoffs/Q-03.md |
+| Q-04 | parent + backend | todo | `docs/Q-04-readme-fixes` (backend, if needed) | — | 2026-10-15 | brief: handoffs/Q-04.md. Fresh clone following README.md → deploy/README.md. Start after W-13 and T-01 merge |
 | B-11 | backend | done | `feature/B-11-search` | [#9](https://github.com/0xfederama/collections-app-backend/pull/9) | 2026-10-14 | Rebased on B-08, squash-merged as `08d30ab`. Branch and worktree removed |
 
 M0 record:
@@ -105,6 +106,8 @@ Postgres, AT-18 compose exposure, `docker build`).**
 - Q-4 license (DECISIONS.md). Default applies if unanswered.
 
 ## Log (newest first, one line each)
+
+- 2026-10-15: Q-03 final run with the real web image passed (backend orchestrator closed it). Brief Q-04 (fresh clone, AT-01) written; starts after W-13 and T-01 merge. Then Q-05, then the user's smoke checklist (C4).
 
 - 2026-10-15: W-10 squash-merged (web `main` c8d1ba0), parent pointer bumped. T-01 rebases clean; W-13 conflicts only in docs/modules/items.md.
 - 2026-10-15: Q-03w squash-merged (web `main` f1df021), parent pointer bumped. Q-03 (backend orchestrator) can do its final prod-compose run. `npm run check` needs Docker from now on.
