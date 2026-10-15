@@ -39,7 +39,8 @@ not separate sessions.
 4. **Workers report.** `FLAGS: none` → the orchestrator only runs the repo gate (`make check` / `npm run check`) once
    before the PR (see "Test runs" below), and doesn't read the diff. Flagged items → it reviews exactly those points, fixes or accepts them, and
    records a D-entry when a flag is a real decision.
-5. **PRs** go to the user for review and merge. After the merge the repo orchestrator bumps the parent pointer (D-044) and updates STATUS.md.
+5. **PRs**: the repo orchestrator merges them itself once the gate is green (D-077): always squash, never a merge commit; a
+   non-trivial rebase and its merge go to a Sonnet 5.5 subagent. The user can still read every PR. After the merge the repo orchestrator bumps the parent pointer (D-044) and updates STATUS.md.
    When all stories are done, the top-level orchestrator marks the feature shipped in ROADMAP.md.
 
 ### Rules that keep it cheap
@@ -121,7 +122,9 @@ Dispatch rules:
 - Push your branch to `origin` and open a PR with `gh pr create` using `.github/pull_request_template.md`.
 - One concern per PR, sized for review (aim for under ~600 changed lines excluding generated code).
 - `--force-with-lease` is allowed **only** on your own unmerged branch. Rebasing on `main` is preferred over merge commits.
-- **Do not merge PRs yourself** unless the user explicitly authorized it for that PR. The user reviews and merges.
+- **Merging (D-077):** in workflow v2 the repo orchestrator merges its own PRs once the gate is green: squash merge only
+  (`gh pr merge --squash --delete-branch`), never merge commits. A non-trivial rebase and its merge go to a Sonnet 5.5
+  subagent. Any other session merges only when the user explicitly says so for that PR.
 - **After every merge, always delete the branch** locally (`git branch -D <branch>`) and on the remote (`git push origin --delete <branch>`), remove its worktree (`git worktree remove <path>`), then `git fetch --prune`. The orchestrator does this when it bumps the parent pointer (user rule, 2026-10-14).
 - Never commit secrets, `.env`, real user data, or the local `data/` directories.
 

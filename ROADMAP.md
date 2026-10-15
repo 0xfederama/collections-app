@@ -119,7 +119,7 @@ Contract: `api-v0.2.0`. Decisions D-001 to D-073 are in [`design-docs/DECISIONS.
 
 ## 5. Now
 
-### F-006 · 1.0.1 polish 🟢 (draft, waiting for your OK)
+### F-006 · 1.0.1 polish 🟢 (approved, web orchestrator starting)
 Small fixes found by the 1.0 checks and by you, all in the web app: Home and Trash go stale after a delete until reload; the
 "Backend: ready" indicator moves into Settings (with the API address and contract version); Tab
 reachability of the sidebar tree; focus return after Esc; delete-confirm vs Trash counts; a client-side IMDb URL check;
