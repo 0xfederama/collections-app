@@ -32,7 +32,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 | # | Release | Theme | Status | Window |
 |---|---|---|---|---|
 | — | **1.0 MVP** | Organize, describe and protect a shared collection | ✅ Released `v1.0.0` (2026-10-15) | Oct 2026 |
-| 1 | **1.0.1** | Polish from the release checks (F-006) | ✅ Done (web#18–#27), tag pending | Oct 2026 |
+| 1 | **1.0.1** | Polish from the release checks (F-006) | ✅ Released `v1.0.1` (2026-10-15) | Oct 2026 |
 | 2 | — | Exploration session: you use the fresh test env and list what to change | 🟢 Now | Oct 2026 |
 | 3 | **1.1** | Lists and items restructure (F-007): one item type per list, fewer predefined fields, list descriptions, plus the exploration findings | 🟡 Next | Q4 2026 |
 | 4 | — | Brief e2e safety net (F-003) | 🟡 Next | Q4 2026 |
@@ -203,7 +203,7 @@ No commitment on order until then. IDs exist only for briefs already written.
 - This file is updated when a feature ships, starts, or changes horizon. Detailed task history stays in STATUS.md.
 
 ## Changelog
-- 2026-10-15: F-006 (1.0.1 polish) done; the exploration session starts. Backup drill (U1) moved to F-005.
+- 2026-10-15: **v1.0.1 released** (F-006 polish); the exploration session starts. Backup drill (U1) moved to F-005.
 - 2026-10-15: **Re-plan.** Next is now, in order: exploration session → F-007 lists and items restructure (1.1) → brief e2e (F-003, cut to e2e only) → UI refresh (F-002, 1.2). List import added. F-004, F-005, CI and upkeep, 2.0 and 3.0 move to a pool ordered after 1.2 (D-078).
 - 2026-10-15: **v1.0.0 released.** Workflow v2 started. F-006 (1.0.1 polish) is Now; F-001 done.
 - 2026-10-15: Q-04 done. F-002 made generic: the design comes from you later (D-075). The v2 workflow starts after Q-05 + C4.
