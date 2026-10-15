@@ -37,7 +37,7 @@ not separate sessions.
    parallel with `isolation: "worktree"` when tasks don't touch the same files. Backend contract changes merge (and get tagged)
    before the web stories that need them.
 4. **Workers report.** `FLAGS: none` → the orchestrator only runs the repo gate (`make check` / `npm run check`) once
-   before the PR, and doesn't read the diff. Flagged items → it reviews exactly those points, fixes or accepts them, and
+   before the PR (see "Test runs" below), and doesn't read the diff. Flagged items → it reviews exactly those points, fixes or accepts them, and
    records a D-entry when a flag is a real decision.
 5. **PRs** go to the user for review and merge. After the merge the repo orchestrator bumps the parent pointer (D-044) and updates STATUS.md.
    When all stories are done, the top-level orchestrator marks the feature shipped in ROADMAP.md.
@@ -51,6 +51,20 @@ not separate sessions.
   **must** flag it as `[CRUCIAL]`, and the orchestrator reviews those parts.
 - `docs-keeper` (haiku) still updates `docs/` before every PR. `researcher` (sonnet) still handles version and library research.
 - Running the app for a check: `./deploy/test up -d --fresh` from the parent, never the user's dev data.
+
+### Test runs: wisely, not by reflex (D-076)
+Run the smallest set of checks that proves the change. A full suite re-run is a tool, not a ritual.
+
+| Situation | What to run |
+|---|---|
+| Worker, while working | The tests for the code it touches, plus the fast static checks (format, lint, types). |
+| Worker, before reporting | Its targeted tests and the static checks, green. The **full gate** only when the task touches shared code: the API contract or generated client, schema/migrations/sqlc, shared query keys or hooks, build config, dependencies, Docker/compose/Caddy. The report's Verification says exactly what ran. |
+| Orchestrator, before opening a PR | The full gate (`make check` / `npm run check`) **once**, on the final commit. Not after every worker, and not again if nothing changed since the last green run. |
+| Docs, README or comment-only change | No tests. Formatting of the touched files at most. |
+| Slow suites: e2e, smoke on `./deploy/test`, `make test-backup`, browser checks | Only when the change touches what they cover (backup scripts → `make test-backup`; compose, Dockerfile, Caddy or CSP → stack smoke; user flows → e2e), or before a release tag. Never "just in case". |
+| A test fails and looks flaky | Re-run that test only, not the whole suite. |
+
+"Never claim tests pass without running them" still holds: say what ran, and don't imply more.
 
 ### Parallel work in one repo
 - Parallel workers use `isolation: "worktree"`. The orchestrator merges their branches into the story branch. Never let
@@ -80,7 +94,7 @@ Dispatch rules:
 - **Prompts must be self-contained.** A subagent starts with no context.
 - Run independent workers **in parallel** (worktree isolation).
 - Subagents do not push, open PRs, or edit `CLAUDE.md` or design docs. The repo orchestrator does those.
-- **Never claim tests pass without running them:** the orchestrator runs the repo gate itself once before each PR.
+- **Never claim tests pass without running them:** the orchestrator runs the repo gate itself once before each PR. Otherwise run tests wisely (§1b "Test runs", D-076).
 - `test-writer` is retired in v2: workers write the tests for their own task.
 
 ---
