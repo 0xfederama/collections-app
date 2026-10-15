@@ -123,14 +123,21 @@ Postgres **and** the images, together (a DB-only backup is not enough). The api 
 ./deploy/prod verify <backup-dir>       # compare the running database with a backup
 ```
 
-Schedule it (example, as the user who owns the clone; cron `crontab -e`):
+**Schedule it** with the systemd units in `deploy/server/systemd/` (nightly backup at 03:15, then prune; `Persistent=true`
+catches up after downtime). Edit `User=` and the paths if your clone isn't `/home/pi/collections-app`, then:
 
-```cron
-15 3 * * *  cd /home/pi/collections-app && ./deploy/prod backup >>/var/log/collection-backup.log 2>&1 && ./deploy/prod prune >>/var/log/collection-backup.log 2>&1
+```bash
+sudo cp deploy/server/systemd/collection-backup.{service,timer} /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now collection-backup.timer
+systemctl list-timers collection-backup.timer   # next run
+sudo systemctl start collection-backup.service  # optional: run one now
+journalctl -u collection-backup.service         # its log
 ```
 
-Or a systemd timer: a `collection-backup.service` (`Type=oneshot`, `WorkingDirectory=/home/pi/collections-app`,
-`ExecStart=/home/pi/collections-app/deploy/prod backup`) triggered by a `collection-backup.timer` with `OnCalendar=*-*-* 03:15:00`.
+**Check that it ran:** `./deploy/prod backup-status` fails (non-zero, with the reason) when there is no backup, the newest
+has no `manifest.json`, or it is older than 26 hours (`./deploy/prod backup-status 48` for another limit). Run it now and
+then, or after the server was off.
 
 **Copy backups off the device** (another machine, a NAS, cloud storage you control): the same disk dying takes the live
 data and the backups together. Example, from another machine on your tailnet:

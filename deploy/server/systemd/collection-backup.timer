@@ -1,0 +1,11 @@
+# Runs collection-backup.service every night at 03:15; Persistent catches up after the server was off.
+[Unit]
+Description=Nightly Collections App backup
+
+[Timer]
+OnCalendar=*-*-* 03:15:00
+Persistent=true
+RandomizedDelaySec=5min
+
+[Install]
+WantedBy=timers.target

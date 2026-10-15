@@ -64,6 +64,7 @@ Run the smallest set of checks that proves the change. A full suite re-run is a 
 | Docs, README or comment-only change | No tests. Formatting of the touched files at most. |
 | Slow suites: e2e, smoke on `./deploy/test`, `make test-backup`, browser checks | Only when the change touches what they cover (backup scripts → `make test-backup`; compose, Dockerfile, Caddy or CSP → stack smoke; user flows → e2e), or before a release tag. Never "just in case". |
 | A test fails and looks flaky | Re-run that test only, not the whole suite. |
+| Before a release tag (any repo) | Dependency audit (D-084): backend `make audit` (govulncheck), web `npm run audit`. A high or critical finding that affects shipped code blocks the tag until it is fixed or explicitly accepted by the user. |
 
 "Never claim tests pass without running them" still holds: say what ran, and don't imply more.
 

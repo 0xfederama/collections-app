@@ -1,0 +1,13 @@
+# Nightly backup + prune of the prod stack. Install: see deploy/README.md "Backups" (systemd timer).
+# Edit User and the paths if your clone isn't /home/pi/collections-app.
+[Unit]
+Description=Collections App backup (Postgres + images) and prune
+Wants=network-online.target docker.service
+After=network-online.target docker.service
+
+[Service]
+Type=oneshot
+User=pi
+WorkingDirectory=/home/pi/collections-app
+ExecStart=/home/pi/collections-app/deploy/prod backup
+ExecStartPost=/home/pi/collections-app/deploy/prod prune

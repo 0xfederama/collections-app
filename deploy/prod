@@ -7,6 +7,7 @@
 #   ./deploy/prod restore <dir> [--force] restore a backup (asks before replacing data)
 #   ./deploy/prod verify <dir>            compare a backup with the running database
 #   ./deploy/prod prune [dest]            keep the newest backup of each of the last 7 days and 4 weeks
+#   ./deploy/prod backup-status [hours]   fail if the newest backup is missing, incomplete or older than [hours] (26)
 #
 # web http://127.0.0.1:8081 (or WEB_BIND)   settings + secrets: deploy/server/.env   guide: deploy/README.md
 set -euo pipefail
@@ -64,6 +65,24 @@ prune() {
   ok "prune: kept $kept, removed $removed"
 }
 
+# Did the scheduled backup run? Newest backup must exist, have its manifest, and be younger than max hours.
+backup_status() {
+  local max="${1:-26}" newest stamp epoch now age
+  [[ "$max" =~ ^[0-9]+$ ]] || die "hours must be a whole number: $max"
+  [ -d "$backups" ] || die "no backups directory: $backups"
+  newest="$(cd "$backups" && printf '%s\n' * | grep -E '^[0-9]{8}T[0-9]{6}Z$' | sort -r | head -n1 || true)"
+  [ -n "$newest" ] || die "no backups in $backups"
+  [ -f "$backups/$newest/manifest.json" ] || die "newest backup $newest has no manifest.json (incomplete)"
+  stamp="${newest:0:4}-${newest:4:2}-${newest:6:2}T${newest:9:2}:${newest:11:2}:${newest:13:2}Z"
+  if epoch="$(date -u -d "$stamp" +%s 2>/dev/null)"; then :; else
+    epoch="$(date -u -j -f %Y%m%dT%H%M%SZ "$newest" +%s)"
+  fi
+  now="$(date -u +%s)"
+  age=$(( (now - epoch) / 3600 ))
+  [ "$age" -le "$max" ] || die "newest backup $newest is ${age}h old (limit ${max}h): check the timer (systemctl status collection-backup.timer)"
+  ok "backup-status: newest $newest, ${age}h old"
+}
+
 cmd="${1:-}"
 [ -n "$cmd" ] || usage 1
 shift
@@ -77,6 +96,7 @@ case "$cmd" in
   restore) exec "$root/backend/scripts/restore.sh" "$@" ;;
   verify) exec "$root/backend/scripts/verify-restore.sh" "$@" ;;
   prune) prune "$@" ;;
+  backup-status) backup_status "$@" ;;
   check) exec "$here/check.sh" ;;
   *) exec docker compose "$cmd" "$@" ;;
 esac
