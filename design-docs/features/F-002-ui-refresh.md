@@ -154,3 +154,4 @@ One branch `feature/F002-backend-contract`, one PR, workers run in sequence (the
 - 2026-10-15: final round: favicon-style local icons, TV links Google + IMDb only, TV triple seasons/episodes/duration; custom fields and types recorded in the roadmap; brief **approved**.
 - 2026-10-15: refinement round: pen on hover only, ✓ at the end of the field, links per kind (TV like movies), real logos, pinned fields (two slots) with kind defaults, price text and sortable, kind field changes, display-mode sketches. Backend stories B2 to B4 added.
 - 2026-10-15: design direction **Frosted Gallery** chosen by the user (Apple-style reference, layered and soft); non-visual changes and decisions agreed in chat; brief written.
+- 2026-10-15: F002-B5 done by the backend orchestrator: `ItemSummary.metadata` (backend#21, `fe58ae5`, tag `api-v0.5.0`). Web syncs to `api-v0.5.0` (includes 0.4.0).

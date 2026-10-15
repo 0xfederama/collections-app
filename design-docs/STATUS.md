@@ -18,7 +18,7 @@ Feature briefs: [`features/`](features/). Repo orchestrators add their task rows
 | F-007 | Lists & items restructure + exploration fixes (1.1.0) | top-level orch. + user | **done** 2026-10-15 (backend#18, web#28; pointers bumped; PRODUCT/DATA_MODEL updated); tagged `v1.1.0` (parent 8e32b68, web 5587dd7, backend be8a532) | | [backend#18](https://github.com/0xfederama/collections-app-backend/pull/18) | 2026-10-15 | One kind per list, trimmed fields, addable price, list description, 6 UI fixes (D-079), `api-v0.3.0` |
 | F-002 | UI refresh web (W1–W5) | web orch. | in progress | `feature/F-002-ui-refresh` | | 2026-10-15 | One PR; T1 tokens/primitives running; contract-dependent parts wait for the backend tag |
 | F-003 | Brief e2e safety net | top-level orch. + user (backend orch.: F003-B1) | **in progress**: **done** 2026-10-15: F003-B1 and F003-W1 merged; pointers bumped | | [backend#19](https://github.com/0xfederama/collections-app-backend/pull/19), [web#29](https://github.com/0xfederama/collections-app-frontend-web/pull/29) | 2026-10-15 | `make smoke` (backend) + ~8 Playwright specs (web); lean workflow (D-081) |
-| F-002 | F002-B1..B4 backend contract (one PR) | backend orch. | **done** | | [backend#20](https://github.com/0xfederama/collections-app-backend/pull/20) | 2026-10-15 | Squash-merged `5b3c244`, tag `api-v0.4.0` pushed (D-082); web: `npm run api:sync -- api-v0.4.0` |
+| F-002 | F002-B1..B4 backend contract (one PR) | backend orch. | **done** | | [backend#20](https://github.com/0xfederama/collections-app-backend/pull/20) | 2026-10-15 | Squash-merged `5b3c244`, tag `api-v0.4.0` pushed (D-082); web: `npm run api:sync -- api-v0.4.0`. B5 (metadata on `ItemSummary`, gap found by web) shipped in [backend#21](https://github.com/0xfederama/collections-app-backend/pull/21), squash `fe58ae5`, tag `api-v0.5.0`: web syncs to that |
 
 ## 1.0 release checks (done, v1 workflow)
 
@@ -122,7 +122,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 | Repo | Remote | Local path | Latest API tag |
 |---|---|---|---|
-| backend | https://github.com/0xfederama/collections-app-backend | `/Users/federico/Developer/collections-app/backend` (submodule) | `api-v0.4.0` (`5b3c244`) |
+| backend | https://github.com/0xfederama/collections-app-backend | `/Users/federico/Developer/collections-app/backend` (submodule) | `api-v0.5.0` (`fe58ae5`) |
 | web | https://github.com/0xfederama/collections-app-frontend-web | `/Users/federico/Developer/collections-app/frontend-web` (submodule) | pinned: — |
 | parent | https://github.com/0xfederama/collections-app | `/Users/federico/Developer/collections-app` | — |
 
