@@ -38,6 +38,8 @@ None.
 ### Web
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
 |---|---|---|---|---|---|
+| W1a install worker.md, delete test-writer, CLAUDE.md v2 block (orchestrator, no worker) | F000-W1 | `chore/adopt-workflow-v2` | — | — | [web#16](https://github.com/0xfederama/collections-app-frontend-web/pull/16) merged `5dc2586` |
+| W1b smoke dispatch of `worker` (read-only) | F000-W1 | — | DONE, report format OK, ran on `claude-sonnet-5-5` (parent on Haiku); `effort` accepted | [UNVERIFIED] gate not run (read-only, expected) | — |
 
 ## Log
 - 2026-10-15: Brief written by the top-level orchestrator (stories B0/W0 moved here from F-001).
