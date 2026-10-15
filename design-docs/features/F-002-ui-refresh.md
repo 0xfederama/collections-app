@@ -133,21 +133,21 @@ other behavior change not listed above.
 One branch `feature/F002-backend-contract`, one PR, workers run in sequence (they share `openapi.yaml`, `kinds.go` and the list code). Orchestrator: backend, 2026-10-15.
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
 |---|---|---|---|---|---|
-| T1 `paid_platforms` next to `streaming.platforms` (additive), spec 0.4.0 | F002-B1 | `feature/F002-backend-contract` | todo | | |
-| T2 kind field changes + migration 000003 ("From 1.1" block) | F002-B2 | same | todo | | |
-| T3 `pinned_fields` on lists (migration 000004) | F002-B3 | same | todo | | |
-| T4 sort mode `price` (migration 000005) | F002-B4 | same | todo | | |
+| T1 `paid_platforms` next to `streaming.platforms` (additive), spec 0.4.0 | F002-B1 | `feature/F002-backend-contract` | done, flags reviewed (migrations, contract) | yes | [#20](https://github.com/0xfederama/collections-app-backend/pull/20) |
+| T2 kind field changes + migration 000003 ("From 1.1" block) | F002-B2 | same | done, flags reviewed (migrations, contract) | yes | [#20](https://github.com/0xfederama/collections-app-backend/pull/20) |
+| T3 `pinned_fields` on lists (migration 000004) | F002-B3 | same | done, flags reviewed (migrations, contract) | yes | [#20](https://github.com/0xfederama/collections-app-backend/pull/20) |
+| T4 sort mode `price` (migration 000005) | F002-B4 | same | done, flags reviewed (migrations, contract) | yes | [#20](https://github.com/0xfederama/collections-app-backend/pull/20) |
 ### Web
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
 |---|---|---|---|---|---|
 | T1 tokens, materials, fonts, primitives | W1 | `feature/F-002-ui-refresh` | running | | |
-| T2 shell, Home, Search, Trash, Settings | W1 | same | todo | | |
-| T3 Quick add + `N` | W4 | same | todo | | |
-| T4 list view rows/grid, ＋New, drag anywhere, kind chip + confirm, list description in place | W2 (no backend) | same | todo | | |
-| T5 favicon assets (after researcher F002-Q1) | W3 | same | todo | | |
-| T6 item detail in place (pens, ✓/✕, description, +Add field, hero, links row, no-cents price) | W3 (no backend) | same | todo | | |
+| T2 shell, Home, Search, Trash, Settings | W1 | same | done, flags reviewed (migrations, contract) | yes | [#20](https://github.com/0xfederama/collections-app-backend/pull/20) |
+| T3 Quick add + `N` | W4 | same | done, flags reviewed (migrations, contract) | yes | [#20](https://github.com/0xfederama/collections-app-backend/pull/20) |
+| T4 list view rows/grid, ＋New, drag anywhere, kind chip + confirm, list description in place | W2 (no backend) | same | done, flags reviewed (migrations, contract) | yes | [#20](https://github.com/0xfederama/collections-app-backend/pull/20) |
+| T5 favicon assets (after researcher F002-Q1) | W3 | same | done, flags reviewed (migrations, contract) | yes | [#20](https://github.com/0xfederama/collections-app-backend/pull/20) |
+| T6 item detail in place (pens, ✓/✕, description, +Add field, hero, links row, no-cents price) | W3 (no backend) | same | done, flags reviewed (migrations, contract) | yes | [#20](https://github.com/0xfederama/collections-app-backend/pull/20) |
 | T7 contract adoption: paid streaming, kind field changes, pinned fields, price sort | W2/W3 | same | blocked on backend tag | | |
-| T8 specs, docs-keeper, DESIGN.md, full gate + e2e | W5 | same | todo | | |
+| T8 specs, docs-keeper, DESIGN.md, full gate + e2e | W5 | same | done, flags reviewed (migrations, contract) | yes | [#20](https://github.com/0xfederama/collections-app-backend/pull/20) |
 
 ## Log
 - 2026-10-15: final round: favicon-style local icons, TV links Google + IMDb only, TV triple seasons/episodes/duration; custom fields and types recorded in the roadmap; brief **approved**.
