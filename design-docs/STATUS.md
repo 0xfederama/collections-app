@@ -14,7 +14,7 @@ Feature briefs: [`features/`](features/). Repo orchestrators add their task rows
 |---|---|---|---|---|---|---|---|
 | F-000 | F000-B1 install v2 agents + rules | backend orch. | done | `chore/adopt-workflow-v2` | [backend#16](https://github.com/0xfederama/collections-app-backend/pull/16) | 2026-10-15 | Squash-merged `f918264`, pointer bumped. Gate green. Smoke ran as an equivalent sonnet/medium dispatch (registry didn't reload mid-session); the next backend session confirms a native `worker` dispatch |
 | F-000 | F000-W1 install v2 agents + rules | web orch. | done | `chore/adopt-workflow-v2` | [web#16](https://github.com/0xfederama/collections-app-frontend-web/pull/16) | 2026-10-15 | Squash-merged `5dc2586`, pointer bumped. Gate green (1200 tests). Smoke worker ran on Sonnet 5.5. The running session picks up a new agent file after a short delay (no restart needed) |
-| F-006 | 1.0.1 polish (W1–W9) | web orch. | approved, not started | | | 2026-10-15 | C4 + Q-05 + Q-04 findings + user: Trash/Home stale after delete, backend status → Settings |
+| F-006 | 1.0.1 polish (W1–W9) | web orch. | in progress | one per story (see brief) | | 2026-10-15 | Breakdown in the brief. W1–W5, W7, W9 dispatched in parallel; W6 after W9; W8 (live CSP) last |
 
 ## 1.0 release checks (done, v1 workflow)
 
