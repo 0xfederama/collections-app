@@ -22,7 +22,7 @@ M1/M2 web rows (added by the web orchestrator):
 | W-12 | web | done | `feature/W-12-trash` | [#9](https://github.com/0xfederama/collections-app-frontend-web/pull/9) | 2026-10-14 | Squash-merged as `d9d2ccb`. Branch and worktree removed |
 | W-09 | web | done | `feature/W-09-item-image` | [#11](https://github.com/0xfederama/collections-app-frontend-web/pull/11) | 2026-10-14 | Squash-merged as `162faab`. Branch and worktree removed. Not checked: 40 MP case in the UI, live progress on a slow link |
 | W-10 | web | done | `feature/W-10-content-editor` | [#13](https://github.com/0xfederama/collections-app-frontend-web/pull/13) | 2026-10-15 | Squash-merged as `c8d1ba0`. Branch and worktree removed |
-| W-13 | web | in review | `feature/W-13-settings-home` | [#14](https://github.com/0xfederama/collections-app-frontend-web/pull/14) | 2026-10-15 | Settings + theme, ISO pickers, Home + real `/recent-items` (synced `api-v0.2.0`). Not verified: Home without lists on a real backend, 375/1440 screenshots |
+| W-13 | web | done | `feature/W-13-settings-home` | [#14](https://github.com/0xfederama/collections-app-frontend-web/pull/14) | 2026-10-15 | Squash-merged on top of W-10. Client synced to `api-v0.2.0` (recent items, D-070). Branch and worktree removed |
 | T-01 | web | in review | `chore/T-01-test-stability` | [PR #15](https://github.com/0xfederama/collections-app-frontend-web/pull/15) | 2026-10-15 | brief: handoffs/T-01.md. Flaky ItemView/ItemActions tests under load |
 | Q-01a | web | deferred | — | — | 2026-10-14 | Post-MVP (D-068). C4 uses the smoke checklist in ACCEPTANCE_TESTS.md |
 | Q-01b | web | deferred | — | — | 2026-10-14 | Post-MVP (D-068) |
@@ -107,6 +107,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 ## Log (newest first, one line each)
 
+- 2026-10-15: W-13 squash-merged, parent pointer bumped; web contract now `api-v0.2.0`. Only T-01 left in the web batch, then C4 (manual smoke checklist).
 - 2026-10-15: Q-03 final run with the real web image passed (backend orchestrator closed it). Brief Q-04 (fresh clone, AT-01) written; starts after W-13 and T-01 merge. Then Q-05, then the user's smoke checklist (C4).
 
 - 2026-10-15: W-10 squash-merged (web `main` c8d1ba0), parent pointer bumped. T-01 rebases clean; W-13 conflicts only in docs/modules/items.md.
