@@ -118,6 +118,8 @@ active, and destructive variants are defined for every interactive primitive.
 
 ## 11. Design system
 
+> **Since web 2.0.0** the visual design is **Frosted Gallery** and items are edited in place (D-083). The brief, sketches and assets in [`features/F-002-ui-refresh.md`](features/F-002-ui-refresh.md) and `features/F-002-assets/` take precedence over older details in this file where they differ.
+
 Tokens live in `src/styles/tokens.css` as CSS custom properties, mapped into Tailwind's theme. **Light and dark themes are both MVP** (D-030).
 Components only use semantic tokens (`--bg`, `--surface`, `--text`, `--text-muted`, `--border`, `--accent`, …), never raw palette values.
 Theme resolution: the `localStorage` choice, else `prefers-color-scheme`. It is applied as `data-theme` on `<html>` by an inline script in `index.html` **before first paint** (no flash), and `color-scheme` is set accordingly.

@@ -1,6 +1,6 @@
 # F-002 — UI refresh (web 2.0.0)
 
-Status: **approved** (2026-10-15, after the refinement rounds)    Release: web 2.0.0 (backend stays 1.x, D-080)    Roadmap: ROADMAP.md §6
+Status: **done** (backend#20, backend#21, web#30, web#31 merged; `v2.0.0` tagged 2026-10-15)    Release: web 2.0.0 (backend stays 1.x, D-080)    Roadmap: ROADMAP.md §6
 Repos: web (almost all) | backend (one small story) | parent    Approved by the user: 2026-10-15
 
 ## Why
@@ -156,3 +156,4 @@ One branch `feature/F002-backend-contract`, one PR, workers run in sequence (the
 - 2026-10-15: refinement round: pen on hover only, ✓ at the end of the field, links per kind (TV like movies), real logos, pinned fields (two slots) with kind defaults, price text and sortable, kind field changes, display-mode sketches. Backend stories B2 to B4 added.
 - 2026-10-15: design direction **Frosted Gallery** chosen by the user (Apple-style reference, layered and soft); non-visual changes and decisions agreed in chat; brief written.
 - 2026-10-15: F002-B5 done by the backend orchestrator: `ItemSummary.metadata` (backend#21, `fe58ae5`, tag `api-v0.5.0`). Web syncs to `api-v0.5.0` (includes 0.4.0).
+- 2026-10-15: top-level: decisions recorded as D-083, UI_SPEC §11 points to this brief, roadmap and STATUS closed. Done.
