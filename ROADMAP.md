@@ -33,11 +33,11 @@ version history, a trash with restore, and backups. It should be quick to use on
 |---|---|---|---|---|
 | — | **1.0 MVP** | Organize, describe and protect a shared collection | ✅ Released `v1.0.0` (2026-10-15) | Oct 2026 |
 | 1 | **1.0.1** | Polish from the release checks (F-006) | ✅ Released `v1.0.1` (2026-10-15) | Oct 2026 |
-| 2 | — | Exploration session: you use the fresh test env and list what to change | 🟢 Now | Oct 2026 |
-| 3 | **1.1** | Lists and items restructure (F-007): one item type per list, fewer predefined fields, list descriptions, plus the exploration findings | 🟡 Next | Q4 2026 |
+| 2 | — | Exploration session: you used the fresh test env and listed what to change | ✅ Done (2026-10-15) | Oct 2026 |
+| 3 | **1.1.0** | Lists and items restructure + exploration fixes (F-007): one kind per list, trimmed fields, addable price, list description, 6 UI fixes. Last shared version (D-080) | 🟢 Now | Q4 2026 |
 | 4 | — | Brief e2e safety net (F-003) | 🟡 Next | Q4 2026 |
-| 5 | **1.2** | UI refresh with your design (F-002) | 🟡 Next | Q4 2026 |
-| — | later | Re-planned after 1.2 from the pool: list import, product gaps, ops hardening, CI and upkeep, TMDB (2.0), accounts (3.0) | ⚪ Pool | 2027 |
+| 5 | **web 2.0.0** | UI refresh with your design (F-002) | 🟡 Next | Q4 2026 |
+| — | later | Re-planned after the UI refresh from the pool: list icons, auto image lookup, list import, product gaps, ops hardening, CI and upkeep, TMDB (backend 1.x), accounts (backend 2.0) | ⚪ Pool | 2027 |
 
 ```mermaid
 timeline
@@ -49,15 +49,15 @@ timeline
         15 Oct : M3–M4 Features : content, images, trash, search, settings
                : M5 Ops : backups, production deploy, test stabilization
         15 Oct : v1.0.0 released
+        15 Oct : v1.0.1 polish
+               : exploration session
     section Now
-        1.0.1 : polish (done)
-        Exploration : you test the fresh env
+        1.1.0 : lists and items restructure + fixes
     section Next (in this order)
-        1.1 : lists and items restructure
         e2e : brief safety net
-        1.2 : UI refresh
-    section After 1.2
-        Re-plan : list import, gaps, ops, TMDB, accounts
+        web 2.0.0 : UI refresh
+    section After the UI refresh
+        Re-plan : icons, auto images, import, gaps, ops, TMDB, accounts
 ```
 
 ---
@@ -67,29 +67,29 @@ timeline
 ```mermaid
 flowchart LR
     subgraph NOW["🟢 Now"]
-        F006["F-006 · 1.0.1 polish ✅"]
-        EXP["Exploration session<br/>(you, fresh test env)"]
+        F007["F-007 · 1.1.0 Lists & items restructure<br/>one kind per list · fewer fields · list description · UI fixes"]
     end
     subgraph NEXT["🟡 Next, in order"]
-        F007["F-007 · 1.1 Lists & items restructure<br/>one type per list · fewer fields · list description"]
         F003["F-003 · Brief e2e safety net"]
-        F002["F-002 · 1.2 UI refresh<br/>(your design)"]
+        F002["F-002 · web 2.0.0 UI refresh<br/>(your design, inline editing)"]
     end
-    subgraph POOL["⚪ Pool, ordered after 1.2"]
+    subgraph POOL["⚪ Pool, ordered after the UI refresh"]
+        ICO["List icons (emoji / icon set)"]
+        AIMG["Auto image lookup on add"]
         IMP["List import<br/>(e.g. Markdown bullets)"]
         F004["F-004 · Product gaps"]
         F005["F-005 · Ops hardening"]
         UPK["CI & upkeep<br/>CI · upgrades · a11y"]
-        P2["2.0 · TMDB + auto refresh"]
-        P3["3.0 · Accounts & access control"]
+        P2["backend 1.x · TMDB + auto refresh"]
+        P3["backend 2.0 · Accounts & access control"]
     end
-    F006 --> EXP --> F007 --> F003 --> F002 --> POOL
+    F007 --> F003 --> F002 --> POOL
 ```
 
 **Why this order.**
 The restructure (F-007) changes the data model and the screens built on it: list types, item forms and list pages. Doing it
 first means the e2e tests and the UI refresh are written once, against the final shape, not twice. The e2e tests come right
-before the UI refresh because they're its safety net. Everything else waits for a re-plan after 1.2, when the app has its
+before the UI refresh because they're its safety net. Everything else waits for a re-plan after the UI refresh, when the app has its
 final shape and look.
 
 ---
@@ -115,8 +115,16 @@ Contract: `api-v0.2.0`. Decisions D-001 to D-073 are in [`design-docs/DECISIONS.
 
 ## 5. Now
 
-### Exploration session 🟢
-You're using `./deploy/test` (fresh) and listing what to change. The findings go into F-007.
+### F-007 · Lists and items restructure + exploration fixes 🟢 · 1.1.0
+Approved 2026-10-15. One kind per list (no per-item kind), common fields trimmed to title, image, website and description,
+price addable on demand (single or range), essential kind fields with a per-kind sort key, Markdown list description, and
+the 6 exploration fixes (no "collections" wording, folder rows without arrow, no move up/down on folders, one description,
+no breadcrumbs, appearance toggle in the sidebar). Contract `api-v0.3.0`. Run with the one-off lean workflow (D-079).
+Both repos ship **1.1.0**, the last shared version (D-080).
+Brief: [`design-docs/features/F-007-lists-items-restructure.md`](design-docs/features/F-007-lists-items-restructure.md).
+
+### Exploration session ✅
+You used `./deploy/test` (fresh) and listed what to change; the findings went into F-007, the rest into F-002 and the pool.
 
 ### F-006 · 1.0.1 polish ✅
 Small fixes found by the 1.0 checks and by you, all in the web app: Home and Trash go stale after a delete until reload; the
@@ -131,42 +139,36 @@ Fresh-clone check (Q-04), scope and security review (Q-05: no critical or high f
 
 ## 6. Next (in this order)
 
-### F-007 · Lists and items restructure 🟡 · 1.1
-**What:** reshape the model before anything is built on top of it. Known so far:
-- **One item type per list.** A list has a single kind, chosen when it's created, and every item in it is of that kind.
-- **Fewer predefined fields** per kind (today's set in PRODUCT §4.2 is too large).
-- **List description:** Markdown on a list, e.g. for links that apply to all its items.
-- Plus the issues found in the exploration session.
-
-Backend and web, with a contract change (`api-v0.3.0`) and a migration of existing data.
-Brief (draft, completed after the exploration): [`design-docs/features/F-007-lists-items-restructure.md`](design-docs/features/F-007-lists-items-restructure.md).
-
 ### F-003 · Brief e2e safety net 🟡
 A **small** set of Playwright end-to-end tests against the real backend (`./deploy/test`), covering only the main flows
 (create folder/list/item, edit, image, trash and restore, search) plus an axe check in both themes. Deliberately short: this
 is a two-person app, not a test framework project. Written after F-007 so it targets the final model.
 
-### F-002 · UI refresh 🟡 · 1.2
-**What:** a large, mostly **aesthetic** refactor of the web app: a new visual design applied across every screen.
-Behavior and the API stay as they are. The design comes from you, and only then does this become a brief (D-075).
+### F-002 · UI refresh 🟡 · web 2.0.0
+**What:** a large, mostly **aesthetic** refactor of the web app: a new visual design applied across every screen. It also
+brings two interaction changes from the exploration session: **inline item editing** (no edit mode: a pen on each field on
+hover, the description edited in place, "+" to add fields such as price) and **drag folders and lists from anywhere on the
+row** (no grip handle). The API stays as it is. The web becomes 2.0.0; the backend keeps its own version (D-080). The design comes from you, and only then does this become a brief (D-075).
 
 **Guardrails that apply whatever the design:**
 - Lean (D-034): no heavy UI kits, and the bundle shouldn't grow without a reason.
 - Accessibility holds: both themes stay at zero axe violations, with keyboard paths intact.
 - Behavior doesn't change; the unit tests and the F-003 e2e tests stay green.
 
-## 7. Pool (ordered at the re-plan after 1.2)
+## 7. Pool (ordered at the re-plan after the UI refresh)
 
 No commitment on order until then. IDs exist only for briefs already written.
 
 | Initiative | What |
 |---|---|
+| **List icons** | An interchangeable icon per list: an emoji or one from a built-in icon set (Notion-style, no photos). The current icon stays the default. Small backend field + picker |
+| **Automatic image lookup** | When an item is added, fetch an image automatically by searching with its title (provider and terms to check first; for movies and TV, TMDB covers it) |
 | **List import** | Create a list from text, e.g. a Markdown bullet list (one item per bullet). Format and rules to be defined |
 | **F-004 · Product gaps** | Paste an image from the clipboard onto an item; "Empty trash" with confirmation; optional trash auto-purge after N days (off by default) |
 | **F-005 · Ops hardening** | Strip EXIF (GPS) from uploads; your backup → wipe → restore drill (moved from F-006 U1); `make audit` / `npm run audit` before each tag; scheduled backup on the Pi plus a quarterly restore drill; exposure check for the local stack; 40 MP and slow-network upload checks |
 | **CI & upkeep** | GitHub Actions running the gates + Dependabot (D-031 deferred it); Node 26 LTS (from 2026-10-28, D-042) and TypeScript 7 when typescript-eslint supports it (D-040); VoiceOver pass on drag-and-drop and a keyboard context menu on tree rows (W-05); verify `VITE_API_MOCKS=1` in a browser (W-02) |
-| **2.0 · TMDB + automatic refresh** | Movie and TV lookup when creating an item, metadata refresh, streaming availability by country, attribution, rate limits. User-entered values are never silently overwritten. No IMDb scraping. Starts with a check of current TMDB terms. Fits the F-007 model (a movie list gets TMDB lookup) |
-| **3.0 · Accounts & access control** | Users, memberships, authorization; every table already carries `workspace_id` (revisit `item_content_versions`, Q-05 finding 5). **The gate before any exposure beyond the private network** |
+| **Backend 1.x · TMDB + automatic refresh** | Movie and TV lookup when creating an item, metadata refresh, streaming availability by country, attribution, rate limits. User-entered values are never silently overwritten. No IMDb scraping. Starts with a check of current TMDB terms. Fits the F-007 model (a movie list gets TMDB lookup) |
+| **Backend 2.0 · Accounts & access control** | Users, memberships, authorization; every table already carries `workspace_id` (revisit `item_content_versions`, Q-05 finding 5). **The gate before any exposure beyond the private network** |
 
 ---
 
@@ -181,10 +183,11 @@ No commitment on order until then. IDs exist only for briefs already written.
 | Multiple images per item | `attachments` is already independent of `items`, so it's additive |
 | Advanced search | Search inside Markdown and metadata, saved filters |
 | Offline mode, rich-text editor, version diffs, custom workflows | Deferred since the MVP, no current demand |
+| User-defined kinds | Create your own item types with custom fields (fits the validator registry + JSONB, but needs a schema-per-kind store) |
 | Comparison view | Side by side of 2–4 items in a list (fits "things we are comparing") |
 
 ## 9. Not doing ⛔
-- Exposing the app to the internet before 3.0.
+- Exposing the app to the internet before accounts (backend 2.0).
 - A monorepo, microservices, Redis, queues, an ORM (ORCHESTRATOR_BRIEF §2).
 - Scraping IMDb or any provider that doesn't allow it.
 
@@ -203,6 +206,7 @@ No commitment on order until then. IDs exist only for briefs already written.
 - This file is updated when a feature ships, starts, or changes horizon. Detailed task history stays in STATUS.md.
 
 ## Changelog
+- 2026-10-15: **Exploration done, F-007 approved** (1.1.0, Now): restructure + 6 UI fixes, one-off lean workflow (D-079). Versions diverge after 1.1.0: UI refresh = web 2.0.0, TMDB stays backend 1.x, accounts = backend 2.0 (D-080). Pool gains list icons and automatic image lookup; F-002 gains inline editing and drag-from-anywhere; user-defined kinds in Exploring.
 - 2026-10-15: **v1.0.1 released** (F-006 polish); the exploration session starts. Backup drill (U1) moved to F-005.
 - 2026-10-15: **Re-plan.** Next is now, in order: exploration session → F-007 lists and items restructure (1.1) → brief e2e (F-003, cut to e2e only) → UI refresh (F-002, 1.2). List import added. F-004, F-005, CI and upkeep, 2.0 and 3.0 move to a pool ordered after 1.2 (D-078).
 - 2026-10-15: **v1.0.0 released.** Workflow v2 started. F-006 (1.0.1 polish) is Now; F-001 done.
