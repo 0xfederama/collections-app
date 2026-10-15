@@ -74,10 +74,15 @@ None.
 ### Backend
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
 |---|---|---|---|---|---|
-| T1 `scripts/smoke.sh` + `make smoke` (curl+jq, shell, no new deps; shellcheck-clean) | F003-B1 | `test/F003-B1-api-smoke` | dispatched | | |
-| T2 README "when to run" + CLAUDE.md command row + `docs/` | F003-B1 | same | | | |
+| T1 `scripts/smoke.sh` + `make smoke` (curl+jq, shell, no new deps; shellcheck-clean) | F003-B1 | `test/F003-B1-api-smoke` | done (e2057b); smoke ran live, passed | 7 unverified assumptions all confirmed by the live run | [#19](https://github.com/0xfederama/collections-app-backend/pull/19) |
+| T2 README "when to run" + CLAUDE.md command row + `docs/` | F003-B1 | same | done (README by worker, rest by orchestrator + docs-keeper) | n/a | #19 |
 ### Web
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
+|---|---|---|---|---|---|
+| T1 Playwright setup (`@playwright/test` 1.64.0, `@axe-core/playwright` 4.13.0 pinned, chromium, `e2e/` dir, `npm run e2e`, excluded from vitest/tsc/gate) + small helpers | F003-W1 | `test/F003-W1-playwright-e2e` | dispatched | | |
+| T2 Specs 1-8 in `e2e/*.spec.ts` (independent, unique names, no `waitForTimeout`) | F003-W1 | same | dispatched | | |
+| T3 README "e2e" section + CLAUDE.md command row + `docs/` | F003-W1 | same | | | |
 
 ## Log
 - 2026-10-15: brief written and approved (scope set by the user: very brief, one PR per repo).
+- 2026-10-15: F003-B1 merged (backend#19, squash). `make smoke` passed on a fresh ./deploy/test.
