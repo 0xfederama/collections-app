@@ -14,7 +14,7 @@ Feature briefs: [`features/`](features/). Repo orchestrators add their task rows
 |---|---|---|---|---|---|---|---|
 | F-000 | F000-B1 install v2 agents + rules | backend orch. | done | `chore/adopt-workflow-v2` | [backend#16](https://github.com/0xfederama/collections-app-backend/pull/16) | 2026-10-15 | Squash-merged `f918264`, pointer bumped. Gate green. Smoke ran as an equivalent sonnet/medium dispatch (registry didn't reload mid-session); the next backend session confirms a native `worker` dispatch |
 | F-000 | F000-W1 install v2 agents + rules | web orch. | done | `chore/adopt-workflow-v2` | [web#16](https://github.com/0xfederama/collections-app-frontend-web/pull/16) | 2026-10-15 | Squash-merged `5dc2586`, pointer bumped. Gate green (1200 tests). Smoke worker ran on Sonnet 5.5. The running session picks up a new agent file after a short delay (no restart needed) |
-| F-006 | 1.0.1 polish (W1–W9) | web orch. | in progress | one per story (see brief) | web#18–#21 merged | 2026-10-15 | W5, W4, W2, W3 merged; W1, W9 in gate; W7 running; then W6 (README), W8 (live CSP) |
+| F-006 | 1.0.1 polish (W1–W9) | web orch. | done (web) | one per story (see brief) | web#18–#25 | 2026-10-15 | All web stories merged, pointer → `d5c2522`. W8 CSP PASS on the prod web image + test backend (trial `./deploy/prod` refused by auto mode). Next: top-level orch. tags v1.0.1; U1 is the user's |
 | F-007 | Lists & items restructure (1.1) | top-level orch. + user | **draft**, stories after the exploration session | | | 2026-10-15 | Next after F-006: one item type per list, fewer fields, list description (D-078) |
 
 ## 1.0 release checks (done, v1 workflow)
