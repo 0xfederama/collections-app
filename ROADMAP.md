@@ -37,6 +37,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 3 | **1.1.0** | Lists and items restructure + exploration fixes (F-007): one kind per list, trimmed fields, addable price, list description, 6 UI fixes. Last shared version (D-080) | ✅ Released `v1.1.0` (2026-10-15) | Oct 2026 |
 | 4 | — | Brief e2e safety net (F-003): `make smoke` + ~8 Playwright specs | ✅ Done (2026-10-15) | Oct 2026 |
 | 5 | **web 2.0.0** | UI refresh (F-002): Frosted Gallery design, in-place item editing, quick add, streaming icons; run from a sister session | ✅ Released `v2.0.0` (2026-10-15) | Q4 2026 |
+| 6 | **web 2.1.0** | UI polish after the first look at 2.0.0 (F-008): top bar (search + quick add + theme), consistent radii and toolbar, keyboard selection, drag into folders, inline new item, title area, links row with real icons, one price field, initials, generic lists without fields | 🟡 Next (before pool item 3) | Oct 2026 |
 | — | later | Pool, in this order: ops hardening (F-005 ✅) → list icons + product gaps → TMDB + auto images → user-defined kinds → collaborative Markdown → accounts (backend 2.0) → security review → internet exposure + public API | ⚪ Pool | 2027 |
 | — | future | List import, advanced search | 🔭 Future | — |
 
@@ -148,6 +149,10 @@ Fresh-clone check (Q-04), scope and security review (Q-05: no critical or high f
 
 ## 6. Next (in this order)
 
+### F-008 · UI polish 🟡 · web 2.1.0 + backend 1.2.2
+Your first look at 2.0.0: 14 web stories and one backend story (generic lists lose price), checked against Apple's HIG.
+Runs before pool item 3. Brief: [`design-docs/features/F-008-ui-polish.md`](design-docs/features/F-008-ui-polish.md).
+
 ### F-002 · UI refresh ✅ · web 2.0.0
 **Status 2026-10-15:** design direction **Frosted Gallery** chosen (Apple-inspired, layered, plain colour) and the brief approved (design finished with the user): [`design-docs/features/F-002-ui-refresh.md`](design-docs/features/F-002-ui-refresh.md) (stories per repo; one backend story for paid streaming platforms, the rest web). The inputs below are all folded into it.
 
@@ -233,6 +238,7 @@ Committed, in this order (set by you, 2026-10-15), after the UI refresh. The re-
 - This file is updated when a feature ships, starts, or changes horizon. Detailed task history stays in STATUS.md.
 
 ## Changelog
+- 2026-10-15: **F-008 UI polish** added as Next (web 2.1.0, backend 1.2.2), before pool item 3.
 - 2026-10-15: **F-005 done**: backend `v1.2.1` (metadata stripped from uploads + `strip-images` backfill), nightly backup timer, `backup-status`, audits before tags. Next: pool item 3, list icons + F-004 product gaps.
 - 2026-10-15: backend tagged `v1.2.0` (F-002 backend features), parent `v2.0.0` message names both versions. Pool items 1–2 merged into **F-005 ops hardening** (Now): EXIF strip, scheduled backups + `backup-status`, audits before tags; no CI or Dependabot (D-084); remaining upkeep done as chores when due.
 - 2026-10-15: **web 2.0.0 released** (F-002 Frosted Gallery, in-place editing; backend contract `api-v0.5.0`, parent tag `v2.0.0`). D-083 records the web interaction rules. Next: pool item 1.
