@@ -1,6 +1,6 @@
 # F-005 — Ops hardening (privacy + backups + audits)
 
-Status: approved    Release: backend 1.2.1 (web unchanged)    Roadmap: ROADMAP.md §7 items 1–2
+Status: **done** (backend#22 merged, `v1.2.1` tagged 2026-10-15; your server steps pending)    Release: backend 1.2.1 (web unchanged)    Roadmap: ROADMAP.md §7 items 1–2
 Repos: backend | parent    Approved by the user: 2026-10-15
 
 ## Why
@@ -60,3 +60,4 @@ None.
 ## Log
 - 2026-10-15: brief written with the user (pool items 1+2 merged into one round, no CI, D-084); parent stories P1–P3 done.
 - 2026-10-15: B1 merged (backend#22, `12bdd81`), `make audit` clean, tag `v1.2.1`. Left for the parent: runbook step for `./deploy/prod exec api /app/api strip-images`, run on server.
+- 2026-10-15: parent: backfill step added to deploy/README.md "Upgrade" (one-off steps table). Done; server steps are yours.

@@ -37,7 +37,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 3 | **1.1.0** | Lists and items restructure + exploration fixes (F-007): one kind per list, trimmed fields, addable price, list description, 6 UI fixes. Last shared version (D-080) | ✅ Released `v1.1.0` (2026-10-15) | Oct 2026 |
 | 4 | — | Brief e2e safety net (F-003): `make smoke` + ~8 Playwright specs | ✅ Done (2026-10-15) | Oct 2026 |
 | 5 | **web 2.0.0** | UI refresh (F-002): Frosted Gallery design, in-place item editing, quick add, streaming icons; run from a sister session | ✅ Released `v2.0.0` (2026-10-15) | Q4 2026 |
-| — | later | Pool, in this order: ops hardening (F-005, 🟢 Now) → list icons + product gaps → TMDB + auto images → user-defined kinds → collaborative Markdown → accounts (backend 2.0) → security review → internet exposure + public API | ⚪ Pool | 2027 |
+| — | later | Pool, in this order: ops hardening (F-005 ✅) → list icons + product gaps → TMDB + auto images → user-defined kinds → collaborative Markdown → accounts (backend 2.0) → security review → internet exposure + public API | ⚪ Pool | 2027 |
 | — | future | List import, advanced search | 🔭 Future | — |
 
 ```mermaid
@@ -77,7 +77,7 @@ flowchart LR
         F002["F-002 · web 2.0.0 UI refresh<br/>(your design, inline editing)"]
     end
     subgraph POOL["⚪ Pool, in order"]
-        F005["F-005 · Ops hardening 🟢"]
+        F005["F-005 · Ops hardening ✅"]
         ICO["List icons + F-004 product gaps"]
         P2["TMDB + auto image lookup"]
         UDK["User-defined kinds"]
@@ -184,7 +184,7 @@ Committed, in this order (set by you, 2026-10-15), after the UI refresh. The re-
 
 | # | Initiative | What | Likely version |
 |---|---|---|---|
-| 1–2 | **F-005 · Ops hardening** 🟢 | Strip EXIF/GPS from uploaded originals + backfill (backend); scheduled nightly backup with systemd and `./deploy/prod backup-status` (parent, done); audits before every tag (D-084). Brief: [`F-005-ops-hardening.md`](design-docs/features/F-005-ops-hardening.md) | backend 1.2.1 |
+| 1–2 | **F-005 · Ops hardening** ✅ | Strip EXIF/GPS from uploaded originals + backfill (backend); scheduled nightly backup with systemd and `./deploy/prod backup-status` (parent, done); audits before every tag (D-084). Brief: [`F-005-ops-hardening.md`](design-docs/features/F-005-ops-hardening.md) | backend 1.2.1 |
 | — | **Upkeep (later)** | Node 26 LTS (from 2026-10-28, D-042), TypeScript 7 when typescript-eslint supports it (D-040), VoiceOver pass on drag-and-drop (W-05), `VITE_API_MOCKS=1` browser check (W-02); your backup → wipe → restore drill; exposure check script; 40 MP and slow-network upload checks. Done as small chores when due | patch bumps |
 | 3 | **List icons + F-004 product gaps** | An interchangeable icon per list: an emoji or one from a built-in icon set (Notion-style, no photos), the current icon as default. Paste an image from the clipboard (copy an image or take a screenshot, then Cmd+V on an item to set it as its image, without saving a file first); "Empty trash" with confirmation; optional trash auto-purge after N days (off by default) | backend 1.2 / web 2.1 |
 | 4 | **TMDB + automatic image lookup** | Movie and TV lookup when creating an item, metadata refresh, streaming availability by country, attribution, rate limits; an image fetched automatically when an item is added (TMDB for movies and TV, another provider to check for the other kinds). User-entered values are never silently overwritten. No IMDb scraping. Starts with a check of the providers' terms | backend 1.3 / web 2.2 |
@@ -233,6 +233,7 @@ Committed, in this order (set by you, 2026-10-15), after the UI refresh. The re-
 - This file is updated when a feature ships, starts, or changes horizon. Detailed task history stays in STATUS.md.
 
 ## Changelog
+- 2026-10-15: **F-005 done**: backend `v1.2.1` (metadata stripped from uploads + `strip-images` backfill), nightly backup timer, `backup-status`, audits before tags. Next: pool item 3, list icons + F-004 product gaps.
 - 2026-10-15: backend tagged `v1.2.0` (F-002 backend features), parent `v2.0.0` message names both versions. Pool items 1–2 merged into **F-005 ops hardening** (Now): EXIF strip, scheduled backups + `backup-status`, audits before tags; no CI or Dependabot (D-084); remaining upkeep done as chores when due.
 - 2026-10-15: **web 2.0.0 released** (F-002 Frosted Gallery, in-place editing; backend contract `api-v0.5.0`, parent tag `v2.0.0`). D-083 records the web interaction rules. Next: pool item 1.
 - 2026-10-15: **v1.1.0 released** (parent + web tags; backend tagged earlier). **F-003 done** (backend#19 `make smoke`, web#29 Playwright). F-002 UI rework is Now, in a sister session (design first).
