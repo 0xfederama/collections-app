@@ -140,6 +140,14 @@ One branch `feature/F002-backend-contract`, one PR, workers run in sequence (the
 ### Web
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
 |---|---|---|---|---|---|
+| T1 tokens, materials, fonts, primitives | W1 | `feature/F-002-ui-refresh` | running | | |
+| T2 shell, Home, Search, Trash, Settings | W1 | same | todo | | |
+| T3 Quick add + `N` | W4 | same | todo | | |
+| T4 list view rows/grid, ＋New, drag anywhere, kind chip + confirm, list description in place | W2 (no backend) | same | todo | | |
+| T5 favicon assets (after researcher F002-Q1) | W3 | same | todo | | |
+| T6 item detail in place (pens, ✓/✕, description, +Add field, hero, links row, no-cents price) | W3 (no backend) | same | todo | | |
+| T7 contract adoption: paid streaming, kind field changes, pinned fields, price sort | W2/W3 | same | blocked on backend tag | | |
+| T8 specs, docs-keeper, DESIGN.md, full gate + e2e | W5 | same | todo | | |
 
 ## Log
 - 2026-10-15: final round: favicon-style local icons, TV links Google + IMDb only, TV triple seasons/episodes/duration; custom fields and types recorded in the roadmap; brief **approved**.
