@@ -1,7 +1,7 @@
 # F-002 — UI refresh (web 2.0.0)
 
-Status: **approved** (design direction chosen 2026-10-15)    Release: web 2.0.0 (backend stays 1.x, D-080)    Roadmap: ROADMAP.md §6
-Repos: web (almost all) | backend (one small story) | parent    Approved by the user: 2026-10-15
+Status: **draft** (direction picked 2026-10-15, design still being refined with the user; do not start the repo orchestrators)    Release: web 2.0.0 (backend stays 1.x, D-080)    Roadmap: ROADMAP.md §6
+Repos: web (almost all) | backend (one small story) | parent    Approved by the user: not yet
 
 ## Why
 The 1.x UI works but looks like a tidy admin tool, and editing an item means a separate big form. The refresh gives the
