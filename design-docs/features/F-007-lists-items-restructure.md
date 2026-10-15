@@ -158,14 +158,15 @@ to `api-v0.3.0` once it's tagged.
 | T4 migration fixture test + docs (docs-keeper) | B5 | same | done | flags reviewed, accepted | [backend#18](https://github.com/0xfederama/collections-app-backend/pull/18) |
 ### Web
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
-| T1 sidebar: no "collections", folder rows (icon toggles), no folder move up/down, theme toggle in sidebar | W1 W2 W3 W6 | `feature/lists-items-restructure` | | | |
-| T2 list view: no description text on rows, no breadcrumbs | W4 W5 | same | done | flags reviewed, accepted | [backend#18](https://github.com/0xfederama/collections-app-backend/pull/18) |
-| T3 pin `api-v0.3.0` (api:sync), list kind in create/settings, move picker by kind | W7 | same | done | flags reviewed, accepted | [backend#18](https://github.com/0xfederama/collections-app-backend/pull/18) |
-| T4 item fields: trimmed kinds, price add/range/remove, website, no status/summary/kind label | W8 | same | done | flags reviewed, accepted | [backend#18](https://github.com/0xfederama/collections-app-backend/pull/18) |
-| T5 sort by kind key + list Markdown description | W9 W10 | same | done | flags reviewed, accepted | [backend#18](https://github.com/0xfederama/collections-app-backend/pull/18) |
-| T6 version 1.1.0, docs-keeper, gate, PR | release | same | done | flags reviewed, accepted | [backend#18](https://github.com/0xfederama/collections-app-backend/pull/18) |
+| T1 sidebar: no "collections", folder rows (icon toggles), no folder move up/down, theme toggle in sidebar | W1 W2 W3 W6 | `feature/lists-items-restructure` | done | flags reviewed, accepted | [web#28](https://github.com/0xfederama/collections-app-frontend-web/pull/28) |
+| T2 list view: no description text on rows, no breadcrumbs | W4 W5 | same | done | flags reviewed, accepted | [web#28](https://github.com/0xfederama/collections-app-frontend-web/pull/28) |
+| T3 pin `api-v0.3.0` (api:sync), list kind in create/settings, move picker by kind | W7 | same | done | flags reviewed, accepted | [web#28](https://github.com/0xfederama/collections-app-frontend-web/pull/28) |
+| T4 item fields: trimmed kinds, price add/range/remove, website, no status/summary/kind label | W8 | same | done | flags reviewed, accepted | [web#28](https://github.com/0xfederama/collections-app-frontend-web/pull/28) |
+| T5 sort by kind key + list Markdown description | W9 W10 | same | done | flags reviewed, accepted | [web#28](https://github.com/0xfederama/collections-app-frontend-web/pull/28) |
+| T6 version 1.1.0, docs-keeper, gate, PR | release | same | done | flags reviewed, accepted | [web#28](https://github.com/0xfederama/collections-app-frontend-web/pull/28) |
 
 ## Log
 - 2026-10-15: draft created from the user's re-plan.
 - 2026-10-15: exploration findings and the user's decisions added; approved.
 - 2026-10-15: backend B1–B5 shipped in one PR (backend#18, squash `be8a532`); gate and `make test-backup` green; tags `api-v0.3.0`, `v1.1.0`. Deviations: JSON body limit 2 MiB on list create/update (64 KiB description); a PATCH of kind plus other fields bumps the list version twice; each trashed piece of a split list gets its own trash batch.
+- 2026-10-15: web W1–W10 delivered in one PR, squash merged (web#28, version 1.1.0, contract api-v0.3.0). Gate green after fixing 4 stale test assertions. Follow-ups: AT-21 reorder web test lost with the menu items; price shows `€1,200` (not `€ 1,200`); list kind is changed via the Rename dialog.
