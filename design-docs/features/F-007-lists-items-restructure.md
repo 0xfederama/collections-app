@@ -152,19 +152,20 @@ to `api-v0.3.0` once it's tagged.
 ## Repo breakdown (filled by the repo orchestrators)
 ### Backend
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
-| T1 schema + queries + spec: migration 000002 (kind on lists, drops, data move/split), sqlc queries, `openapi.yaml` 0.3.0, regenerate | B1 B2 B3 B4 B5 | `feature/F007-lists-items-restructure` | | | |
-| T2 services + handlers: list kind, kind change, move check, trimmed kinds, price `amount`, `website`, settings currency removal, search kind | B1 B2 | same | | | |
-| T3 sort by kind key + list Markdown description | B3 B4 | same | | | |
-| T4 migration fixture test + docs (docs-keeper) | B5 | same | | | |
+| T1 schema + queries + spec: migration 000002 (kind on lists, drops, data move/split), sqlc queries, `openapi.yaml` 0.3.0, regenerate | B1 B2 B3 B4 B5 | `feature/F007-lists-items-restructure` | done | flags reviewed, accepted | [backend#18](https://github.com/0xfederama/collections-app-backend/pull/18) |
+| T2 services + handlers: list kind, kind change, move check, trimmed kinds, price `amount`, `website`, settings currency removal, search kind | B1 B2 | same | done | flags reviewed, accepted | [backend#18](https://github.com/0xfederama/collections-app-backend/pull/18) |
+| T3 sort by kind key + list Markdown description | B3 B4 | same | done | flags reviewed, accepted | [backend#18](https://github.com/0xfederama/collections-app-backend/pull/18) |
+| T4 migration fixture test + docs (docs-keeper) | B5 | same | done | flags reviewed, accepted | [backend#18](https://github.com/0xfederama/collections-app-backend/pull/18) |
 ### Web
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
 | T1 sidebar: no "collections", folder rows (icon toggles), no folder move up/down, theme toggle in sidebar | W1 W2 W3 W6 | `feature/lists-items-restructure` | | | |
-| T2 list view: no description text on rows, no breadcrumbs | W4 W5 | same | | | |
-| T3 pin `api-v0.3.0` (api:sync), list kind in create/settings, move picker by kind | W7 | same | | | |
-| T4 item fields: trimmed kinds, price add/range/remove, website, no status/summary/kind label | W8 | same | | | |
-| T5 sort by kind key + list Markdown description | W9 W10 | same | | | |
-| T6 version 1.1.0, docs-keeper, gate, PR | release | same | | | |
+| T2 list view: no description text on rows, no breadcrumbs | W4 W5 | same | done | flags reviewed, accepted | [backend#18](https://github.com/0xfederama/collections-app-backend/pull/18) |
+| T3 pin `api-v0.3.0` (api:sync), list kind in create/settings, move picker by kind | W7 | same | done | flags reviewed, accepted | [backend#18](https://github.com/0xfederama/collections-app-backend/pull/18) |
+| T4 item fields: trimmed kinds, price add/range/remove, website, no status/summary/kind label | W8 | same | done | flags reviewed, accepted | [backend#18](https://github.com/0xfederama/collections-app-backend/pull/18) |
+| T5 sort by kind key + list Markdown description | W9 W10 | same | done | flags reviewed, accepted | [backend#18](https://github.com/0xfederama/collections-app-backend/pull/18) |
+| T6 version 1.1.0, docs-keeper, gate, PR | release | same | done | flags reviewed, accepted | [backend#18](https://github.com/0xfederama/collections-app-backend/pull/18) |
 
 ## Log
 - 2026-10-15: draft created from the user's re-plan.
 - 2026-10-15: exploration findings and the user's decisions added; approved.
+- 2026-10-15: backend B1–B5 shipped in one PR (backend#18, squash `be8a532`); gate and `make test-backup` green; tags `api-v0.3.0`, `v1.1.0`. Deviations: JSON body limit 2 MiB on list create/update (64 KiB description); a PATCH of kind plus other fields bumps the list version twice; each trashed piece of a split list gets its own trash batch.
