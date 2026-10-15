@@ -13,7 +13,7 @@ The v1 repo orchestrators finish Q-05 and C4. **Workflow v2 (D-074) starts after
 | Task | Owner | State | Branch | PR | Updated | Notes |
 |---|---|---|---|---|---|---|
 | Q-04 fresh clone (AT-01) | v1 backend orch. | done | `docs/Q-04-readme-fixes` | [backend#14](https://github.com/0xfederama/collections-app-backend/pull/14) | 2026-10-15 | Test + prod modes and both gates OK. Parent doc fixes `cb6e5b7`, backend README `2fc516f`. Web README gaps + flaky ItemEditForm test → web orchestrator (handoffs/Q-04.md Questions) |
-| Q-05 scope fence (AT-19) + security review | v1 backend orch. → reviewer session | todo | `fix/Q-05-review` (if needed) | | 2026-10-15 | brief: handoffs/Q-05.md (both repos; web non-trivial fixes → web orch.) |
+| Q-05 scope fence (AT-19) + security review | v1 backend orch. → reviewer session | in review | `fix/Q-05-review` | [backend#15](https://github.com/0xfederama/collections-app-backend/pull/15) | 2026-10-15 | No critical/high. Scope fence clean. PR = dependency bumps (govulncheck). Web: 1 low follow-up (IMDb href scheme check). CSP not verified in a browser (see handoffs/Q-05.md findings + Questions) |
 | C4 smoke checklist (D-068) | v1 web orch. + user | in progress | | | 2026-10-15 | ACCEPTANCE_TESTS.md smoke checklist on `./deploy/test up -d --fresh` |
 | Backup → wipe → restore on dev | user | todo | — | — | 2026-10-15 | Open since Q-02 |
 | Tag `v1.0.0`, roadmap update, start v2 | top-level orch. | todo | — | — | 2026-10-15 | After Q-05 + C4 |
