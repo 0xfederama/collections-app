@@ -62,7 +62,7 @@ Only `web` publishes a port. `db` and `api` exist only on the compose network.
 
 ### Prerequisites
 
-- Docker with Compose v2, `git`, `jq` (backups), optionally `zstd` (otherwise backups use gzip).
+- Docker with Compose v2 (running), `git`, `jq` (backups), optionally `zstd` (otherwise backups use gzip).
 - Disk for the images and build cache (the first build downloads Go, Node and base images), plus room for your data and backups.
 - A Pi needs a 64-bit OS. The first build there is slow (the Go and Node builds run natively); check `docker stats` if it struggles.
 
@@ -72,13 +72,14 @@ Only `web` publishes a port. `db` and `api` exist only on the compose network.
 git clone --recurse-submodules https://github.com/0xfederama/collections-app.git
 cd collections-app
 cp deploy/server/.env.example deploy/server/.env      # set POSTGRES_PASSWORD (openssl rand -hex 24)
-sudo mkdir -p /srv/collection/backups && sudo chown "$USER" /srv/collection/backups
+sudo mkdir -p /srv/collection/backups && sudo chown "$USER" /srv/collection/backups   # or set BACKUP_DIR in .env to a folder you own
 ./deploy/prod check                     # exposure check: must print "ok"
 ./deploy/prod up -d --build             # first build is slow, later ones use the cache
 curl -fsS http://127.0.0.1:8081/readyz  # prints "ready"
 ```
 
-Open `http://127.0.0.1:8081`. Already cloned without submodules: `git submodule update --init --recursive`.
+Open `http://127.0.0.1:8081`. Quote values with spaces in `.env` (`WORKSPACE_NAME="Our Collection"`): the `./deploy/prod` wrapper reads it as a shell file.
+Already cloned without submodules: `git submodule update --init --recursive`.
 
 #### Where the data lives
 
@@ -94,6 +95,12 @@ Do not `chown` or edit inside them by hand. `docker compose down` keeps them; `d
 
 Container hardening: all capabilities dropped (Postgres gets back the few it needs to start), `no-new-privileges`;
 the api (UID 65532) and web (UID 10001) run with a read-only root filesystem.
+
+#### Trying prod next to another stack
+
+To rehearse on a machine that already runs prod (or just to try it): `PROD_PROJECT=collections-app-trial ./deploy/prod …` uses its own
+containers and volumes (leave it unset on the real server), and a different `WEB_PORT` and `BACKUP_DIR` in `.env` keep it from clashing.
+Remove it with `PROD_PROJECT=collections-app-trial ./deploy/prod down --volumes`, always with the same variable set.
 
 ### Reaching it from your other devices
 

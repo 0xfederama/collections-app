@@ -16,7 +16,8 @@ whole-app local setup. The service code lives in the submodules.
 
 ## Quick start
 
-Prerequisites: Git, Docker with Compose v2. (Go 1.27 and Node 24 are only needed if you run the services on the host.)
+Prerequisites: Git, Docker with Compose v2 (running). `jq` is needed for prod backups. Go 1.27 and Node 24+ are only needed to
+run the services on the host and for `make lint-api` (Redocly via `npx`), which is part of `make check` in `backend/`.
 
 ```bash
 git clone --recurse-submodules https://github.com/0xfederama/collections-app.git
@@ -34,8 +35,9 @@ There are three environments, one command each. The full guide is [deploy/README
 | `./deploy/prod` | The real app on a home server: built images, backups, exposure check | http://127.0.0.1:8081 |
 
 Each takes any `docker compose` command (`./deploy/dev logs -f api`, `./deploy/test down --fresh`, ...) and `--help`.
+`./deploy/test` also needs `backend/.env` (the same `cp` as above). The first start downloads images and runs `npm ci`, so allow a minute or two.
 Already cloned without `--recurse-submodules`: `git submodule update --init --recursive`.
-The web app's header shows `Backend: ready` once it reaches the API.
+Open the web URL: Home shows "Your lists" and "Recently updated" (empty on a blank database).
 
 ## How the app fits together
 
@@ -49,8 +51,8 @@ The web app's header shows `Backend: ready` once it reaches the API.
 ```
 
 - **Same-origin by design (D-033, D-016).** The browser only calls relative `/api/...`. In dev Vite forwards it, in
-  production Caddy will. There is no CORS code.
-- **Contract first.** The backend owns `backend/api/openapi.yaml` (OpenAPI 3.0.3, arrives in B-03). The web app vendors a
+  production Caddy does. There is no CORS code.
+- **Contract first.** The backend owns `backend/api/openapi.yaml` (OpenAPI 3.0.3). The web app vendors a
   pinned copy and generates its API client from it, so the two repos never drift silently.
 - **Postgres holds everything relational**, including Markdown content and its versions. Only image files live on disk.
 - **No monorepo (D-001).** Two independently buildable repos, joined by this parent repo (D-043).
@@ -59,12 +61,12 @@ The web app's header shows `Backend: ready` once it reaches the API.
 
 | Layer | Choices (versions and sources: `design-docs/DECISIONS.md` "Toolchain versions") |
 |---|---|
-| Backend | Go 1.27, chi, pgx v5, sqlc (B-02), golang-migrate, `log/slog`, testcontainers-go, golangci-lint |
+| Backend | Go 1.27, chi, pgx v5, sqlc, golang-migrate, `log/slog`, testcontainers-go, golangci-lint |
 | Database | PostgreSQL 18 (`pg_trgm` for search later) |
-| Contract | OpenAPI 3.0.3, oapi-codegen strict chi server, Redocly lint (B-03) |
+| Contract | OpenAPI 3.0.3, oapi-codegen strict chi server, Redocly lint |
 | Web | React 19, TypeScript 6 (strict), Vite 8, Tailwind 4, React Router 8 |
-| Web, later tasks | TanStack Query, openapi-fetch, Radix UI primitives, dnd-kit, CodeMirror 6, react-markdown, Fontsource |
-| Tests | Go: `go test` + real Postgres. Web: Vitest + Testing Library (jsdom). E2E: Playwright + axe (Q-01) |
+| Web, more | TanStack Query, openapi-fetch, Radix UI primitives, dnd-kit, CodeMirror 6, react-markdown, Fontsource |
+| Tests | Go: `go test` + real Postgres. Web: Vitest + Testing Library (jsdom). E2E (Playwright + axe) is post-MVP |
 
 ## What the product does (MVP)
 
@@ -87,7 +89,7 @@ offline mode, multiple images per item.
 
 There is **no authentication** in the MVP, so the API must never be reachable from the public internet.
 
-- Compose publishes every port on `127.0.0.1` only. `make check` in `backend/` fails if that ever changes (AT-18).
+- Compose publishes every port on `127.0.0.1` only. `make check` in `backend/` and `./deploy/prod check` fail if that ever changes (AT-18).
 - Reaching it from another device is an explicit opt-in. The recommended way is a private VPN such as Tailscale.
 - Never commit secrets: `.env` files are gitignored, `.env.example` files hold blank placeholders. Don't write
   `user:pass@host` URLs in tracked files (the repo is scanned by GitGuardian). Pass credentials as `?user=…&password=…`.
@@ -97,8 +99,9 @@ There is **no authentication** in the MVP, so the API must never be reachable fr
 | Where | File | What |
 |---|---|---|
 | `backend/.env` | from `backend/.env.example` | `POSTGRES_PASSWORD` (required), `API_PORT`, `APP_ENV`, `LOG_LEVEL`, `LOG_FORMAT`, `WORKSPACE_NAME`, host-loop `DATABASE_URL`/`DATA_DIR`. Validated at startup, the API refuses to start on bad values |
-| `./.env` (optional) | from `.env.example` | `WEB_PORT` for the parent compose |
-| `frontend-web/.env` (optional) | from `frontend-web/.env.example` | `API_PROXY_TARGET` for the Vite dev proxy (host runs only; the parent compose sets it to `http://api:8080`) |
+| `deploy/server/.env` | from `deploy/server/.env.example` | prod only: `POSTGRES_PASSWORD`, `WEB_PORT`, `WEB_BIND`, `BACKUP_DIR`, `WORKSPACE_NAME`, `LOG_LEVEL` (see [deploy/README.md](deploy/README.md)) |
+| `deploy/local/dev.env`, `test.env` | committed, no secrets | dev and test ports and log level |
+| `frontend-web/.env` (optional) | from `frontend-web/.env.example` | `API_PROXY_TARGET` for the Vite dev proxy (host runs only; the dev/test compose sets it to `http://api:8080`) |
 
 Full variable table: [design-docs/BACKUP_AND_DEPLOYMENT.md](design-docs/BACKUP_AND_DEPLOYMENT.md) §3.
 
@@ -106,9 +109,10 @@ Full variable table: [design-docs/BACKUP_AND_DEPLOYMENT.md](design-docs/BACKUP_A
 
 | Mode | Command | When |
 |---|---|---|
-| Everything in containers | `docker compose up --build` (this folder) | Default. One command, nothing to install but Docker |
+| Everything in containers | `./deploy/dev up -d` (or `./deploy/test up -d --fresh`) | Default. One command, nothing to install but Docker |
 | Backend in Docker, web on the host | `cd backend && docker compose up --build`, then `cd frontend-web && npm ci && npm run dev` | Faster frontend iteration with your own editor tooling |
 | API on the host too | `cd backend`, copy `compose.override.example.yaml` to `compose.override.yaml`, `docker compose up -d db`, `make migrate`, `make run` | Debugging the Go code |
+| The real app (built images, backups) | `./deploy/prod up -d --build`, see [deploy/README.md](deploy/README.md) | Your home server |
 
 ## Quality gates (there is no CI)
 
@@ -116,19 +120,19 @@ No GitHub Actions or Dependabot for now (D-031). Gates run locally, and the resu
 
 | Repo | Command | Covers today |
 |---|---|---|
-| `backend/` | `make check` (Docker must be running) | gofmt, golangci-lint (goimports, noctx), `go test ./...` with a real Postgres, compose exposure check, Docker build |
-| `frontend-web/` | `npm run check` | Prettier, ESLint, `tsc`, Vitest, `vite build` |
+| `backend/` | `make check` (Docker running, Node 24+) | gofmt, golangci-lint (goimports, noctx), Redocly spec lint, shellcheck, sqlc/oapi-codegen drift, `go test ./...` with a real Postgres, compose exposure check, Docker build |
+| `frontend-web/` | `npm ci && npm run check` (Docker running) | Prettier, ESLint, `tsc`, API contract check, Vitest, `vite build`, production image build |
 | either | `make audit` / `npm run audit` | Vulnerability scans (need network, not part of `check`) |
 
-Later tasks extend the gates: B-02/B-03 add sqlc and OpenAPI drift checks, W-02 adds the API contract check, Q-01 adds Playwright.
+The first `make check` compiles golangci-lint and pulls Docker images, so it is slow once. Run the gates from a quiet machine: under heavy load (for example next to a running stack) a Vitest test can time out, so rerun before suspecting your change.
 
 ## Environments, logs and health
 
-- **Environments.** `APP_ENV` is `development` or `production`. Today it changes almost nothing (it is validated, logged, and
-  `make reset-dev` refuses to run in `production`). The real variants are the three run modes above. A production
-  deployment (published images, Caddy, backups) is planned in Q-02/Q-03, see BACKUP_AND_DEPLOYMENT §4–5.
+- **Environments.** `APP_ENV` is `development` or `production`. It is validated, logged, and
+  `make reset-dev` refuses to run in `production`. The real variants are the three environments above; production
+  (images built on the server, Caddy, backups) is described in [deploy/README.md](deploy/README.md).
 - **Logs.** Structured `log/slog`: `LOG_FORMAT=json|text`, `LOG_LEVEL=debug|info|warn|error`. View with
-  `docker compose logs -f api`. Request IDs, access logs and panic recovery arrive in B-04.
+  `./deploy/dev logs -f api` (or `test`, `prod`). Every request gets an ID, an access-log line, and panics are recovered.
 - **Health.** `/healthz` is liveness (process is up). `/readyz` is readiness (database answers and the data directory is writable;
   failures return a terse 503 with no paths or SQL).
 - **Metrics and tracing** are out of scope for a two-person home deployment.
@@ -175,12 +179,13 @@ Submodules check out a detached commit by default, so run `git switch <branch>` 
 
 ## Troubleshooting
 
-- **`web` container restarts or shows npm errors:** `docker compose logs web`. If `node_modules` got out of sync, run
-  `docker compose down` and `docker volume rm collections-app_web_node_modules`, then start again.
-- **`db` exits with "superuser password is not specified":** `POSTGRES_PASSWORD` in `backend/.env` is empty.
-- **Port already in use:** set `API_PORT` in `backend/.env` or `WEB_PORT` in `./.env`.
+- **`web` container restarts or shows npm errors:** `./deploy/dev logs web` (or `test`). If `node_modules` got out of sync, run
+  `./deploy/dev down`, `docker volume rm collections-app_web_node_modules` (`collections-app-test_web_node_modules` for test), then start again.
+- **`db` exits with "superuser password is not specified":** `POSTGRES_PASSWORD` in `backend/.env` (dev, test) or `deploy/server/.env` (prod) is empty.
+- **`./deploy/test` complains about `backend/.env`:** copy it from `backend/.env.example` and set `POSTGRES_PASSWORD`.
+- **Port already in use:** edit the ports in `deploy/local/dev.env` / `test.env` (prod: `WEB_PORT` in `deploy/server/.env`).
 - **Empty `backend/` or `frontend-web/` folders:** the submodules are not initialised, run `git submodule update --init --recursive`.
-- **`Backend: down` in the web header:** `docker compose ps` should show `api` healthy. Check `curl -fsS http://127.0.0.1:8080/readyz`.
+- **Web page loads but nothing shows:** `./deploy/dev ps` should show `api` healthy. Check `curl -fsS http://127.0.0.1:8080/readyz` (test: port 8090, prod: `http://127.0.0.1:8081/readyz`).
 - **Service-specific problems:** see the troubleshooting sections of the two service READMEs.
 
 ## License
