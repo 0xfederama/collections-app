@@ -120,6 +120,7 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 ## Log (newest first, one line each)
 
+- 2026-10-15: C4 smoke checklist (web, D-068) run in the browser pane against `./deploy/test --fresh` on web main 2b9e7a6 / backend api-v0.2.0: items 1–13 PASS, 14 (backup/restore) left to the backend prod drill. Non-blocking findings for a web polish task: Home "Recently updated" stale after deleting a folder (needs reload); sidebar tree may not be reachable by Tab alone (to confirm); focus not returned after Esc on Add item; delete-confirm vs Trash counts wording differ (root folder counted only in Trash).
 - 2026-10-15: Q-05 done: backend#15 (govulncheck dependency bumps) squash-merged (`ea0b1c5`), parent pointer bumped. Scope fence clean, no critical/high findings. Remaining for 1.0: C4 smoke checklist (incl. live CSP check), dev restore drill, then `v1.0.0` tags.
 
 - 2026-10-15: Brief handoffs/Q-05.md written (reviewer session, both repos). Runs in parallel with the C4 smoke checklist.
