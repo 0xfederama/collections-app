@@ -23,7 +23,7 @@ divergences are fixed in the same PR.
 
 // List
 { "id", "folder_id": "uuid|null", "name", "description": "string|null",
-  "display_mode": "compact|thumbnail|grid", "sort_mode": "manual|title|updated",
+  "display_mode": "compact|thumbnail|grid", "sort_mode": "manual|title|updated|kind_key|price", "pinned_fields": "{under:[key],right:[key]}|null",
   "sort_order", "item_count", "version", "created_at", "updated_at" }
 
 // Item
@@ -126,7 +126,7 @@ divergences are fixed in the same PR.
 |---|---|---|
 | POST | `/api/v1/lists` | `{ name, folder_id?, description?, display_mode?, sort_mode? }` → 201. A missing or trashed folder → `409 destination_unavailable` |
 | GET | `/api/v1/lists/{id}` | Includes `path: [{type:"folder",id,name}]` |
-| PATCH | `/api/v1/lists/{id}` | `If-Match`. `name, description, display_mode, sort_mode` |
+| PATCH | `/api/v1/lists/{id}` | `If-Match`. `name, description, display_mode, sort_mode, pinned_fields` (`null` resets) |
 | DELETE | `/api/v1/lists/{id}` | `If-Match` |
 | POST | `/api/v1/lists/{id}/move` | `If-Match`. `{ folder_id: uuid\|null }` |
 | PUT | `/api/v1/lists/order` | `{ folder_id: uuid\|null, ids: [uuid] }` orders child **lists** of that folder or the root → 204 |
@@ -134,7 +134,7 @@ divergences are fixed in the same PR.
 ### Items
 | Method | Path | Notes |
 |---|---|---|
-| GET | `/api/v1/lists/{id}/items` | `?sort=manual\|title\|updated` (default: the list's `sort_mode`), `?q=` title filter, `?limit=` (default 50, max 200), `?offset=`. Returns `{ data: [ItemSummary], page: { limit, offset, total } }`. Tie-breaker `id` |
+| GET | `/api/v1/lists/{id}/items` | `?sort=manual\|title\|updated\|kind_key\|price` (default: the list's `sort_mode`), `?q=` title filter, `?limit=` (default 50, max 200), `?offset=`. Returns `{ data: [ItemSummary], page: { limit, offset, total } }`. Tie-breaker `id` |
 | POST | `/api/v1/lists/{id}/items` | `{ title, kind?, summary?, status?, price?, official_website_url?, metadata? }` → 201 Item. Image and content are set via their own endpoints after creation |
 | GET | `/api/v1/items/{id}` | Item, plus `path` (folders and list) |
 | PATCH | `/api/v1/items/{id}` | `If-Match`. Any of: `title, kind, summary, status, price, official_website_url, metadata`. If `kind` changes and `metadata` is absent, metadata resets to `{}` |

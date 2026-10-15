@@ -86,7 +86,8 @@ CREATE TABLE lists (
   kind           TEXT NOT NULL CHECK (kind ~ '^[a-z][a-z0-9_]{0,31}$'),  -- every item in the list has this kind (F-007)
   description    TEXT NULL CHECK (char_length(description) <= 65536),        -- Markdown, no history
   display_mode   TEXT NOT NULL DEFAULT 'thumbnail' CHECK (display_mode IN ('compact','thumbnail','grid')),
-  sort_mode      TEXT NOT NULL DEFAULT 'manual'    CHECK (sort_mode IN ('manual','title','updated','kind_key')),
+  sort_mode      TEXT NOT NULL DEFAULT 'manual'    CHECK (sort_mode IN ('manual','title','updated','kind_key','price')),  -- price: F-002
+  pinned_fields  JSONB NULL,  -- F-002: {"under":[key],"right":[key]}, NULL = kind default; reset on kind change
   sort_order     INTEGER NOT NULL,
   version        INTEGER NOT NULL DEFAULT 1,
   created_at, updated_at, deleted_at, trash_batch_id  -- as folders
@@ -157,7 +158,7 @@ Metadata is validated in Go by a per-kind validator registry (`internal/items/ki
 all keys are optional, and `null` is not stored (the key is omitted). Text fields are trimmed and limited to 100 chars unless noted.
 Shared sub-shapes:
 - `imdb_url`: string matching `^https://(www\.|m\.)?imdb\.com/title/tt\d{7,10}/?$`
-- `streaming`: `{ "country": "IT" (ISO 3166-1 alpha-2, required within the object), "platforms": [string ≤ 60], ≤ 30 entries, unique case-insensitively }`
+- `streaming`: `{ "country": "IT" (ISO 3166-1 alpha-2, required within the object), "platforms": [string ≤ 60], ≤ 30 entries, unique case-insensitively, "paid_platforms": optional subset of `platforms` (paid per title, F-002; stored in the platform's casing) }`
 
 | Kind | Key | Type / rule |
 |---|---|---|
@@ -168,9 +169,10 @@ Shared sub-shapes:
 | `tv_show` | `first_air_year` | int 1920–2100 |
 | | `end_year` | int 1920–2100, ≥ `first_air_year`; absent = ongoing |
 | | `seasons` | int 1–200 |
+| | `episodes_per_season` | int 1–500 (F-002) |
+| | `episode_minutes` | int 1–1000, average (F-002) |
 | | `imdb_url`, `streaming` | shared |
-| `motorcycle` | `make`, `model` | text |
-| | `model_year` | int 1885–2100 |
+| `motorcycle` | `model_year` | int 1885–2100 |
 | | `displacement_cc` | int 1–5000 |
 | | `power_hp` | number 0–1000, 1 decimal |
 | | `license_class` | `AM` \| `A1` \| `A2` \| `A` |
@@ -178,10 +180,12 @@ Shared sub-shapes:
 | | `model_year` | int 1885–2100 |
 | | `fuel_type` | `petrol` \| `diesel` \| `hybrid` \| `plugin_hybrid` \| `electric` \| `lpg` \| `cng` \| `hydrogen` \| `other` |
 | | `power_hp` | number 0–2000, 1 decimal |
-| `camera` | `make`, `model` | text |
-| | `release_year` | int 1900–2100 |
+| `camera` | `release_year` | int 1900–2100 |
 | | `sensor_format` | `full_frame` \| `aps_c` \| `micro_four_thirds` \| `one_inch` \| `medium_format` \| `film_35mm` \| `other` |
 | | `megapixels` | number 0.1–500, 1 decimal |
+| | `camera_type` | `mirrorless` \| `dslr` \| `film` (F-002) |
+
+F-002 (API 0.4.0): motorcycle and camera lost `make`/`model` (migration 000003 moves them into a "## From 1.1" content block). Pinnable keys of a list = its kind's keys plus `price` (`kinds.PinnableKeys`).
 
 Example:
 ```json
