@@ -38,6 +38,9 @@ CREATE TABLE workspace_settings (
 );
 ```
 
+### TMDB import provenance (F-013, D-089)
+A workspace-scoped row per imported item records the TMDB id/kind, snapshots of imported values and the original typed title, owned poster attachment and fetch/refresh/expiry times. Imports and provenance commit together; automatic refresh/expiry changes only values still owned by the import and preserves user edits. Metadata and posters need independent freshness when poster refresh fails. Deleting an item cascades its provenance; trashed items still undergo expiry cleanup. Exact DDL is migration 000012.
+
 ### trash_batches
 One row per user-initiated delete. Trash UI lists these rows.
 ```sql

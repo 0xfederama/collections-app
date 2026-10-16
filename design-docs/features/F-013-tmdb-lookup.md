@@ -54,15 +54,16 @@ Books and other kinds, another provider, IMDb data, the Compare/AI concept, offl
 ### Backend (2026-10-16, one PR: `feature/F013-tmdb-lookup`)
 | Task | Stories | Tier / model (medium) | Scope | State |
 |---|---|---|---|---|
-| Client | F013-B1 | Simple / GPT 6 Luna | Isolated TMDB client, bounded HTTP, throttle, short cache, fake-server tests | in progress |
+| Client | F013-B1 | Simple / GPT 6 Luna | Isolated TMDB client, bounded HTTP, throttle, short cache, fake-server tests | code committed; FLAGS reviewed; tests pending |
 | Contract, director, settings | F013-B2–B5 contract; B4/B5 implementation | Complex / GPT 5.6 Sol (Terra unavailable in session) | Spec 0.9.0, settings/sort migration, director validation/pinning/sort/filter, optional key config, tests | in progress |
-| Lookup integration | F013-B2/B3 | Complex / GPT 5.6 Sol (Terra unavailable in session) | Suggestions, create/fill/rematch/refresh, empty-field preservation, poster pipeline, fake-server integration tests | pending retention decision |
+| Lookup integration | F013-B2/B3 | Complex / GPT 5.6 Sol (Terra unavailable in session) | Suggestions, create/fill/rematch/refresh, empty-field preservation, poster pipeline, fake-server integration tests | in progress |
+| Provenance and retention | F013-B3 | Complex / GPT 5.6 Sol (Terra unavailable in session) | Atomic import provenance, refresh at five months, expiry at six months preserving user edits, startup/daily maintenance, fake-clock tests | in progress |
 | Module docs | all | Simple / GPT 6 Luna | `docs/` and backend README | pending implementation |
 
 Workers write code and tests without executing tests (D-079/D-081). Orchestrator reviews FLAGS, runs `make check` once after integration, `make test-backup` for the migration, merges one squash PR, tags `api-v0.9.0`, audits before `v1.5.0`, then removes worktrees/branches.
 
 ### Terms check (2026-10-16)
-- [API terms](https://www.themoviedb.org/documentation/api/terms-of-use), retrieved directly: §1.C prohibits caching TMDB information for more than six months. Indefinite saved imports/posters conflict; user retention decision requested before implementing persistence policy.
+- [API terms](https://www.themoviedb.org/documentation/api/terms-of-use), retrieved directly: §1.C prohibits caching TMDB information for more than six months. Resolved by the user: track imported fields/posters, refresh before six months, and remove expired imported data if refresh fails while preserving user edits (D-089).
 - [Attribution guidance](https://developer.themoviedb.org/docs/faq): approved TMDB logo and notice in About/Credits; personal noncommercial use is supported, image ownership is not granted by TMDB.
 - [Watch providers](https://developer.themoviedb.org/reference/movie-watch-providers): **JustWatch attribution is additionally required**. Web W4 must include it when displaying provider data, and should retain the supplied country watch link.
 - [Rate limits](https://developer.themoviedb.org/docs/rate-limiting): respect HTTP 429; the historical fixed limit is no longer authoritative. Conservative throttling and a five-minute bounded search cache are planned.
@@ -70,3 +71,5 @@ Workers write code and tests without executing tests (D-079/D-081). Orchestrator
 
 ## Log
 - 2026-10-16: written from the user's answers.
+
+- 2026-10-17: resumed after account usage reset. User approved retention policy (D-089); complex worker dispatched for atomic provenance and maintenance.
