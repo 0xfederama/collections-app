@@ -59,5 +59,12 @@ Folder icons, uploaded icon images, icon packs from brands (Upkeep), TMDB.
 - **T3 (F012-B3):** migration 000010 `workspace_settings.trash_retention_days`; settings GET/PATCH; daily purge job + at start-up (logs count), like the images sweeper. Spec bumped to 0.8.0 across T1–T3.
 - Final: orchestrator runs `make check` + `make test-backup` once; PR, squash merge, tag `api-v0.8.0`, `make audit`, tag `v1.4.0`.
 
+### Web (one branch `feature/F012-list-icons-and-gaps`, one PR; Luna workers code/tests only, orchestrator validates)
+- **T1 (F012-W2, first):** clipboard image on an open item through existing upload validation/errors/ETags; component coverage and real-backend paste e2e.
+- **T2 (F012-W1):** after tagged `api-v0.8.0` sync, shared icon model/rendering, searchable icon/emoji picker, create + list settings, tree/rail/header/search integration, picker e2e and both-theme axe. Prefer a small vendored emoji keyword table over a package; flag the choice and measured size.
+- **T3 (F012-W3/W4):** bulk empty-trash API/mocks/confirm/count and immediate retention setting using snapshot ETags and existing conflict recovery; component tests, empty-trash e2e, update affected settings coverage.
+- **T4 (release):** update docs and conventions, bump web 2.3.0; orchestrator reviews FLAGS, runs `npm run check`, `npm run e2e` once against fresh parent `./deploy/test`, and `npm run audit`; one squash PR, tag `v2.3.0`, bump parent pointer and clean branch/worktree.
+- Contract `api-v0.8.0` verified via backend `git ls-remote` on 2026-10-16 before contract-dependent work.
+
 ## Log
 - 2026-10-16: written with defaults.

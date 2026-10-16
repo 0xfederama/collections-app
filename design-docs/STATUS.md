@@ -25,6 +25,8 @@ Feature briefs: [`features/`](features/). Repo orchestrators add their task rows
 | F-010 | F010-W1 folder path when creating a list | web orch. | **done (web)**, merged 2026-10-16, folded into [web#37](https://github.com/0xfederama/collections-app-frontend-web/pull/37) at the user's request | `feature/F009-ui-polish-2` | [web#37](https://github.com/0xfederama/collections-app-frontend-web/pull/37) | 2026-10-16 | One PR, separate commits, squashed at the end. Session-only memory (`sessionStorage`), frontend only. Brief: [features/F-010-new-list-folder.md](features/F-010-new-list-folder.md) |
 | F-011 | F011-W1..W6 review fixes (streaming, hovers, folder dropdown) | web orch. | **done** 2026-10-16, merged in [web#37](https://github.com/0xfederama/collections-app-frontend-web/pull/37) | `feature/F009-ui-polish-2` | [web#37](https://github.com/0xfederama/collections-app-frontend-web/pull/37) | 2026-10-16 | Brief: [features/F-011-review-fixes.md](features/F-011-review-fixes.md). W1 no country on the item, W2 platforms as a multi-choice dropdown, W3 sidebar "…" slimmer hover, W4 field pen + label alignment, W5 "+ New" inset focus ring, W6 folder as a dropdown beside Kind. No contract change |
 
+| F-012 | F012-W1..W4 list icons, paste, trash controls | web orch. | in progress | `feature/F012-list-icons-and-gaps` | — | 2026-10-16 | W2 dispatched first to Luna worker (code/tests only); `api-v0.8.0` verified remotely. One PR + web 2.3.0; final gate/e2e/audit by orchestrator |
+
 ## 1.0 release checks (done, v1 workflow)
 
 | Task | Owner | State | Branch | PR | Updated | Notes |
