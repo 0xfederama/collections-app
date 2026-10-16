@@ -37,7 +37,8 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 3 | **1.1.0** | Lists and items restructure + exploration fixes (F-007): one kind per list, trimmed fields, addable price, list description, 6 UI fixes. Last shared version (D-080) | ✅ Released `v1.1.0` (2026-10-15) | Oct 2026 |
 | 4 | — | Brief e2e safety net (F-003): `make smoke` + ~8 Playwright specs | ✅ Done (2026-10-15) | Oct 2026 |
 | 5 | **web 2.0.0** | UI refresh (F-002): Frosted Gallery design, in-place item editing, quick add, streaming icons; run from a sister session | ✅ Released `v2.0.0` (2026-10-15) | Q4 2026 |
-| 6 | **web 2.1.0** | UI polish after the first look at 2.0.0 (F-008): top bar (search + quick add + theme), consistent radii and toolbar, keyboard selection, drag into folders, inline new item, title area, links row with real icons, one price field, initials, generic lists without fields | 🟡 Next (before pool item 3) | Oct 2026 |
+| 6 | **web 2.1.0** | UI polish after the first look at 2.0.0 (F-008): top bar (search + quick add + theme), consistent radii and toolbar, keyboard selection, drag into folders, inline new item, title area, links row with real icons, one price field, initials, generic lists without fields | ✅ Done (2026-10-16) | Oct 2026 |
+| 7 | **web 2.2.0** | UI polish 2 (F-009): price only on kinds that have it, ordered pinned fields, Move/Delete at the bottom, one icon tile, cleaner streaming row, centred empty Trash | 🟡 Next (before pool item 3) | Oct 2026 |
 | — | later | Pool, in this order: ops hardening (F-005 ✅) → list icons + product gaps → TMDB + auto images → user-defined kinds → collaborative Markdown → accounts (backend 2.0) → security review → internet exposure + public API | ⚪ Pool | 2027 |
 | — | future | List import, advanced search | 🔭 Future | — |
 
@@ -149,7 +150,12 @@ Fresh-clone check (Q-04), scope and security review (Q-05: no critical or high f
 
 ## 6. Next (in this order)
 
-### F-008 · UI polish 🟡 · web 2.1.0 + backend 1.2.2
+### F-009 · UI polish 2 🟡 · web 2.2.0 + backend 1.3.0
+Second polish round after the look at 2.1.0: price only on the kinds that have it, pinned fields as an ordered list of
+two, Move and Delete at the bottom of the item, one icon tile for every link and streaming service, a cleaner streaming
+row, and a centred empty Trash. Contract `api-v0.7.0`. Brief: [`design-docs/features/F-009-ui-polish-2.md`](design-docs/features/F-009-ui-polish-2.md).
+
+### F-008 · UI polish ✅ · web 2.1.0 + backend 1.2.2
 Your first look at 2.0.0: 14 web stories and one backend story (generic lists lose price), checked against Apple's HIG.
 Runs before pool item 3. Brief: [`design-docs/features/F-008-ui-polish.md`](design-docs/features/F-008-ui-polish.md).
 
@@ -190,7 +196,7 @@ Committed, in this order (set by you, 2026-10-15), after the UI refresh. The re-
 | # | Initiative | What | Likely version |
 |---|---|---|---|
 | 1–2 | **F-005 · Ops hardening** ✅ | Strip EXIF/GPS from uploaded originals + backfill (backend); scheduled nightly backup with systemd and `./deploy/prod backup-status` (parent, done); audits before every tag (D-084). Brief: [`F-005-ops-hardening.md`](design-docs/features/F-005-ops-hardening.md) | backend 1.2.1 |
-| — | **Upkeep (later)** | Node 26 LTS (from 2026-10-28, D-042), TypeScript 7 when typescript-eslint supports it (D-040), VoiceOver pass on drag-and-drop (W-05), `VITE_API_MOCKS=1` browser check (W-02); your backup → wipe → restore drill; exposure check script; 40 MP and slow-network upload checks. Done as small chores when due | patch bumps |
+| — | **Upkeep (later)** | Node 26 LTS (from 2026-10-28, D-042), TypeScript 7 when typescript-eslint supports it (D-040), VoiceOver pass on drag-and-drop (W-05), `VITE_API_MOCKS=1` browser check (W-02); your backup → wipe → restore drill; exposure check script; 40 MP and slow-network upload checks. Done as small chores when due | patch bumps; icon packs: SVG brand packs for every link and streaming service (vendored, never fetched at runtime) |
 | 3 | **List icons + F-004 product gaps** | An interchangeable icon per list: an emoji or one from a built-in icon set (Notion-style, no photos), the current icon as default. Paste an image from the clipboard (copy an image or take a screenshot, then Cmd+V on an item to set it as its image, without saving a file first); "Empty trash" with confirmation; optional trash auto-purge after N days (off by default) | backend 1.2 / web 2.1 |
 | 4 | **TMDB + automatic image lookup** | Movie and TV lookup when creating an item, metadata refresh, streaming availability by country, attribution, rate limits; an image fetched automatically when an item is added (TMDB for movies and TV, another provider to check for the other kinds). User-entered values are never silently overwritten. No IMDb scraping. Starts with a check of the providers' terms | backend 1.3 / web 2.2 |
 | 5 | **Custom fields + custom types** | Two steps, wanted by the user (2026-10-15): **(a) custom fields on any list**, e.g. a *Director* on a movie list, shown in the item, **pinnable** in rows (F-002 stores pinned fields by key for this) and usable to **filter and sort** (today the filter is title-only); **(b) custom types**: create your own item kinds with their own fields, sort key, default pinned fields and links, replacing the fixed kind list. Fits the validator registry + `metadata` JSONB, but needs field and kind definitions stored per workspace/list | backend 1.4 / web 2.3 |

@@ -1,6 +1,6 @@
 # F-008 — 2.x UI polish (after the first look at 2.0.0)
 
-Status: approved (to run before pool item 3)    Release: web 2.1.0, backend 1.2.2    Roadmap: ROADMAP.md §6
+Status: **done** (2026-10-16)    Release: web 2.1.0, backend 1.2.2    Roadmap: ROADMAP.md §6
 Repos: web (almost all) | backend (one story)    Approved by the user: 2026-10-15
 
 ## Why
@@ -176,3 +176,4 @@ web stories need nothing from the backend.
 ## Log
 - 2026-10-15: written from the user's first look at 2.0.0 (4 screenshots), with an HIG review; inserted before pool item 3.
 - 2026-10-15: web 2.1.0 shipped (PR #32, tag v2.1.0): 3 gate failures fixed (drop-into zone broke keyboard drag → enabled only for pointer drags), e2e specs updated, tree-dnd spec added.
+- 2026-10-16: done per the user; follow-ups in F-009.
