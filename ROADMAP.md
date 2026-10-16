@@ -38,7 +38,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 4 | — | Brief e2e safety net (F-003): `make smoke` + ~8 Playwright specs | ✅ Done (2026-10-15) | Oct 2026 |
 | 5 | **web 2.0.0** | UI refresh (F-002): Frosted Gallery design, in-place item editing, quick add, streaming icons; run from a sister session | ✅ Released `v2.0.0` (2026-10-15) | Q4 2026 |
 | 6 | **web 2.1.0** | UI polish after the first look at 2.0.0 (F-008): top bar (search + quick add + theme), consistent radii and toolbar, keyboard selection, drag into folders, inline new item, title area, links row with real icons, one price field, initials, generic lists without fields | ✅ Done (2026-10-16) | Oct 2026 |
-| 7 | **web 2.2.0** | UI polish 2 (F-009): price only on kinds that have it, ordered pinned fields, Move/Delete at the bottom, one icon tile, cleaner streaming row, centred empty Trash | ✅ Merged 2026-10-16 (2.2.0 bump + tag pending) | Oct 2026 |
+| 7 | **web 2.2.0** | UI polish 2 (F-009): price only on kinds that have it, ordered pinned fields, Move/Delete at the bottom, one icon tile, cleaner streaming row, centred empty Trash | ✅ Merged 2026-10-16 (2.2.0 bumped in #39, tag pending) | Oct 2026 |
 | — | later | Pool, in this order: ops hardening (F-005 ✅) → list icons + product gaps → TMDB + auto images → user-defined kinds → collaborative Markdown → accounts (backend 2.0) → security review → internet exposure + public API | ⚪ Pool | 2027 |
 | — | future | List import, advanced search | 🔭 Future | — |
 
@@ -244,7 +244,7 @@ Committed, in this order (set by you, 2026-10-15), after the UI refresh. The re-
 - This file is updated when a feature ships, starts, or changes horizon. Detailed task history stays in STATUS.md.
 
 ## Changelog
-- 2026-10-16: **F-009 merged** (backend 1.3.0 / api-v0.7.0 tagged; web#37 squashed `80a40bb` incl. F-010 new-list folder and F-011 review fixes). Web 2.2.0 bump + audit + tag pending.
+- 2026-10-16: **F-009 merged** (backend 1.3.0 / api-v0.7.0 tagged; web#37 squashed `80a40bb` incl. F-010 new-list folder and F-011 review fixes). Web 2.2.0 bumped (web#39, audit clean); tag v2.2.0 pending.
 - 2026-10-16: **F-008 done**; **F-009 UI polish 2** added as Next (web 2.2.0, backend 1.3.0, api-v0.7.0). Icon packs added to Upkeep.
 - 2026-10-15: **F-008 UI polish** added as Next (web 2.1.0, backend 1.2.2), before pool item 3.
 - 2026-10-15: **F-005 done**: backend `v1.2.1` (metadata stripped from uploads + `strip-images` backfill), nightly backup timer, `backup-status`, audits before tags. Next: pool item 3, list icons + F-004 product gaps.
