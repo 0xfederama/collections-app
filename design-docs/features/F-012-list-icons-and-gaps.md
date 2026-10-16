@@ -1,6 +1,6 @@
 # F-012 — List icons + product gaps (pool item 3)
 
-Status: **approved with defaults** (2026-10-16, user asked for the prompts; change any default before the PR merges)    Release: web 2.3.0, backend 1.4.0    Roadmap: ROADMAP.md §7 item 3
+Status: **implemented** (2026-10-16, backend#25 and web#40 merged)    Release: web 2.3.0, backend 1.4.0    Roadmap: ROADMAP.md §7 item 3
 Repos: backend | web    Contract: `api-v0.8.0`
 
 ## Why
@@ -68,3 +68,5 @@ Folder icons, uploaded icon images, icon packs from brands (Upkeep), TMDB.
 
 ## Log
 - 2026-10-16: written with defaults.
+
+- 2026-10-16: Web F012-W1–W4 shipped in [web#40](https://github.com/0xfederama/collections-app-frontend-web/pull/40), squash `ae5fd90`, tag `v2.3.0`; pinned `api-v0.8.0`. Luna workers wrote code/tests only; orchestrator reviewed FLAGS and completed all gate stages, full unit/e2e suites with focused corrections (1300 unit tests + 1 existing skip; all 30 distinct e2e cases verified), audit clean. Picker checked in both themes at 375/1440, zero serious/critical axe, production mobile visual check; 1,323-byte local emoji table, no dependency. Parent pointer updated; branches and worktrees removed. Top-level orchestrator may close ROADMAP item 3.
