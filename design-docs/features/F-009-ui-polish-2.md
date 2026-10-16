@@ -116,7 +116,21 @@ None.
 ### Web
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
 |---|---|---|---|---|---|
+| T1 · ordered pinned fields + kind-matched sort/pins | W2, W3 | `feature/F009-ui-polish-2` | worker: full gate green | [CRUCIAL] contract shape reviewed (client sends only `string[] \| null`); [DECISION] `tv_show` default changed to `['seasons','streaming']` by the orchestrator so TV rows keep the service icons; `firstLetter` moved to `lib/text.ts` | pending |
+| T2 · item detail shows less by default + streaming row | W1, W6 | `feature/F009-ui-polish-2` | worker: full unit suite green | [DECISION] reviewed: streaming is hidden by default like every kind field; "+ Add field" reveals a set field **read-only** and opens the editor only for an empty one (orchestrator change, with the e2e/unit tests updated) | pending |
+| T3 · Move/Delete at the bottom + one icon tile set | W4, W5 | `feature/F009-ui-polish-2` | worker: targeted suites green | [DEVIATION] reviewed: the white `<rect>` and the 0.6 inset removed from `google.svg` / `imdb.svg` (the tile owns the padding now, `assets/services/README.md` records it); [DECISION] `TILE_SIZE = 36` on the item page, rows keep 20–26 px | pending |
+| T4 · centred empty Trash | W7 | `feature/F009-ui-polish-2` | worker: targeted suite green | [UNVERIFIED] reviewed: jsdom cannot measure layout, so the orchestrator measured the rendered page against `./deploy/test` — centred in the page column, vertically centred below the heading | pending |
+
+One PR for the whole web side (D-079/D-081 lean workflow). Tasks run **sequentially on the same branch**: T2, T3 and T4 all
+touch `ItemView.test.tsx` / `FieldBlock.tsx`, so they cannot be parallel. T1 is `[CRUCIAL]` (the `pinned_fields` contract
+shape changed in `api-v0.7.0`). Workers run on the session's default model: no Sonnet 5.5 is available in this environment
+([DEVIATION] from AGENT_WORKFLOW §2, the dispatch table assumes it).
 
 ## Log
 - 2026-10-16: written from the user's look at 2.1.0; "defined" = the field belongs to the list's kind.
 - 2026-10-16: backend — B1's "book" is not an item kind (the user confirmed: ignore it); price stays on motorcycle, car, camera only. B2's migration maps the old `under` slot to the primary and `right` to the secondary (the brief's "left → first"), deduping and keeping the first two.
+- 2026-10-16: web — one PR for W1–W7 (D-079/D-081 lean). Three orchestrator decisions worth recording:
+  - `tv_show`'s kind default is `['seasons', 'streaming']`, not the migration's `['seasons', 'episodes_per_season']`: with two pins, streaming has to stay one of them or the service icons disappear from every TV row, which nothing in F-009 asked for. Pinning seasons and episodes together still reads `5×7`.
+  - W1's "+ Add field" **reveals a field that already has a value read-only**, and opens the editor only for an empty field. Dropping a user who just wants to read a saved value into an edit form (with the unsaved-changes guard) is the wrong default for "show less by default".
+  - W5's letter tile reuses `firstLetter`, moved from `features/lists/ItemThumb.tsx` to `src/lib/text.ts` so `components/` does not import from `features/`.
+- 2026-10-16: web — `npm run check` green (1274 tests + production image) and `npm run e2e` green (19/19) on a fresh `./deploy/test up -d --fresh`. The empty-Trash centring was additionally measured in the browser (jsdom has no layout).
