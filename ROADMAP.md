@@ -244,6 +244,7 @@ Committed, in this order (set by you, 2026-10-15), after the UI refresh. The re-
 - This file is updated when a feature ships, starts, or changes horizon. Detailed task history stays in STATUS.md.
 
 ## Changelog
+- 2026-10-16: **F-008 done**; **F-009 UI polish 2** added as Next (web 2.2.0, backend 1.3.0, api-v0.7.0). Icon packs added to Upkeep.
 - 2026-10-15: **F-008 UI polish** added as Next (web 2.1.0, backend 1.2.2), before pool item 3.
 - 2026-10-15: **F-005 done**: backend `v1.2.1` (metadata stripped from uploads + `strip-images` backfill), nightly backup timer, `backup-status`, audits before tags. Next: pool item 3, list icons + F-004 product gaps.
 - 2026-10-15: backend tagged `v1.2.0` (F-002 backend features), parent `v2.0.0` message names both versions. Pool items 1–2 merged into **F-005 ops hardening** (Now): EXIF strip, scheduled backups + `backup-status`, audits before tags; no CI or Dependabot (D-084); remaining upkeep done as chores when due.
