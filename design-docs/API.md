@@ -8,6 +8,9 @@ divergences are fixed in the same PR.
 
 > F-012 / `api-v0.8.0`: lists and list path segments include nullable `icon` (one emoji or `i:<name>`) and `icon_color` (red/orange/amber/green/teal/blue/indigo/purple/pink/gray, built-in icons only). List create/PATCH accept them. Settings GET/PATCH adds `trash_retention_days` (`null` off, otherwise 1–365). `DELETE /api/v1/trash` permanently empties every batch and its images, idempotent 204, no If-Match. The vendored contract is authoritative for exact schemas.
 
+
+> F-013 / planned `api-v0.9.0` (in progress): `GET /api/v1/tmdb/suggestions?kind=movie|tv_show&q=...` returns availability and ranked localized matches. `POST /api/v1/items/{id}/lookup` takes an item If-Match and `mode: fill|rematch|refresh`, optionally a selected `tmdb_id`; item create accepts `lookup` and `tmdb_id`. Movie/TV metadata includes `tmdb_id` and `lookup_disabled`; movie adds a pinnable/filterable `director`, with movie-only `sort=director`. Settings adds `metadata_language` (default `en-US`) and read-only `lookup_available`; missing `TMDB_API_KEY` disables lookup. Persistence/retention remains subject to the terms conflict recorded in the F-013 brief. Exact request and response schemas live in the backend spec.
+
 ## 1. Conventions
 
 - JSON field names are `snake_case`. IDs are UUID strings. Timestamps are RFC 3339 UTC strings.

@@ -31,6 +31,7 @@ CREATE TABLE workspaces (
 CREATE TABLE workspace_settings (
   workspace_id           UUID PRIMARY KEY REFERENCES workspaces(id) ON DELETE CASCADE,
   streaming_country_code CHAR(2) NOT NULL DEFAULT 'IT'  CHECK (streaming_country_code ~ '^[A-Z]{2}$'),
+  metadata_language      TEXT NOT NULL DEFAULT 'en-US' CHECK (metadata_language ~ '^[a-z]{2}(-[A-Z]{2})?$'), -- F-013
   markdown_history_limit INTEGER NOT NULL DEFAULT 20 CHECK (markdown_history_limit BETWEEN 0 AND 200),
   version                INTEGER NOT NULL DEFAULT 1,
   created_at, updated_at
@@ -86,7 +87,7 @@ CREATE TABLE lists (
   kind           TEXT NOT NULL CHECK (kind ~ '^[a-z][a-z0-9_]{0,31}$'),  -- every item in the list has this kind (F-007)
   description    TEXT NULL CHECK (char_length(description) <= 65536),        -- Markdown, no history
   display_mode   TEXT NOT NULL DEFAULT 'thumbnail' CHECK (display_mode IN ('compact','thumbnail','grid')),
-  sort_mode      TEXT NOT NULL DEFAULT 'manual'    CHECK (sort_mode IN ('manual','title','updated','kind_key','price')),  -- price: F-002; only on kinds with a price (0.7.0)
+  sort_mode      TEXT NOT NULL DEFAULT 'manual'    CHECK (sort_mode IN ('manual','title','updated','kind_key','price','director')),  -- price: priced kinds only; director: movie only (F-013)
   pinned_fields  JSONB NULL,  -- F009-B2 (0.7.0): ordered array of at most 2 keys; NULL = kind default; reset on kind change
   sort_order     INTEGER NOT NULL,
   version        INTEGER NOT NULL DEFAULT 1,
