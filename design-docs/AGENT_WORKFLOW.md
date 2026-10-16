@@ -24,9 +24,9 @@ not separate sessions.
 
 | Level | Where | Model | Does | Does not |
 |---|---|---|---|---|
-| **Top-level orchestrator** | parent repo root (`/Users/federico/Developer/collections-app`) | Opus 5.5, medium effort | Owns [`ROADMAP.md`](../ROADMAP.md). Analyzes each new feature with the user, writes the **feature brief** (`features/F-NNN-*.md`): why, user stories per repo, contract impact, out of scope. Keeps cross-repo order (backend contract first). Parent-repo changes (`deploy/`, docs, pointer bumps) | Split stories into tasks, write code in the service repos, review worker output |
-| **Repo orchestrator** | one per repo, started in `backend/` or `frontend-web/` | Opus 5.5, **medium** effort | Turns its repo's stories into small tasks, dispatches **worker** agents, reviews **only what workers flag**, runs the repo gate, opens the PRs, updates STATUS.md and the brief's "Repo breakdown". Asks the top-level orchestrator (via the user) or the user about design gaps | Re-review unflagged work line by line |
-| **Worker** (agent `worker`) | inside the repo orchestrator's session (Agent tool) | Sonnet 5.5, medium effort (set in `.claude/agents/worker.md`) | Implements one task with its tests, runs the gate, commits on the given branch, and ends with a report whose **FLAGS** section lists deviations, decisions, crucial points and anything unverified | Push, open PRs, edit CLAUDE.md or design docs, widen its scope |
+| **Top-level orchestrator** | parent repo root (`/Users/federico/Developer/collections-app`) | Orchestrator tier (below) | Owns [`ROADMAP.md`](../ROADMAP.md). Analyzes each new feature with the user, writes the **feature brief** (`features/F-NNN-*.md`): why, user stories per repo, contract impact, out of scope. Keeps cross-repo order (backend contract first). Parent-repo changes (`deploy/`, docs, pointer bumps) | Split stories into tasks, write code in the service repos, review worker output |
+| **Repo orchestrator** | one per repo, started in `backend/` or `frontend-web/` | Orchestrator tier (below) | Turns its repo's stories into small tasks, dispatches **worker** agents, reviews **only what workers flag**, runs the repo gate, opens the PRs, updates STATUS.md and the brief's "Repo breakdown". Asks the top-level orchestrator (via the user) or the user about design gaps | Re-review unflagged work line by line |
+| **Worker** (agent `worker`) | inside the repo orchestrator's session (Agent tool) | Worker tier chosen per task (below); default simple (set in `.claude/agents/worker.md`) | Implements one task with its tests, runs the gate, commits on the given branch, and ends with a report whose **FLAGS** section lists deviations, decisions, crucial points and anything unverified | Push, open PRs, edit CLAUDE.md or design docs, widen its scope |
 
 ### Flow of a feature
 1. **You and the top-level orchestrator** discuss the idea. It writes `features/F-NNN-<slug>.md` (template: `features/README.md`)
@@ -40,7 +40,7 @@ not separate sessions.
    before the PR (see "Test runs" below), and doesn't read the diff. Flagged items → it reviews exactly those points, fixes or accepts them, and
    records a D-entry when a flag is a real decision.
 5. **PRs**: the repo orchestrator merges them itself once the gate is green (D-077): always squash, never a merge commit; a
-   non-trivial rebase and its merge go to a Sonnet 5.5 subagent. The user can still read every PR. After the merge the repo orchestrator bumps the parent pointer (D-044) and updates STATUS.md.
+   non-trivial rebase and its merge go to a complex-tier worker subagent (Sonnet 5.5 or GPT 5.6 Terra). The user can still read every PR. After the merge the repo orchestrator bumps the parent pointer (D-044) and updates STATUS.md.
    When all stories are done, the top-level orchestrator marks the feature shipped in ROADMAP.md.
 
 ### Rules that keep it cheap
@@ -50,7 +50,7 @@ not separate sessions.
   orchestrator does that task itself.
 - Security-sensitive, schema, contract (`api/openapi.yaml`), migration, concurrency, trash and storage work: the worker
   **must** flag it as `[CRUCIAL]`, and the orchestrator reviews those parts.
-- `docs-keeper` (haiku) still updates `docs/` before every PR. `researcher` (sonnet) still handles version and library research.
+- `docs-keeper` (simple tier) still updates `docs/` before every PR. `researcher` (complex tier) still handles version and library research.
 - Running the app for a check: `./deploy/test up -d --fresh` from the parent, never the user's dev data.
 
 ### Test runs: wisely, not by reflex (D-076)
@@ -83,14 +83,24 @@ task in its own worktree. Superseded by v2 (D-074). The `handoffs/` folder is ke
 
 ## 2. Model dispatch policy (cost control)
 
-| Work | Who | Model / effort | Notes |
+The workflow is **AI agnostic**: it names three tiers, each with a Claude and a GPT model of similar capability, always at **medium** effort. The user picks the family per session; mixing is fine. A simpler orchestrator tier (the worker-complex models) may be used directly for simple orchestrations (a short brief, one small PR).
+
+| Tier | Claude | GPT | Use for |
 |---|---|---|---|
-| Feature analysis, user stories, cross-repo order, roadmap | top-level orchestrator | Opus 5.5 / medium | Session in the parent repo |
-| Task breakdown, flagged-item review, contract and schema design, PRs | repo orchestrator | Opus 5.5 / medium | Session in `backend/` or `frontend-web/` |
-| Implementation + its tests, mechanical edits, test fixes | `worker` | Sonnet 5.5 / medium | Ends with a FLAGS report |
-| Web/doc research (versions, library status, API docs, TMDB terms) | `researcher` | sonnet | Must cite sources and give the date checked. Never guess versions |
-| Codebase search ("where is X") | built-in `Explore` | haiku | Conclusions plus file:line, not file dumps |
-| `docs/` module docs before every PR | `docs-keeper` | haiku | §5 |
+| **Orchestrator** | Opus 5.5 medium | GPT 6.1 Sol medium | Top-level and repo orchestrators |
+| **Worker, complex** | Sonnet 5.5 medium | GPT 5.6 Terra medium | Very complex coding-only tasks: breaking migrations, intricate logic, stubborn frontend problems (drag and drop, focus, layout bugs that resisted a first try) |
+| **Worker, simple** (the default) | Haiku 5.5 medium | GPT 6 Luna medium | Simple coding tasks, short and already well documented: renames, copy changes, small components, test updates, mechanical edits |
+
+The repo orchestrator picks the tier **per task** when it dispatches (the Agent tool `model` parameter overrides the default in `.claude/agents/worker.md`) and writes the choice in the brief's "Repo breakdown". If a simple worker fails or flags a task as too hard, redo it once on the complex tier instead of retrying.
+
+| Work | Who | Tier | Notes |
+|---|---|---|---|
+| Feature analysis, user stories, cross-repo order, roadmap | top-level orchestrator | Orchestrator | Session in the parent repo |
+| Task breakdown, flagged-item review, contract and schema design, PRs | repo orchestrator | Orchestrator | Session in `backend/` or `frontend-web/` |
+| Implementation, mechanical edits, test fixes | `worker` | Simple by default, complex when justified above | Ends with a FLAGS report |
+| Web/doc research (versions, library status, API docs, TMDB terms) | `researcher` | Worker, complex | Must cite sources and give the date checked. Never guess versions |
+| Codebase search ("where is X") | built-in `Explore` | Worker, simple | Conclusions plus file:line, not file dumps |
+| `docs/` module docs before every PR | `docs-keeper` | Worker, simple | §5 |
 
 Dispatch rules:
 - **Prompts must be self-contained.** A subagent starts with no context.
@@ -124,7 +134,7 @@ Dispatch rules:
 - One concern per PR, sized for review (aim for under ~600 changed lines excluding generated code).
 - `--force-with-lease` is allowed **only** on your own unmerged branch. Rebasing on `main` is preferred over merge commits.
 - **Merging (D-077):** in workflow v2 the repo orchestrator merges its own PRs once the gate is green: squash merge only
-  (`gh pr merge --squash --delete-branch`), never merge commits. A non-trivial rebase and its merge go to a Sonnet 5.5
+  (`gh pr merge --squash --delete-branch`), never merge commits. A non-trivial rebase and its merge go to a complex-tier worker (Sonnet 5.5 or GPT 5.6 Terra)
   subagent. Any other session merges only when the user explicitly says so for that PR.
 - **After every merge, always delete the branch** locally (`git branch -D <branch>`) and on the remote (`git push origin --delete <branch>`), remove its worktree (`git worktree remove <path>`), then `git fetch --prune`. The orchestrator does this when it bumps the parent pointer (user rule, 2026-10-14).
 - Never commit secrets, `.env`, real user data, or the local `data/` directories.
