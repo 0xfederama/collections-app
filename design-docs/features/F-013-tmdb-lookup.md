@@ -51,5 +51,22 @@ Books and other kinds, another provider, IMDb data, the Compare/AI concept, offl
 
 ## Repo breakdown (filled by the repo orchestrators)
 
+### Backend (2026-10-16, one PR: `feature/F013-tmdb-lookup`)
+| Task | Stories | Tier / model (medium) | Scope | State |
+|---|---|---|---|---|
+| Client | F013-B1 | Simple / GPT 6 Luna | Isolated TMDB client, bounded HTTP, throttle, short cache, fake-server tests | in progress |
+| Contract, director, settings | F013-B2–B5 contract; B4/B5 implementation | Complex / GPT 5.6 Sol (Terra unavailable in session) | Spec 0.9.0, settings/sort migration, director validation/pinning/sort/filter, optional key config, tests | in progress |
+| Lookup integration | F013-B2/B3 | Complex / GPT 5.6 Sol (Terra unavailable in session) | Suggestions, create/fill/rematch/refresh, empty-field preservation, poster pipeline, fake-server integration tests | pending retention decision |
+| Module docs | all | Simple / GPT 6 Luna | `docs/` and backend README | pending implementation |
+
+Workers write code and tests without executing tests (D-079/D-081). Orchestrator reviews FLAGS, runs `make check` once after integration, `make test-backup` for the migration, merges one squash PR, tags `api-v0.9.0`, audits before `v1.5.0`, then removes worktrees/branches.
+
+### Terms check (2026-10-16)
+- [API terms](https://www.themoviedb.org/documentation/api/terms-of-use), retrieved directly: §1.C prohibits caching TMDB information for more than six months. Indefinite saved imports/posters conflict; user retention decision requested before implementing persistence policy.
+- [Attribution guidance](https://developer.themoviedb.org/docs/faq): approved TMDB logo and notice in About/Credits; personal noncommercial use is supported, image ownership is not granted by TMDB.
+- [Watch providers](https://developer.themoviedb.org/reference/movie-watch-providers): **JustWatch attribution is additionally required**. Web W4 must include it when displaying provider data, and should retain the supplied country watch link.
+- [Rate limits](https://developer.themoviedb.org/docs/rate-limiting): respect HTTP 429; the historical fixed limit is no longer authoritative. Conservative throttling and a five-minute bounded search cache are planned.
+- §1.C also prohibits derivatives of TMDB content; the brief's normal image stripping/thumbnail pipeline is recorded as a terms ambiguity to consider with image permissions.
+
 ## Log
 - 2026-10-16: written from the user's answers.
