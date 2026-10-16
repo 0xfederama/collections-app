@@ -53,6 +53,11 @@ Lists all look alike in the tree. Two gaps from 1.0 are still open: setting an i
 Folder icons, uploaded icon images, icon packs from brands (Upkeep), TMDB.
 
 ## Repo breakdown (filled by the repo orchestrators)
+### Backend (one branch `feature/F-012-list-icons-trash`, one PR, Haiku workers code only, D-079/D-081; sequential: shared spec + generated code)
+- **T1 (F012-B1):** migration 000009 `lists.icon`, `lists.icon_color`; spec `icon`/`icon_color` on List create/update/summary/search/tree; validation in `internal/tree`; clear colour on icon change.
+- **T2 (F012-B2):** `DELETE /api/v1/trash` empties the whole trash (204, idempotent), reusing the purge logic per batch; files removed after commit.
+- **T3 (F012-B3):** migration 000010 `workspace_settings.trash_retention_days`; settings GET/PATCH; daily purge job + at start-up (logs count), like the images sweeper. Spec bumped to 0.8.0 across T1–T3.
+- Final: orchestrator runs `make check` + `make test-backup` once; PR, squash merge, tag `api-v0.8.0`, `make audit`, tag `v1.4.0`.
 
 ## Log
 - 2026-10-16: written with defaults.

@@ -250,3 +250,4 @@ Postgres, AT-18 compose exposure, `docker build`).**
 
 - 2026-10-13: Design package v1 written. Kinds, dark theme, repo names, and the unversioned-docs policy were decided (D-026–D-030).
 - 2026-10-16: web#37 (F-009 W1–W7 + F-010-W1 + F-011) reviewed by the top-level orch. (report + targeted greps: no old `{under,right}` pinned shape left, price only via `hasPrice`, storage helpers fine) and squash-merged as `80a40bb`; branch deleted. Parent pointer bumped. Still open: version 2.2.0 + `npm run audit` + tag `v2.2.0` (PR does not bump `package.json`); F-010/F-011 have no briefs (recorded here and in the F-009 log).
+- 2026-10-16: F-012 backend (F012-B1..B3) **in progress** on `feature/F-012-list-icons-trash` (worktree `../backend-f012`): Haiku workers code only, gate + `make test-backup` once at the end, one PR, then tags `api-v0.8.0` / `v1.4.0`.
