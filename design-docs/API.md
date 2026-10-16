@@ -23,7 +23,7 @@ divergences are fixed in the same PR.
 
 // List
 { "id", "folder_id": "uuid|null", "name", "description": "string|null",
-  "display_mode": "compact|thumbnail|grid", "sort_mode": "manual|title|updated|kind_key|price", "pinned_fields": "{under:[key],right:[key]}|null",
+  "display_mode": "compact|thumbnail|grid", "sort_mode": "manual|title|updated|kind_key|price", "pinned_fields": "[key,key]|null",  // ordered, at most 2; the first is the primary field
   "sort_order", "item_count", "version", "created_at", "updated_at" }
 
 // Item
@@ -32,7 +32,7 @@ divergences are fixed in the same PR.
          | { "source": "url", "url": "https://…" }
          | { "source": "upload", "attachment_id", "url": "/api/v1/attachments/{id}/file",
              "thumbnail_url": "/api/v1/attachments/{id}/thumbnail", "width", "height", "original_filename" },
-  "price": null | { "min": "12.00|null", "max": "15.00|null", "currency": "EUR" },
+  "price": null | { "min": "12.00|null", "max": "15.00|null", "currency": "EUR" },  // only on motorcycle, car, camera items (0.7.0)
   "official_website_url": "string|null",
   "metadata": { …per kind… },
   "content_version": 3,          // current Markdown version (0 = empty), for display only
@@ -134,8 +134,8 @@ divergences are fixed in the same PR.
 ### Items
 | Method | Path | Notes |
 |---|---|---|
-| GET | `/api/v1/lists/{id}/items` | `?sort=manual\|title\|updated\|kind_key\|price` (default: the list's `sort_mode`), `?q=` title filter, `?limit=` (default 50, max 200), `?offset=`. Returns `{ data: [ItemSummary], page: { limit, offset, total } }`. Tie-breaker `id` |
-| POST | `/api/v1/lists/{id}/items` | `{ title, kind?, summary?, status?, price?, official_website_url?, metadata? }` → 201 Item. Image and content are set via their own endpoints after creation |
+| GET | `/api/v1/lists/{id}/items` | `?sort=manual\|title\|updated\|kind_key\|price` (default: the list's `sort_mode`), `?q=` title filter, `?limit=` (default 50, max 200), `?offset=`. Returns `{ data: [ItemSummary], page: { limit, offset, total } }`. Tie-breaker `id`. `kind_key` only on kinds with a sort key; `price` only on kinds with a price (0.7.0) |
+| POST | `/api/v1/lists/{id}/items` | `{ title, kind?, summary?, status?, price?, official_website_url?, metadata? }` → 201 Item. `price` only on motorcycle, car, camera (0.7.0). Image and content are set via their own endpoints after creation |
 | GET | `/api/v1/items/{id}` | Item, plus `path` (folders and list) |
 | PATCH | `/api/v1/items/{id}` | `If-Match`. Any of: `title, kind, summary, status, price, official_website_url, metadata`. If `kind` changes and `metadata` is absent, metadata resets to `{}` |
 | DELETE | `/api/v1/items/{id}` | `If-Match` |

@@ -112,9 +112,11 @@ None.
 ### Backend
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
 |---|---|---|---|---|---|
+| F009-B1+B2 (one PR) | B1, B2 | `feature/F009-price-kind-pinned-order` | done by the orchestrator directly, no worker dispatch ([DEVIATION], D-079 lean workflow); gate + `make test-backup` green | [CRUCIAL]: contract + migrations self-reviewed | [backend#24](https://github.com/0xfederama/collections-app-backend/pull/24) |
 ### Web
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
 |---|---|---|---|---|---|
 
 ## Log
 - 2026-10-16: written from the user's look at 2.1.0; "defined" = the field belongs to the list's kind.
+- 2026-10-16: backend — B1's "book" is not an item kind (the user confirmed: ignore it); price stays on motorcycle, car, camera only. B2's migration maps the old `under` slot to the primary and `right` to the secondary (the brief's "left → first"), deduping and keeping the first two.

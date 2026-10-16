@@ -20,7 +20,7 @@ Feature briefs: [`features/`](features/). Repo orchestrators add their task rows
 | F-003 | Brief e2e safety net | top-level orch. + user (backend orch.: F003-B1) | **done** 2026-10-15: F003-B1 and F003-W1 merged; pointers bumped | | [backend#19](https://github.com/0xfederama/collections-app-backend/pull/19), [web#29](https://github.com/0xfederama/collections-app-frontend-web/pull/29) | 2026-10-15 | `make smoke` (backend) + ~8 Playwright specs (web); lean workflow (D-081) |
 | F-005 | Ops hardening: EXIF strip (backend), scheduled backup + backup-status + audit rule (parent) | top-level orch. + user | **done** 2026-10-15 (runbook step added; server steps: you); parent P1–P3 done; backend B1 **done**: squash `12bdd81`, tag `v1.2.1`, `make audit` clean; pointer bumped; to do: runbook step + run `strip-images` on the server | [backend#22](https://github.com/0xfederama/collections-app-backend/pull/22) | 2026-10-15 | Backend 1.2.1; lean workflow; no CI (D-084) |
 | F-008 | UI polish after 2.0.0 (W1–W14, B1) | top-level orch. + user | **done** 2026-10-16; backend F008-B1 **done**: squash `b1b719e`, tags `api-v0.6.0` + `v1.2.2`; web W1–W14 **done**: squash `eba8459`, tag `v2.1.0`, `npm run check` + e2e green, `npm audit` clean | [web#32](https://github.com/0xfederama/collections-app-frontend-web/pull/32) | [backend#23](https://github.com/0xfederama/collections-app-backend/pull/23) | 2026-10-15 | web 2.1.0, backend 1.2.2 (`api-v0.6.0`); lean workflow |
-| F-009 | UI polish 2 (B1–B2, W1–W7) | top-level orch. + user | **approved** 2026-10-16, not started | | | 2026-10-16 | web 2.2.0, backend 1.3.0 (`api-v0.7.0`); lean workflow |
+| F-009 | UI polish 2 (B1–B2, W1–W7) | top-level orch. + user | backend **in review** 2026-10-16 (gate + `make test-backup` green) | `feature/F009-price-kind-pinned-order` | [backend#24](https://github.com/0xfederama/collections-app-backend/pull/24) | 2026-10-16 | web 2.2.0, backend 1.3.0 (`api-v0.7.0`); lean workflow; price on motorcycle/car/camera only; pinned_fields ordered list ≤2 |
 | F-002 | F002-B1..B4 backend contract (one PR) | backend orch. | **done** | | [backend#20](https://github.com/0xfederama/collections-app-backend/pull/20) | 2026-10-15 | Squash-merged `5b3c244`, tag `api-v0.4.0` pushed (D-082); web: `npm run api:sync -- api-v0.4.0`. B5 (metadata on `ItemSummary`, gap found by web) shipped in [backend#21](https://github.com/0xfederama/collections-app-backend/pull/21), squash `fe58ae5`, tag `api-v0.5.0`: web syncs to that |
 
 ## 1.0 release checks (done, v1 workflow)
@@ -134,6 +134,8 @@ Postgres, AT-18 compose exposure, `docker build`).**
 - Q-4 license (DECISIONS.md). Default applies if unanswered.
 
 ## Log (newest first, one line each)
+
+- 2026-10-16: F-009 backend (F009-B1+B2) PR opened: [backend#24](https://github.com/0xfederama/collections-app-backend/pull/24), contract `api-v0.7.0`. `make check` + `make test-backup` (AT-17) green. Awaiting the user's review; then squash-merge, tag `api-v0.7.0`, `make audit`, tag `v1.3.0`, bump pointer. Price only on motorcycle/car/camera; `pinned_fields` is an ordered array ≤2 (D-085).
 
 - 2026-10-15: **v1.0.0 released**: tags in backend (`ea0b1c5`), web (`2b9e7a6`) and parent. **Workflow v2 starts**: v1 orchestrators dismissed; F-000 (install v2 agents) approved; F-006 (1.0.1 polish) drafted for the user's OK.
 

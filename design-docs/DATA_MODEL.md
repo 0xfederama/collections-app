@@ -86,8 +86,8 @@ CREATE TABLE lists (
   kind           TEXT NOT NULL CHECK (kind ~ '^[a-z][a-z0-9_]{0,31}$'),  -- every item in the list has this kind (F-007)
   description    TEXT NULL CHECK (char_length(description) <= 65536),        -- Markdown, no history
   display_mode   TEXT NOT NULL DEFAULT 'thumbnail' CHECK (display_mode IN ('compact','thumbnail','grid')),
-  sort_mode      TEXT NOT NULL DEFAULT 'manual'    CHECK (sort_mode IN ('manual','title','updated','kind_key','price')),  -- price: F-002
-  pinned_fields  JSONB NULL,  -- F-002: {"under":[key],"right":[key]}, NULL = kind default; reset on kind change
+  sort_mode      TEXT NOT NULL DEFAULT 'manual'    CHECK (sort_mode IN ('manual','title','updated','kind_key','price')),  -- price: F-002; only on kinds with a price (0.7.0)
+  pinned_fields  JSONB NULL,  -- F009-B2 (0.7.0): ordered array of at most 2 keys; NULL = kind default; reset on kind change
   sort_order     INTEGER NOT NULL,
   version        INTEGER NOT NULL DEFAULT 1,
   created_at, updated_at, deleted_at, trash_batch_id  -- as folders
@@ -152,7 +152,7 @@ rejects a price without a currency (422) rather than guessing.
 
 ### 2.1 Kind metadata (`items.metadata`)
 
-Since 1.1.0 (migration `000002_restructure`, F-007) the kind lives on the list, the item's metadata is validated against its list's kind, and each kind has a sort key (`release_year`, `first_air_year`, `displacement_cc`, `power_hp`, `megapixels`; none for generic). Prices are stored as `min`/`max`; the API also accepts a single `amount` (stored as `min` = `max`).
+Since 1.1.0 (migration `000002_restructure`, F-007) the kind lives on the list, the item's metadata is validated against its list's kind, and each kind has a sort key (`release_year`, `first_air_year`, `displacement_cc`, `power_hp`, `megapixels`; none for generic). Prices are stored as `min`/`max`; the API also accepts a single `amount` (stored as `min` = `max`). Since 0.7.0 (migration `000007_price_kinds`, F009-B1) a price exists only on `motorcycle`, `car` and `camera` items: for `generic`, `movie` and `tv_show` the server rejects one and a price sort, and migration 000007 moved their existing prices into a "## From 1.3" content block.
 
 Metadata is validated in Go by a per-kind validator registry (`internal/items/kinds`). Unknown keys are rejected (400 `unknown_field`, or 422 for a wrong kind),
 all keys are optional, and `null` is not stored (the key is omitted). Text fields are trimmed and limited to 100 chars unless noted.
@@ -185,7 +185,7 @@ Shared sub-shapes:
 | | `megapixels` | number 0.1–500, 1 decimal |
 | | `camera_type` | `mirrorless` \| `dslr` \| `film` (F-002) |
 
-F-002 (API 0.4.0): motorcycle and camera lost `make`/`model` (migration 000003 moves them into a "## From 1.1" content block). Pinnable keys of a list = its kind's keys plus `price` (`kinds.PinnableKeys`).
+F-002 (API 0.4.0): motorcycle and camera lost `make`/`model` (migration 000003 moves them into a "## From 1.1" content block). Pinnable keys of a list = its kind's keys plus `price` only on the kinds that have a price (motorcycle, car, camera; F009-B1, `kinds.PinnableKeys`/`kinds.HasPrice`), at most 2 in an ordered array (F009-B2, migration 000008).
 
 Example:
 ```json
