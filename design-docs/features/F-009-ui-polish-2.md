@@ -1,6 +1,6 @@
 # F-009 — UI polish 2 (after the look at web 2.1.0)
 
-Status: approved    Release: web 2.2.0, backend 1.3.0    Roadmap: ROADMAP.md §6
+Status: **merged** (backend#24, web#37 on 2026-10-16; web 2.2.0 bump + tag pending)    Release: web 2.2.0, backend 1.3.0    Roadmap: ROADMAP.md §6
 Repos: backend | web    Approved by the user: 2026-10-16
 
 ## Why
@@ -136,3 +136,4 @@ shape changed in `api-v0.7.0`). Workers run on the session's default model: no S
 - 2026-10-16: web — **out of scope, split off**: while reviewing the PR the user asked for F-010-W1 (choose the folder when creating a list, remembered for the session). It is a different feature, so it went into its own PR ([web#38](https://github.com/0xfederama/collections-app-frontend-web/pull/38)) instead of growing this one; it touches no file this PR touches. It needs its own brief from the top-level orchestrator.
 - 2026-10-16: web — `npm run check` green (1274 tests + production image) and `npm run e2e` green (19/19) on a fresh `./deploy/test up -d --fresh`. The empty-Trash centring was additionally measured in the browser (jsdom has no layout).
 - 2026-10-16: web — the user's screenshot showed the empty Trash was **not** centred: my first attempt centred it inside the page's `max-w-5xl` column and floated it in the middle of the screen. The reference is Home's empty state: centred in the whole content area, in normal flow under the heading. Fixed by dropping `max-w-5xl` when the Trash is empty (re-measured: 0 px offset, same as Home). Lesson: a bounding-box measurement that "looked plausible" was rationalised instead of compared against the reference screen — measure against the thing you are copying.
+- 2026-10-16: web#37 squash-merged (`80a40bb`), bundled with F-010-W1 (new-list folder) and F-011 (review fixes). Web version bump, `npm run audit` and tag `v2.2.0` still to do.
