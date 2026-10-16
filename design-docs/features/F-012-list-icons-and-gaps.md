@@ -8,13 +8,16 @@ Lists all look alike in the tree. Two gaps from 1.0 are still open: setting an i
 
 ## Defaults chosen (to confirm)
 - **Icon kinds:** an emoji, or one icon from a built-in set; no photos. Lists only, not folders. No icon means the kind's current icon.
-- **Built-in set:** the icon library the web already uses (no new dependency); a curated grid of about 60 icons plus a free emoji field.
+- **Colour:** built-in icons (not emoji) can take a colour from a fixed palette of 10 named colours (theme tokens, readable in light and dark); default is the normal text colour. Stored as a name, not a hex.
+- **Search:** the picker has one search box that matches icon names and emoji names/keywords (e.g. "camera", "pizza").
+- **Built-in set:** the icon library the web already uses ; a curated grid of about 60 icons plus a free emoji field.
 - **Trash auto-purge:** off by default; choices are Off / 7 / 30 / 90 days, one workspace setting.
 
 ## User stories
 ### Backend
 - **F012-B1 · List icon.** As a user, I want an icon on each list. Acceptance:
   - `lists.icon` is optional text: an emoji (one grapheme) or `i:<name>` for a built-in icon key; `null` means the default. Invalid values are rejected with 422 `validation_failed`.
+  - `icon_color` is optional: one of the 10 palette names, or `null`. Only allowed when `icon` is a built-in icon (422 on an emoji or no icon); it is cleared when the icon changes to an emoji or null.
   - It is set on create and via PATCH with the list's `version`. Tree, list and search responses return it.
   - Migration adds the column; existing lists stay `null`.
 - **F012-B2 · Empty trash.** As a user, I want to purge the whole trash in one call. Acceptance: one endpoint (reuse the existing purge if there is one) that permanently deletes every trashed batch, idempotent, with its images removed from disk.
@@ -26,7 +29,9 @@ Lists all look alike in the tree. Two gaps from 1.0 are still open: setting an i
 
 ### Web
 - **F012-W1 · List icon picker.** As a user, I want to pick a list's icon in list settings and when creating a list. Acceptance:
-  - A picker with the built-in grid, a field for any emoji and "Use default".
+  - A picker with one search box over built-in icons and emoji by name (case-insensitive, partial words), the full grid when empty, a free emoji field and "Use default".
+  - For a built-in icon, a row of the 10 colour swatches (with a "None" swatch and accessible names); emoji keep their own colours and hide the swatches.
+  - Emoji names/keywords come from a small vendored data file or one pinned data-only package (no runtime code); the orchestrator picks the smaller and flags it.
   - The icon shows in the tree, rail, list header and search results; same tile size and radius rules as F-008/F-009.
   - Keyboard reachable; zero serious or critical axe findings in both themes.
 - **F012-W2 · Paste an image.** As a user, I want Cmd/Ctrl+V on an open item to set its image from the clipboard. Acceptance:
@@ -38,11 +43,11 @@ Lists all look alike in the tree. Two gaps from 1.0 are still open: setting an i
 - **Release:** web 2.3.0, update the affected e2e specs and add one each for the picker, the paste and empty trash. `npm run audit` before the `v2.3.0` tag.
 
 ## Contract impact
-`api-v0.8.0` (additive: `icon` on lists, `trash_retention_days` in settings, the empty-trash endpoint). W1, W3, W4 pin to it; W2 needs nothing.
+`api-v0.8.0` (additive: `icon` and `icon_color` on lists, `trash_retention_days` in settings, the empty-trash endpoint). W1, W3, W4 pin to it; W2 needs nothing.
 
 ## Constraints
 - Lean workflow D-079/D-081: Sonnet 5.5 orchestrators, workers write code only, the orchestrator runs the gate (and `make test-backup`, `npm run e2e` on a fresh `./deploy/test`) once at the end, one PR per repo, squash merge yourself.
-- Keep Frosted Gallery and D-083. No new runtime dependency.
+- Keep Frosted Gallery and D-083. No new runtime dependency except at most one pinned data-only emoji-names package (flag it).
 
 ## Out of scope
 Folder icons, uploaded icon images, icon packs from brands (Upkeep), TMDB.
