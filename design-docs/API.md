@@ -6,6 +6,8 @@ divergences are fixed in the same PR.
 
 > `/api/v1` is **not** a public API product (PRODUCT §13, Phase 4). There is no auth in MVP, so it is private-network only.
 
+> F-012 / `api-v0.8.0`: lists and list path segments include nullable `icon` (one emoji or `i:<name>`) and `icon_color` (red/orange/amber/green/teal/blue/indigo/purple/pink/gray, built-in icons only). List create/PATCH accept them. Settings GET/PATCH adds `trash_retention_days` (`null` off, otherwise 1–365). `DELETE /api/v1/trash` permanently empties every batch and its images, idempotent 204, no If-Match. The vendored contract is authoritative for exact schemas.
+
 ## 1. Conventions
 
 - JSON field names are `snake_case`. IDs are UUID strings. Timestamps are RFC 3339 UTC strings.

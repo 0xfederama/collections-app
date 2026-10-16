@@ -17,7 +17,7 @@ product, not an admin dashboard and not a project-management tool.
 |---|---|
 | Workspace | Exactly one in MVP, auto-created on first start. Has a name and settings |
 | Folder | Nestable without a depth limit. Lives at the root or inside a folder. Manually ordered among siblings |
-| List | Lives at the workspace root or inside a folder. Has a name, a **kind** (one per list, F-007), an optional Markdown description (≤ 64 KiB, no history), a display mode, and a sort mode. Manually ordered among sibling lists |
+| List | Lives at the workspace root or inside a folder. Has a name, a **kind** (one per list, F-007), an optional Markdown description (≤ 64 KiB, no history), a display mode, and a sort mode. An optional emoji or built-in icon (with a named colour for the mark) identifies the list; no icon uses its kind default (F-012). Manually ordered among sibling lists |
 | Item | Belongs to exactly one list and has that list's kind. Manually ordered within the list |
 
 - Folders and lists are separate sibling groups inside a parent. In the sidebar, folders show first and then lists, each in its own manual order.
@@ -102,7 +102,8 @@ Links open in a new tab with `rel="noopener noreferrer"`. URLs are built with pr
 - **Restore** brings back exactly that batch. Things deleted separately earlier stay in Trash as their own entries.
 - If the original parent is itself in Trash, restore is blocked. The user is offered either "Restore parent first" or "Restore to…" (pick an active destination, or the root where allowed).
 - **Delete permanently** (purge) removes the batch's records and image files. If a purged folder contained older separately-trashed entries, those are purged too. The confirmation dialog states this, with counts.
-- "Empty trash" is out of scope for MVP. Purge works per entry.
+- F-012 adds **Empty trash** with a permanent-delete confirmation and contained counts.
+- Optional automatic deletion runs daily and at startup: off by default, with 7/30/90-day choices in Settings.
 - All destructive actions require explicit confirmation.
 
 ## 11. Concurrency (two people editing)
@@ -113,7 +114,7 @@ Links open in a new tab with `rel="noopener noreferrer"`. URLs are built with pr
 ## 12. Settings
 
 Theme (System / Light / Dark, per device, not synced), workspace name, streaming country (ISO 3166-1 alpha-2, default `IT`), default currency (default `EUR`),
-and Markdown history limit (default 20).
+Markdown history limit (default 20), and Delete trash automatically (Off / 7 / 30 / 90 days, saved immediately; F-012).
 
 ## 13. Roadmap (order is fixed)
 
@@ -123,4 +124,4 @@ and Markdown history limit (default 20).
 4. **Phase 4: Public API**, which needs a full re-discussion first. Not committed.
 5. **Very distant: AI/LLM features** (description generation, comparisons, Q&A). Only with explicit user approval before saving.
 
-Also deferred, with no committed phase: real-time collaborative editing (the architecture keeps this path open, see ARCHITECTURE §7), offline mode, advanced search, multiple images, rich editor, diffs, custom workflows, paste-image-from-clipboard, empty-trash, and auto-purge.
+Also deferred, with no committed phase: real-time collaborative editing (the architecture keeps this path open, see ARCHITECTURE §7), offline mode, advanced search, multiple images, rich editor, diffs, custom workflows. F-012 adds clipboard images on open items, empty trash and auto-purge.
