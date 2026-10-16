@@ -3,7 +3,8 @@
 The app should feel like a **polished collection product**: image-forward, calm, and tactile. It must not look like
 an admin dashboard. Visual quality is an MVP requirement.
 
-> F-012 (web 2.3.0) adds a searchable icon/emoji picker on list create and the list menu, icon marks in tree/rail/header/search, paste-image on an open item, confirmed Empty trash and immediately saved trash retention presets. See [F-012](features/F-012-list-icons-and-gaps.md) and D-086; D-083 remains in effect.
+> F-012 (web 2.3.0) adds a searchable icon/emoji picker on list create and the list menu (new list: a compact “Icon” field to the right of “Name”, with matching labels above), icon marks in tree/rail/header/search, paste-image on an open item, confirmed Empty trash and immediately saved trash retention presets. See [F-012](features/F-012-list-icons-and-gaps.md) and D-086; D-083 remains in effect.
+> Follow-up: simple item field editors keep the input immediately to the right of the field label and ✓ / ✕ to the right of the input, in one compact row, including the narrow item panel.
 
 ## 1. Routes
 

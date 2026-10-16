@@ -27,6 +27,8 @@ Feature briefs: [`features/`](features/). Repo orchestrators add their task rows
 
 | F-012 | F012-W1..W4 list icons, paste, trash controls | web orch. | done | — | [web#40](https://github.com/0xfederama/collections-app-frontend-web/pull/40) | 2026-10-16 | Squash-merged `ae5fd90`, tag `v2.3.0` pushed; parent web pointer bumped. api-v0.8.0. All gate stages validated (full suite + focused corrections: 1300 tests, 1 existing skip); all 30 distinct e2e cases verified on fresh test stack, both-theme picker axe + production mobile QA; audit 0 vulnerabilities. Branches/worktrees deleted |
 
+| F-012 | Follow-up: compact create icon and item field editors | web orch. | done | — | [web#42](https://github.com/0xfederama/collections-app-frontend-web/pull/42) | 2026-10-16 | Squash `cd62669`; Icon beside Name, simple item input and ✓/✕ in one row. All gate stages passed (1300 tests + 1 existing skip, image); 12 affected e2e cases verified on fresh test stack, 375/1440 visual checks, both-theme picker axe. Parent pointer bumped; branch deleted |
+
 ## 1.0 release checks (done, v1 workflow)
 
 | Task | Owner | State | Branch | PR | Updated | Notes |
