@@ -1,0 +1,122 @@
+{
+ "title": "Refined: layered, soft, Apple-inspired",
+ "question": "Reset around your steer: Apple's guidelines as the reference (depth, translucency, restraint), no flat colour fields. Pick one.",
+ "options": [
+  {
+   "id": "assigned",
+   "kind": "assigned",
+   "label": "Frosted Gallery",
+   "kicker": "THE ROLL",
+   "lineage": "Apple Photos and Finder: translucent chrome over content",
+   "thesis": "Frosted sidebar, toolbar and sheets float over the images, which are the only real colour.",
+   "palette": [
+    "#EDEEF1",
+    "#FFFFFF",
+    "#1D1D1F",
+    "#4F46E5"
+   ],
+   "materials": [
+    "backdrop blur",
+    "hairline + inner highlight",
+    "soft layered shadows"
+   ],
+   "viewport": "Translucent sidebar, floating toolbar, rounded cards with soft depth, detail as a floating sheet.",
+   "risk": "Blur over busy images costs paint time; needs a solid fallback.",
+   "raised": [
+    {
+     "from": "Zoo guide map",
+     "raise": "Each list keeps a hue, now a small gradient tile in the sidebar instead of a flat field."
+    }
+   ],
+   "html": ".impeccable/mocks/decision/assigned.html"
+  },
+  {
+   "id": "model-pick",
+   "kind": "pick",
+   "kicker": "IMPECCABLE\u2019S PICK",
+   "label": "Paper & Sunlight",
+   "lineage": "Apple Books and Notes, warm and tactile",
+   "thesis": "A warm, paper-like stack of sheets with gentle depth and a single burnt-orange action colour.",
+   "palette": [
+    "#F2EEE8",
+    "#FFFFFF",
+    "#241F1A",
+    "#B4531E"
+   ],
+   "materials": [
+    "warm frost",
+    "sheets",
+    "soft shadows"
+   ],
+   "viewport": "Warm translucent shell over a sunlit gradient, white sheet cards, orange only on actions.",
+   "risk": "Warm neutrals with a rust accent is a familiar lane.",
+   "html": ".impeccable/mocks/decision/model-pick.html"
+  },
+  {
+   "id": "night",
+   "kind": "grounded",
+   "label": "Night Studio",
+   "lineage": "Apple TV and Photos in dark",
+   "thesis": "Dark graphite where images glow and floating controls stay quiet.",
+   "palette": [
+    "#0E0F12",
+    "#1C1D22",
+    "#F5F5F7",
+    "#8E9BFF"
+   ],
+   "materials": [
+    "dark frost",
+    "glow",
+    "inner highlights"
+   ],
+   "viewport": "Graphite shell with luminous cards and a periwinkle accent.",
+   "risk": "Light mode is a separate full design to maintain.",
+   "html": ".impeccable/mocks/decision/night.html"
+  },
+  {
+   "id": "ambient",
+   "kind": "grounded",
+   "label": "Ambient Tint",
+   "lineage": "Apple Music and Podcasts, colour from the content",
+   "thesis": "The open list bleeds a soft tint into the background glow; the chrome stays neutral glass.",
+   "palette": [
+    "#E6F0EF",
+    "#FFFFFF",
+    "#10282C",
+    "#0F766E"
+   ],
+   "materials": [
+    "tinted ambient glow",
+    "frost",
+    "soft shadow"
+   ],
+   "viewport": "Same glass shell, a teal glow behind it for Movies and a different hue per list.",
+   "risk": "Per-list tints need contrast checks; must stay subtle.",
+   "html": ".impeccable/mocks/decision/ambient.html"
+  }
+ ],
+ "reroll": {
+  "registers": [
+   "safer",
+   "bolder"
+  ]
+ },
+ "canon": true,
+ "canonCard": {
+  "label": "The category standard",
+  "thesis": "A clean white collection app: sidebar, card grid, detail panel, one blue accent.",
+  "palette": [
+   "#FFFFFF",
+   "#111827",
+   "#2563EB"
+  ],
+  "materials": [
+   "clean grid",
+   "hairlines"
+  ],
+  "viewport": "White shell, blue primary buttons, neutral cards.",
+  "risk": "Indistinguishable from the competition by design.",
+  "html": ".impeccable/mocks/decision/canon.html"
+ },
+ "steer": true
+}
