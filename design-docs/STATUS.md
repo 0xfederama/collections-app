@@ -29,7 +29,7 @@ Feature briefs: [`features/`](features/). Repo orchestrators add their task rows
 
 | F-012 | Follow-up: compact create icon and item field editors | web orch. | done | — | [web#42](https://github.com/0xfederama/collections-app-frontend-web/pull/42) | 2026-10-16 | Squash `cd62669`; Icon beside Name, simple item input and ✓/✕ in one row. All gate stages passed (1300 tests + 1 existing skip, image); 12 affected e2e cases verified on fresh test stack, 375/1440 visual checks, both-theme picker axe. Parent pointer bumped; branch deleted |
 
-| F-013 | F013-B1..B5 TMDB lookup, director, settings; E2E TMDB fixture | backend orch. | in progress | `feature/tmdb-e2e-mock` | — | 2026-10-17 | Add a test-stack-only deterministic TMDB fixture: frontend E2E uses title `[mock] movie name`; all other test-stack queries may use the configured real key for manual experiments. |
+| F-013 | F013-B1..B5 TMDB lookup, director, settings; E2E TMDB fixture | backend orch. | in review | `feature/tmdb-e2e-mock` | [backend#28](https://github.com/0xfederama/collections-app-backend/pull/28) | 2026-10-17 | `make check` passed. Test-stack-only deterministic fixture uses title `[mock] movie name`; all other test-stack queries may use the configured real key for manual experiments. |
 
 ## 1.0 release checks (done, v1 workflow)
 

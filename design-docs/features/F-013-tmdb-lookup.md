@@ -59,7 +59,7 @@ Books and other kinds, another provider, IMDb data, the Compare/AI concept, offl
 | Lookup integration | F013-B2/B3 | Complex / GPT 5.6 Sol (Terra unavailable in session) | Suggestions, create/fill/rematch/refresh, empty-field preservation, poster pipeline, fake-server integration tests | done |
 | Provenance and retention | F013-B3 | Complex / GPT 6 Luna | Atomic import provenance, refresh at five months, expiry at six months preserving user edits, startup/daily maintenance, fake-clock tests | done |
 | Module docs | all | Simple / GPT 6 Luna | `docs/` and backend README | done |
-| E2E TMDB fixture | F013-B1/B3 test support | Simple / GPT 6 Luna | Test-stack-only `[mock] movie name` suggestion/detail fixture; no real TMDB during E2E | in progress |
+| E2E TMDB fixture | F013-B1/B3 test support | Simple / GPT 6 Luna | Test-stack-only `[mock] movie name` suggestion/detail fixture; no real TMDB during E2E | in review ([backend#28](https://github.com/0xfederama/collections-app-backend/pull/28)) |
 
 Workers write code and tests without executing tests (D-079/D-081). Orchestrator reviews FLAGS, runs `make check` once after integration, `make test-backup` for the migration, merges one squash PR, tags `api-v0.9.0`, audits before `v1.5.0`, then removes worktrees/branches.
 
