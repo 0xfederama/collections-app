@@ -109,6 +109,8 @@ Answered 2026-10-13: Q-1 → D-026, Q-2 → D-027, Q-3 → D-028, Q-5 → D-029,
 
 | D-090 | 2026-10-17 | **F-013 frontend E2E TMDB fixture:** `./deploy/test` enables a deterministic, backend-owned TMDB fixture only for the exact movie query `[mock] movie name`. The fixture works without `TMDB_API_KEY` and covers suggestions plus lookup detail/fill. All other queries use the normal client and, when a key is present in the ignored backend `.env`, may call TMDB for manual testing. The fixture flag is rejected in production and is absent from dev/server deployment configuration. | User wants frontend E2E tests to be network-free while retaining a usable disposable stack for manual TMDB experiments. A backend-owned fixture exercises the real API path without a browser interceptor. | Disable TMDB in test entirely; mock every test-stack TMDB request; use a real API key in E2E |
 
+| D-091 | 2026-10-17 | **F-013 web defaults:** TMDB title suggestions use the existing 250 ms search debounce. Settings offers English (US), Italian (Italy), French (France), German (Germany), and Spanish (Spain) as the initial metadata-language choices; all values comply with the contract's locale pattern. | Keeps lookup interaction consistent with sidebar search and gives the Settings control a concise, locally useful initial set while the API remains locale-extensible. | An arbitrary locale text field; a large locale dependency or exhaustive list |
+
 ## Toolchain versions (R-1, checked 2026-10-13)
 
 Sources: GitHub releases API, proxy.golang.org, go.dev, Docker Hub, npm registry, nodejs.org (fetched by researcher subagents, reviewed by the M0 session).
