@@ -70,7 +70,7 @@ Workers write code and tests without executing tests (D-079/D-081). Orchestrator
 | Contract adoption and director | F013-W3 | Simple / GPT 6 Luna | Pin `api-v0.9.0`, generated client, movie director field config, filtering, pinning and sorting | done in web#43 |
 | Create lookup | F013-W1 | Simple / GPT 6 Luna | Debounced keyboard-accessible suggestions for new-item draft and Quick add; selected or first-result lookup create | done in web#43 |
 | Filled-item lookup | F013-W2 | Simple / GPT 6 Luna | Item lookup actions, matching feedback, reload/cache behavior and conflict handling | done in web#43 |
-| E2E and release integration | F013-W1–W4 | Orchestrator / GPT 6.1 Sol | Update affected flows and add deterministic `[mock] movie name` suggestion, director-filter and director-sort coverage; full gate, fresh-stack E2E, audit, merge and `v2.4.0` tag | in review |
+| E2E and release integration | F013-W1–W4 | Orchestrator / GPT 6.1 Sol | Update affected flows and add deterministic `[mock] movie name` suggestion, director-filter and director-sort coverage; full gate, fresh-stack E2E, audit, merge and `v2.4.0` tag | done ([web#43](https://github.com/0xfederama/collections-app-frontend-web/pull/43), `82dfe26`, `v2.4.0`) |
 
 Development workers write implementation and tests but do not run tests; the orchestrator verifies once after integration (D-079/D-081).
 
