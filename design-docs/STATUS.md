@@ -30,6 +30,7 @@ Feature briefs: [`features/`](features/). Repo orchestrators add their task rows
 | F-012 | Follow-up: compact create icon and item field editors | web orch. | done | — | [web#42](https://github.com/0xfederama/collections-app-frontend-web/pull/42) | 2026-10-16 | Squash `cd62669`; Icon beside Name, simple item input and ✓/✕ in one row. All gate stages passed (1300 tests + 1 existing skip, image); 12 affected e2e cases verified on fresh test stack, 375/1440 visual checks, both-theme picker axe. Parent pointer bumped; branch deleted |
 
 | F-013 | F013-B1..B5 TMDB lookup, director, settings; E2E TMDB fixture | backend orch. | done (backend) | — | [backend#28](https://github.com/0xfederama/collections-app-backend/pull/28) | 2026-10-17 | Squash-merged `e9abee1`; parent pointer bumped. `make check` passed and an isolated no-key Docker stack returned `[mock] movie name`. Other test-stack queries may use the configured real key for manual experiments. |
+| F-013 | F013-W1..W4 TMDB lookup, director, settings | web orch. | in progress | `feature/f013-tmdb-lookup` | — | 2026-10-17 | Backend tag `api-v0.9.0` verified; one web PR. All development workers use Simple / GPT 6 Luna (medium); orchestrator runs the gate, fresh-stack E2E, audit, merge and tag. |
 
 ## 1.0 release checks (done, v1 workflow)
 

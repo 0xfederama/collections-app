@@ -63,6 +63,17 @@ Books and other kinds, another provider, IMDb data, the Compare/AI concept, offl
 
 Workers write code and tests without executing tests (D-079/D-081). Orchestrator reviews FLAGS, runs `make check` once after integration, `make test-backup` for the migration, merges one squash PR, tags `api-v0.9.0`, audits before `v1.5.0`, then removes worktrees/branches.
 
+### Web (2026-10-17, one PR: `feature/f013-tmdb-lookup`)
+| Task | Stories | Tier / model (medium) | Scope | State |
+|---|---|---|---|---|
+| Settings and attribution | F013-W4 | Simple / GPT 6 Luna | Metadata-language Settings control; Frosted Gallery About section with TMDB and JustWatch attribution, repository and profile links | in progress |
+| Contract adoption and director | F013-W3 | Simple / GPT 6 Luna | Pin `api-v0.9.0`, generated client, movie director field config, filtering, pinning and sorting | queued |
+| Create lookup | F013-W1 | Simple / GPT 6 Luna | Debounced keyboard-accessible suggestions for new-item draft and Quick add; selected or first-result lookup create | queued |
+| Filled-item lookup | F013-W2 | Simple / GPT 6 Luna | Item lookup actions, matching feedback, reload/cache behavior and conflict handling | queued |
+| E2E and release integration | F013-W1–W4 | Orchestrator / GPT 6.1 Sol | Update affected flows and add deterministic `[mock] movie name` suggestion, director-filter and director-sort coverage; full gate, fresh-stack E2E, audit, merge and `v2.4.0` tag | queued |
+
+Development workers write implementation and tests but do not run tests; the orchestrator verifies once after integration (D-079/D-081).
+
 ### Terms check (2026-10-16)
 - [API terms](https://www.themoviedb.org/documentation/api/terms-of-use), retrieved directly: §1.C prohibits caching TMDB information for more than six months. Resolved by the user: track imported fields/posters, refresh before six months, and remove expired imported data if refresh fails while preserving user edits (D-089).
 - [Attribution guidance](https://developer.themoviedb.org/docs/faq): approved TMDB logo and notice in About/Credits; personal noncommercial use is supported, image ownership is not granted by TMDB.
