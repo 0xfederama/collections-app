@@ -55,10 +55,10 @@ Books and other kinds, another provider, IMDb data, the Compare/AI concept, offl
 | Task | Stories | Tier / model (medium) | Scope | State |
 |---|---|---|---|---|
 | Client | F013-B1 | Simple / GPT 6 Luna | Isolated TMDB client, bounded HTTP, throttle, short cache, fake-server tests | code committed; FLAGS reviewed; tests pending |
-| Contract, director, settings | F013-B2–B5 contract; B4/B5 implementation | Complex / GPT 5.6 Sol (Terra unavailable in session) | Spec 0.9.0, settings/sort migration, director validation/pinning/sort/filter, optional key config, tests | in progress |
+| Contract, director, settings | F013-B2–B5 contract; B4/B5 implementation | Complex / GPT 5.6 Sol (Terra unavailable in session) | Spec 0.9.0, settings/sort migration, director validation/pinning/sort/filter, optional key config, tests | code committed; FLAGS reviewed; tests pending |
 | Lookup integration | F013-B2/B3 | Complex / GPT 5.6 Sol (Terra unavailable in session) | Suggestions, create/fill/rematch/refresh, empty-field preservation, poster pipeline, fake-server integration tests | in progress |
 | Provenance and retention | F013-B3 | Complex / GPT 5.6 Sol (Terra unavailable in session) | Atomic import provenance, refresh at five months, expiry at six months preserving user edits, startup/daily maintenance, fake-clock tests | in progress |
-| Module docs | all | Simple / GPT 6 Luna | `docs/` and backend README | pending implementation |
+| Module docs | all | Simple / GPT 6 Luna | `docs/` and backend README | committed; final interface reconciliation pending |
 
 Workers write code and tests without executing tests (D-079/D-081). Orchestrator reviews FLAGS, runs `make check` once after integration, `make test-backup` for the migration, merges one squash PR, tags `api-v0.9.0`, audits before `v1.5.0`, then removes worktrees/branches.
 
@@ -72,4 +72,4 @@ Workers write code and tests without executing tests (D-079/D-081). Orchestrator
 ## Log
 - 2026-10-16: written from the user's answers.
 
-- 2026-10-17: resumed after account usage reset. User approved retention policy (D-089); complex worker dispatched for atomic provenance and maintenance.
+- 2026-10-17: resumed after account usage reset. User approved retention policy (D-089); atomic provenance and maintenance landed. [backend#27](https://github.com/0xfederama/collections-app-backend/pull/27) is open after `make check` and `make test-backup` (AT-17) passed.
