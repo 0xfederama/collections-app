@@ -162,7 +162,7 @@ Metadata is validated in Go by a per-kind validator registry (`internal/items/ki
 all keys are optional, and `null` is not stored (the key is omitted). Text fields are trimmed and limited to 100 chars unless noted.
 Shared sub-shapes:
 - `imdb_url`: string matching `^https://(www\.|m\.)?imdb\.com/title/tt\d{7,10}/?$`
-- `streaming`: `{ "country": "IT" (ISO 3166-1 alpha-2, required within the object), "platforms": [string ≤ 60], ≤ 30 entries, unique case-insensitively, "paid_platforms": optional subset of `platforms` (paid per title, F-002; stored in the platform's casing) }`
+- `streaming`: `{ "country": "IT" (ISO 3166-1 alpha-2, required within the object), "platforms": [string ≤ 60], ≤ 30 entries, unique case-insensitively, "paid_platforms": optional subset of `platforms` (per-title rent/buy only; subscription, free and ad-supported availability is not paid; stored in the platform's casing) }`
 
 | Kind | Key | Type / rule |
 |---|---|---|

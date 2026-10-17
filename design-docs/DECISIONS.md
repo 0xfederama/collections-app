@@ -111,6 +111,8 @@ Answered 2026-10-13: Q-1 → D-026, Q-2 → D-027, Q-3 → D-028, Q-5 → D-029,
 
 | D-091 | 2026-10-17 | **F-013 web defaults:** TMDB title suggestions use the existing 250 ms search debounce. Settings offers English (US), Italian (Italy), French (France), German (Germany), and Spanish (Spain) as the initial metadata-language choices; all values comply with the contract's locale pattern. | Keeps lookup interaction consistent with sidebar search and gives the Settings control a concise, locally useful initial set while the API remains locale-extensible. | An arbitrary locale text field; a large locale dependency or exhaustive list |
 
+| D-092 | 2026-10-17 | **TMDB provider classification and default locale:** `flatrate` means subscription availability and is never `paid_platforms`; `rent` and `buy` are paid only when the same provider is absent from subscription, free and ad-supported availability. The default `metadata_language` for new workspaces is `it-IT`; existing workspaces retain their saved choice. | User clarified that Netflix-style subscription availability must not be labelled as paid, while per-title rental/purchase availability should be. Italian is the desired starting locale without overwriting existing preferences. | Treat every availability channel as paid; retroactively overwrite existing workspace settings |
+
 ## Toolchain versions (R-1, checked 2026-10-13)
 
 Sources: GitHub releases API, proxy.golang.org, go.dev, Docker Hub, npm registry, nodejs.org (fetched by researcher subagents, reviewed by the M0 session).
