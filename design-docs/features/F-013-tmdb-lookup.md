@@ -33,7 +33,7 @@ Filling a movie by hand is slow. The user types a title, in any language and not
 - **F013-W2 · Filled item.** The item shows the filled fields and poster; "Wrong match?", "Re-match" and "Refresh from TMDB" in the item's actions; clear feedback while it loads and when nothing matches (the item is kept as typed).
 - **F013-W3 · Director.** Shown, editable, pinnable, in the sort menu and found by the list filter on movie lists.
 - **F013-W4 · Settings.** Metadata language choice; About section with the TMDB attribution (logo + notice), the repo link and the author link.
-- **Release:** web 2.4.0; update the affected e2e specs against a backend with a stubbed TMDB (no network in tests); `npm run audit` before the `v2.4.0` tag.
+- **Release:** web 2.4.0; affected E2E specs query the exact movie title `[mock] movie name`, which the disposable `./deploy/test` backend resolves through its deterministic TMDB fixture (suggestions and lookup detail, no network or key). All other test-stack queries remain available for manual experimentation with a configured key; `npm run audit` before the `v2.4.0` tag.
 
 ### Parent (top-level orchestrator)
 - `TMDB_API_KEY` in `deploy/server/.env.example` and the compose wiring; `deploy/README.md` and the backend README say where to get and put the key. The key itself is never committed.
@@ -59,6 +59,7 @@ Books and other kinds, another provider, IMDb data, the Compare/AI concept, offl
 | Lookup integration | F013-B2/B3 | Complex / GPT 5.6 Sol (Terra unavailable in session) | Suggestions, create/fill/rematch/refresh, empty-field preservation, poster pipeline, fake-server integration tests | done |
 | Provenance and retention | F013-B3 | Complex / GPT 6 Luna | Atomic import provenance, refresh at five months, expiry at six months preserving user edits, startup/daily maintenance, fake-clock tests | done |
 | Module docs | all | Simple / GPT 6 Luna | `docs/` and backend README | done |
+| E2E TMDB fixture | F013-B1/B3 test support | Simple / GPT 6 Luna | Test-stack-only `[mock] movie name` suggestion/detail fixture; no real TMDB during E2E | in progress |
 
 Workers write code and tests without executing tests (D-079/D-081). Orchestrator reviews FLAGS, runs `make check` once after integration, `make test-backup` for the migration, merges one squash PR, tags `api-v0.9.0`, audits before `v1.5.0`, then removes worktrees/branches.
 
@@ -73,3 +74,4 @@ Workers write code and tests without executing tests (D-079/D-081). Orchestrator
 - 2026-10-16: written from the user's answers.
 
 - 2026-10-17: [backend#27](https://github.com/0xfederama/collections-app-backend/pull/27) squash-merged as `4f941d2`; `make check`, `make test-backup` (AT-17), and `make audit` passed. Tags `api-v0.9.0` and `v1.5.0` pushed.
+- 2026-10-17: D-090 adds the test-stack-only `[mock] movie name` TMDB fixture for frontend E2E while preserving ordinary TMDB requests for manual use in `./deploy/test`.
