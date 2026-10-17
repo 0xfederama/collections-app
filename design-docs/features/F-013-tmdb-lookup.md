@@ -59,7 +59,7 @@ Books and other kinds, another provider, IMDb data, the Compare/AI concept, offl
 | Lookup integration | F013-B2/B3 | Complex / GPT 5.6 Sol (Terra unavailable in session) | Suggestions, create/fill/rematch/refresh, empty-field preservation, poster pipeline, fake-server integration tests | done |
 | Provenance and retention | F013-B3 | Complex / GPT 6 Luna | Atomic import provenance, refresh at five months, expiry at six months preserving user edits, startup/daily maintenance, fake-clock tests | done |
 | Module docs | all | Simple / GPT 6 Luna | `docs/` and backend README | done |
-| E2E TMDB fixture | F013-B1/B3 test support | Simple / GPT 6 Luna | Test-stack-only `[mock] movie name` suggestion/detail fixture; no real TMDB during E2E | in review ([backend#28](https://github.com/0xfederama/collections-app-backend/pull/28)) |
+| E2E TMDB fixture | F013-B1/B3 test support | Simple / GPT 6 Luna | Test-stack-only `[mock] movie name` suggestion/detail fixture; no real TMDB during E2E | done ([backend#28](https://github.com/0xfederama/collections-app-backend/pull/28), `e9abee1`) |
 
 Workers write code and tests without executing tests (D-079/D-081). Orchestrator reviews FLAGS, runs `make check` once after integration, `make test-backup` for the migration, merges one squash PR, tags `api-v0.9.0`, audits before `v1.5.0`, then removes worktrees/branches.
 
@@ -75,3 +75,4 @@ Workers write code and tests without executing tests (D-079/D-081). Orchestrator
 
 - 2026-10-17: [backend#27](https://github.com/0xfederama/collections-app-backend/pull/27) squash-merged as `4f941d2`; `make check`, `make test-backup` (AT-17), and `make audit` passed. Tags `api-v0.9.0` and `v1.5.0` pushed.
 - 2026-10-17: D-090 adds the test-stack-only `[mock] movie name` TMDB fixture for frontend E2E while preserving ordinary TMDB requests for manual use in `./deploy/test`.
+- 2026-10-17: [backend#28](https://github.com/0xfederama/collections-app-backend/pull/28) squash-merged as `e9abee1`; `make check` passed and an isolated no-key Docker stack verified the fixture suggestion.
