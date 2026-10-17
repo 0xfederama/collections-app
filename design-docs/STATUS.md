@@ -29,7 +29,7 @@ Feature briefs: [`features/`](features/). Repo orchestrators add their task rows
 
 | F-012 | Follow-up: compact create icon and item field editors | web orch. | done | — | [web#42](https://github.com/0xfederama/collections-app-frontend-web/pull/42) | 2026-10-16 | Squash `cd62669`; Icon beside Name, simple item input and ✓/✕ in one row. All gate stages passed (1300 tests + 1 existing skip, image); 12 affected e2e cases verified on fresh test stack, 375/1440 visual checks, both-theme picker axe. Parent pointer bumped; branch deleted |
 
-| F-013 | F013-B1..B5 TMDB lookup, director, settings | backend orch. | in review | `feature/F013-tmdb-lookup` | [backend#27](https://github.com/0xfederama/collections-app-backend/pull/27) | 2026-10-17 | Full `make check` and `make test-backup` (AT-17) passed. Optional key, fake TMDB tests, retention D-089, and JustWatch web handoff are included. Awaiting squash merge, then `api-v0.9.0`, audit and `v1.5.0`. |
+| F-013 | F013-B1..B5 TMDB lookup, director, settings | backend orch. | done (backend) | — | [backend#27](https://github.com/0xfederama/collections-app-backend/pull/27) | 2026-10-17 | Squash-merged `4f941d2`; parent pointer bumped. `make check` and `make test-backup` (AT-17) passed; `make audit` found no reachable vulnerabilities. Tags `api-v0.9.0` and `v1.5.0` pushed. Web implements F013-W1..W4, including TMDB and JustWatch attribution. |
 
 ## 1.0 release checks (done, v1 workflow)
 
