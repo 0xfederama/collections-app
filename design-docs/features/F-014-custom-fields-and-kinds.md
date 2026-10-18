@@ -54,5 +54,17 @@ Pick-one choice fields, per-list fields, required fields, field visibility rules
 
 ## Repo breakdown (filled by the repo orchestrators)
 
+### Backend
+
+| Task | Scope | Worker tier | Dependency |
+|---|---|---|---|
+| F014-B1 | Definitions schema, breaking migration, built-in seeds, generated queries and fixture coverage | Complex (GPT 5.6 Terra, medium) | — |
+| F014-B2 | Replace the validator registry with definition-backed validation while retaining built-in special shapes | Complex (GPT 5.6 Terra, medium) | B1 |
+| F014-B3 | Kind/field management API and definition service, including destructive-field transaction | Complex (GPT 5.6 Terra, medium) | B1, B2 |
+| F014-B4 | Definition-backed sorting, filtering, pins and defaults | Simple (GPT 6 Luna, medium) | B1, B2, B3 |
+| F014-B5 | Custom-kind list operations and named-kind search results | Simple (GPT 6 Luna, medium) | B1, B3, B4 |
+
+One backend PR: `feature/F014-custom-fields-kinds`. Per D-079/D-081, workers develop only; the repo orchestrator runs the final gate and breaking-migration backup fixture.
+
 ## Log
 - 2026-10-18: written from the user's answers.
