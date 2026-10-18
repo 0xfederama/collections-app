@@ -66,5 +66,16 @@ Pick-one choice fields, per-list fields, required fields, field visibility rules
 
 One backend PR: `feature/F014-custom-fields-kinds`. Per D-079/D-081, workers develop only; the repo orchestrator runs the final gate and breaking-migration backup fixture.
 
+### Web
+
+| Task | Scope | Worker tier | Dependency |
+|---|---|---|---|
+| F014-W1 | Split the existing Settings modal into responsive, keyboard-accessible panes while retaining its close-and-save behavior | Simple (GPT 6 Luna, medium) | — |
+| F014-W2 | Kinds & fields management pane: definitions list, create/edit/delete flows, and sortable fields | Simple (GPT 6 Luna, medium) | `api-v0.10.0` |
+| F014-W3 | Replace the item kind registry with API definitions across item and list displays/editors | Complex (GPT 5.6 Terra, medium) | `api-v0.10.0`, W2 |
+| F014-W4 | Add type-aware, URL-backed field filters to list views and cover the full custom-kind flow in E2E | Simple (GPT 6 Luna, medium) | `api-v0.10.0`, W3 |
+
+One web PR: `feature/F014-custom-fields-kinds`. Per D-079/D-081, workers develop only; the repo orchestrator runs the final gate, fresh-stack E2E suite, and release audit.
+
 ## Log
 - 2026-10-18: written from the user's answers.
