@@ -96,4 +96,5 @@ Orchestrator then reviews FLAGS, `docs-keeper`, runs `make check` once and `make
 Gate, once at the end by the orchestrator: `npm run check`, `npm run e2e` on a fresh `./deploy/test up -d --fresh`, `npm run audit`. Workers write code only and do not run tests. `[CRUCIAL]` review: the placement logic (T3) and the lookup generalisation (T2).
 
 ## Log
+- 2026-10-19: backend done: PR backend#36 squash-merged `ed4ee06`, tags `api-v0.12.0` and `v2.1.0`; tasks T1 to T4 as above (T1 simple, T2 simple, T3 and T4 complex), migrations 000019 to 000022; see D-095 to D-098.
 - 2026-10-19: planned from the user's request.
