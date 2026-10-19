@@ -98,3 +98,4 @@ Gate, once at the end by the orchestrator: `npm run check`, `npm run e2e` on a f
 ## Log
 - 2026-10-19: backend done: PR backend#36 squash-merged `ed4ee06`, tags `api-v0.12.0` and `v2.1.0`; tasks T1 to T4 as above (T1 simple, T2 simple, T3 and T4 complex), migrations 000019 to 000022; see D-095 to D-098.
 - 2026-10-19: planned from the user's request.
+- 2026-10-19 (web): "Wrong match?", re-match and refresh are NOT built for books: the web removed them for movies in 2.6.0 (#46), and F-016 asks for the same UX as movies. `useLookupItem` stays unused. Add Open Library credit to Settings → About.
