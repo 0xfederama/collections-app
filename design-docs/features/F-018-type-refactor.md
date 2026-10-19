@@ -54,6 +54,13 @@ The icons for services and stores (F-017), hiding built-in types, per-type defau
 | F018-Q3 | Extra Vehicles fields (fuel type, licence class) | Dropped |
 
 ## Repo breakdown (filled by the repo orchestrators)
+### Web (one PR, branch `feature/f018-type-refactor`, web 2.14.0)
+| Task | Story | Tier | Notes |
+|---|---|---|---|
+| T1 | W1 icon editing: header icon is a button opening `ListIconDialog`; "Change icon" leaves the header "…" and joins the sidebar row "…" (rail where applicable) | simple | no contract change |
+| T2 | W2 no-type glyph is the classic list icon; price tag leaves it | simple | after T1 (shared `icons.ts`) |
+| T3 | W3 sync `api-v0.16.0`, five plural built-ins, `vehicle`/`wishlist` icons, plural hints | **complex** | waits for the backend tag |
+| T4 | e2e: update affected specs, add Wishlist (price only) and icon-edit (header + sidebar) | simple | after T3 |
 
 ## Log
 - 2026-10-20: planned from the user's request.
