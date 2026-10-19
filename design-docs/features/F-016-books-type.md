@@ -53,5 +53,47 @@ Per-country store availability, audiobooks, series and reading status, the icon 
 
 ## Repo breakdown (filled by the repo orchestrators)
 
+### Backend
+
+#### F016-B1 · Source check report (backend orch., 2026-10-19)
+**Decision: Open Library. No API key needed.** Google Books is not needed as a fallback, and a key would be needed only if it were: an unauthenticated request to Google Books today returned `429 RESOURCE_EXHAUSTED` (daily quota 0 for keyless use).
+
+Sources: [Open Library API guide](https://openlibrary.org/developers/api), [Covers API](https://openlibrary.org/dev/docs/api/covers), [licensing](https://openlibrary.org/developers/licensing). Checked 2026-10-19 with live requests.
+- **Terms.** The API is meant for "open, mission-aligned" apps that help people find books in real time, not as a bulk data backend. Rules: cache responses, identify the app with a `User-Agent` carrying a contact email, do not scrape HTML, do not crawl the covers API. Violations may get rate limited or blocked. No retention duty is stated (the data is open and has monthly dumps), so **D-089 does not apply**: imported book data and covers may be kept indefinitely.
+- **Rate limits.** 1 request/second unidentified, **3 requests/second identified** (User-Agent with app name and email). The client paces itself well below that and caches suggestions briefly, like the TMDB client.
+- **Covers.** `https://covers.openlibrary.org/b/id/<cover_i>-M.jpg?default=false` (404 instead of a blank image when missing). Allowed for display; we fetch **one cover per imported item** (a user action, not a crawl) and store it through the image pipeline.
+- **Quality on the six sample titles** (`search.json`, `lang` preference where relevant):
+  | Case | Query | Result |
+  |---|---|---|
+  | English | `the hobbit` | The Hobbit, Tolkien, 1937, 310 p., cover: correct, first |
+  | Italian | `il nome della rosa` (lang it) | Il nome della rosa, Eco, 1980, 533 p., cover: correct, first. `la ragazza di Bube`, `il signore degli anelli` also correct |
+  | French | `le petit prince` (lang fr) | Le petit prince, Saint-Exupéry, 1943, 96 p., cover: correct, first. `cent ans de solitude` returns the Spanish edition first, the French one second |
+  | Exact ISBN | `isbn:9780441172719` | Dune, Frank Herbert, 1965, 608 p., cover: correct, single result |
+  | Misspelling | `dun frank herbart` | **0 results.** There is no fuzzy matching, a clear typo finds nothing (the item is created unchanged, as for TMDB) |
+  | Translated title | `lo hobbit` (lang it) | Finds The Hobbit (work-level match through other editions), correct but under the English title |
+  Weak points to accept: no typo tolerance; a translated query is matched at work level and the title comes back in the work's main language; `number_of_pages_median` is a median over editions, not the user's edition. Open Library does not need to be perfect here: "Wrong match?" and manual editing exist.
+- **Fields mapped.** Search with `fields=key,title,author_name,first_publish_year,number_of_pages_median,isbn,cover_i` gives writer, pages, first publication year, an ISBN and the cover id in one call; the work id (`/works/OL…W`) is the stable source id for refresh.
+
+#### Tasks (one branch `feature/F016-books-type`, one PR; workers write code and tests but run no tests, D-079/D-081; sequential on one branch because the migrations are numbered in order)
+| Task | Story | Tier | What |
+|---|---|---|---|
+| T1 | F016-B5 | simple (Haiku 5.5) | Pins up to 3 on every type: spec `maxItems: 3` (lists and type defaults), `ValidatePinned`, no migration; `make generate` |
+| T2 | F016-B4 | simple (Haiku 5.5) | `internal/stores` (fixed provider list, single link builder from ISBN/title/Open Library id), field type `stores`, `workspace_settings.preferred_stores` + settings API; migration 000019 |
+| T3 | F016-B2 | **complex (Sonnet 5.5)** | Migration 000020: built-in `book` type + fields + default pins + `allows_price`, collision handling for an existing custom type with key `book`, idempotent seed functions |
+| T4 | F016-B3 | **complex (Sonnet 5.5)** | Generalise lookup to several providers (migration 000021 `tmdb_imports` to `lookup_imports`), Open Library client, endpoints, fixture; D-088 to D-092 behaviour kept for TMDB |
+Orchestrator then reviews FLAGS, `docs-keeper`, runs `make check` once and `make test-backup`, opens and squash-merges the PR, tags `api-v0.12.0`, runs `make audit`, tags `v2.1.0`.
+
+### Web (web orchestrator, 2026-10-19). One PR, web 2.7.0, pinned to `api-v0.12.0`; blocked until the backend tags it. Order: T0 → T1 → T2/T3 → T4 → T5.
+| Task | Story | Tier | Scope |
+|---|---|---|---|
+| T0 | all | orchestrator | `npm run api:sync -- api-v0.12.0`, check the generated diff, bump to 2.7.0, update dev/test fakes (`mocks/types.ts` gets a `book` definition). |
+| T1 | W1 | simple | Book in the new-list and change-type menus (comes from the types API); author, pages, ISBN, first publication year and stores in "+ Add field" and the detail; cover as the item image. Mostly data-driven: check `items/types/index.ts` and `inline/fields.ts` for hard-coded type keys. |
+| T2 | W2 | simple | Generalise `items/TmdbTitleField.tsx` (suggestions, first result on commit, Wrong match?, re-match, refresh) to book lookups; poster becomes cover; settings hint "filled from TMDB" becomes source-neutral. Reuse, do not copy. |
+| T3 | W3 | **complex** | `MAX_PINNED` 2 → 3 in `lists/pinned.ts`; `pinnedPlacements` returns `{ first, second, third }` (1 pin: beside the title; 2: unchanged, so movies and TV are untouched; 3: two beside the title, third far right; the TV `5×7` combination is kept); `ItemEntry.tsx` compact, thumbnail and grid layouts (lines ~106–190), checked at 375 px; `PinnedMenu` and Settings → Types & fields allow 3 (`aria-description` "of 3"). Rows with a stores pin render the tile run via the shared `ServiceIcon`. |
+| T4 | W4 | simple | Stores multi-choice (clone `inline/StreamingPlatforms.tsx` over the provider list from the API), preferred stores in Settings → Media (`SettingsForm.tsx`, `form.ts`, `mocks/devSettings.ts`); store tiles via `ServiceIcon` with the neutral letter tile fallback (no logos, F-017). |
+| T5 | release | simple | e2e: update affected specs (`10-tmdb`, `11-custom-fields`, `02-item`, `08-a11y` as needed), add `12-book.spec.ts` (suggestion, fill, three-pin layout, stores) against the test-stack fixture; unit tests per task. |
+
+Gate, once at the end by the orchestrator: `npm run check`, `npm run e2e` on a fresh `./deploy/test up -d --fresh`, `npm run audit`. Workers write code only and do not run tests. `[CRUCIAL]` review: the placement logic (T3) and the lookup generalisation (T2).
+
 ## Log
 - 2026-10-19: planned from the user's request.

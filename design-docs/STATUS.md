@@ -12,6 +12,7 @@ Feature briefs: [`features/`](features/). Repo orchestrators add their task rows
 
 | Feature | Story | Owner | State | Branch | PR | Updated | Notes |
 |---|---|---|---|---|---|---|---|
+| F-016 | F016-B1..B5 books type backend (one PR) | backend orch. | in progress (B1 report done, D-095) | `feature/F016-books-type` | | 2026-10-19 | Tasks T1 to T4 in the brief; then `api-v0.12.0`, `v2.1.0` |
 | F-014 | F014-B1..B5 custom fields and kinds | backend orch. | done | `feature/F014-custom-fields-kinds` | [backend#31](https://github.com/0xfederama/collections-app-backend/pull/31) | 2026-10-18 | Squash-merged `4ebeb83`; `api-v0.10.0` and `v1.6.0` tagged. |
 | F-014 | Kind defaults contract follow-up | backend orch. | done | `fix/kind-defaults-contract` | [backend#32](https://github.com/0xfederama/collections-app-backend/pull/32) | 2026-10-19 | Squash-merged `652d223`; `make check` and audit green; `api-v0.10.1` published. Web W2 can now sync the replacement contract. |
 | F-014 | F014-W1..W4 custom fields and kinds | web orch. | done | `feature/F014-custom-fields-kinds` | [web#52](https://github.com/0xfederama/collections-app-frontend-web/pull/52) | 2026-10-19 | Squash-merged `268c6a5`; `v2.5.0` tagged; check, audit and e2e (34/34, fresh stack) green. Open: built-in kinds have no default pinned fields in the backend seed (old web default was runtime + streaming for movies); kind delete reads affected lists from the tree (no backend preview). |
