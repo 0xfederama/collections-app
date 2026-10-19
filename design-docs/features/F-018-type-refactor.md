@@ -54,6 +54,13 @@ The icons for services and stores (F-017), hiding built-in types, per-type defau
 | F018-Q3 | Extra Vehicles fields (fuel type, licence class) | Dropped |
 
 ## Repo breakdown (filled by the repo orchestrators)
+### Backend (one PR, branch `feature/F018-type-refactor`, worktree `backend-F018`; workers write code only, the orchestrator runs the gate once, API 0.16.0, backend 2.5.0)
+| Task | Story | Tier | Scope |
+|---|---|---|---|
+| T1 | F018-B1 | **complex** | Migration 000025: plural labels, `vehicle` and `wishlist` definitions (default icons `i:car`, `i:tag`), camera lists to no-type, motorcycle/car to `vehicle`, replaced seed + default-pin functions, collision rename of custom `vehicle`/`wishlist` keys (as 000021), migration test on a fixture with every old type filled |
+| T2 | F018-B2 | simple | Remove motorcycle/car/camera from `internal/items/types`, tests and `scripts/smoke.sh`; spec 0.16.0 (type enums, per-type schemas, examples); title-only item test per built-in; `make generate` |
+Decisions (D-entry in DECISIONS.md): Vehicles keep the field keys `model_year`, `displacement_cc`, `power_hp` (labels Year, Engine size (cc), Power (hp)) plus `make`, `model`, so metadata needs no rewrite beyond dropping `license_class` and `fuel_type`; price is allowed on Wishlist only (B1 text), so book prices are dropped too; Wishlist default pins `["price"]`.
+
 ### Web (one PR, branch `feature/f018-type-refactor`, web 2.14.0)
 | Task | Story | Tier | Notes |
 |---|---|---|---|
