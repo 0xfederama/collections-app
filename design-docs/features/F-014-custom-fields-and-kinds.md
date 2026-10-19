@@ -1,7 +1,7 @@
 # F-014 — Custom fields and custom kinds (pool item 5)
 
 Status: **approved** (2026-10-18, answers by the user)    Release: backend 1.6.0, web 2.5.0    Roadmap: ROADMAP.md §7 item 5
-Repos: backend | web    Contract: `api-v0.10.0`
+Repos: backend | web    Contract: `api-v0.10.1` (supersedes `api-v0.10.0`)
 
 ## Why
 The kinds (movie, TV show, motorcycle, car, camera, generic) and their fields are fixed in code, in both repos. The user wants to add fields (e.g. a *Rating* on movies) and to create their own kinds (e.g. *Board game*), without a release.
@@ -26,7 +26,7 @@ The kinds (movie, TV show, motorcycle, car, camera, generic) and their fields ar
 - **F014-B3 · Management API.** Create, rename, reorder and delete custom kinds and custom fields; list all kinds with fields. Enforces the locks and the delete rules above; conflicts return clear errors. Field deletion strips the values from items in one transaction.
 - **F014-B4 · Sort, filter, pin on any field.** Sort mode by any field of the list's kind (number numeric, date chronological, text case-insensitive, yes/no false first), empty values last. A filter on a field value (text contains, number min/max, date range, yes/no) combined with the existing title filter. `pinned_fields` and the default pinned fields accept any field key of the kind. Replaces the single `kind_key` sort of F-007.
 - **F014-B5 · Custom kinds on lists.** Lists can use any kind key, built-in or custom; the list kind picker data comes from the definitions; search results show the kind name.
-- **Contract:** `api-v0.10.0` (breaking: kind and field definitions replace the fixed enum). `make test-backup`; `make audit` before the `v1.6.0` tag (D-084).
+- **Contract:** `api-v0.10.1` (breaking base contract in `api-v0.10.0`: kind and field definitions replace the fixed enum; corrective PATCH support lets clients set defaults after fields exist). `make test-backup`; `make audit` before release tags (D-084).
 
 ### Web
 - **F014-W1 · Settings panes.** Settings is split into panes (e.g. Appearance, Media, Kinds & fields, About) with a pane list; closing still saves as today. Works at 375 px and with the keyboard.

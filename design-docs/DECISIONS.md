@@ -113,6 +113,8 @@ Answered 2026-10-13: Q-1 → D-026, Q-2 → D-027, Q-3 → D-028, Q-5 → D-029,
 
 | D-092 | 2026-10-17 | **TMDB provider classification and default locale:** `flatrate` means subscription availability and is never `paid_platforms`; `rent` and `buy` are paid only when the same provider is absent from subscription, free and ad-supported availability. The default `metadata_language` for new workspaces is `it-IT`; existing workspaces retain their saved choice. | User clarified that Netflix-style subscription availability must not be labelled as paid, while per-title rental/purchase availability should be. Italian is the desired starting locale without overwriting existing preferences. | Treat every availability channel as paid; retroactively overwrite existing workspace settings |
 
+| D-093 | 2026-10-19 | **F-014 contract correction (`api-v0.10.1`):** a custom kind's PATCH is a partial update of its name, default icon, price permission, default sort field, and default pins. Nullable defaults distinguish omitted (keep) from `null` (clear), and are validated only after the proposed update against the kind's currently defined fields. Create and response mapping preserve `default_icon`. | The initial `api-v0.10.0` exposed defaults at kind creation but could not set them once fields existed, which made the required W2 kind-creation flow impossible; the handler also discarded the declared icon. | Ask clients to choose defaults before fields exist; make a second endpoint for defaults; leave `default_icon` write-only |
+
 ## Toolchain versions (R-1, checked 2026-10-13)
 
 Sources: GitHub releases API, proxy.golang.org, go.dev, Docker Hub, npm registry, nodejs.org (fetched by researcher subagents, reviewed by the M0 session).

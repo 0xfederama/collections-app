@@ -45,7 +45,8 @@ collections-app-backend/
 │   ├── httpapi/                # generated server iface, handlers, middleware, problem+json, ETag helpers
 │   ├── workspace/              # bootstrap, settings
 │   ├── tree/                   # folders + lists: CRUD, move, reorder, cycle checks
-│   ├── items/                  # items CRUD, move, reorder, kind metadata validation registry
+│   ├── items/                  # items CRUD, move, reorder, definition-backed metadata validation
+│   ├── definitions/            # workspace kind/field definitions and their optimistic-concurrency writes
 │   ├── content/                # markdown versions, retention, restore
 │   ├── images/                 # upload validation, thumbnails, attach/replace/remove
 │   ├── trash/                  # batches, restore, purge
@@ -157,7 +158,7 @@ Both repos: Dependabot (gomod/npm, github-actions, docker), branch protection on
 | Future | Seam kept now |
 |---|---|
 | Accounts (Phase 3) | `workspace_id` on every table and query; single resolution point for "current workspace" in middleware |
-| TMDB (Phase 2) | Per-kind metadata validator registry; metadata JSONB; no provider columns yet |
+| TMDB (Phase 2) | Definition-backed metadata validation by stable field key; metadata JSONB; no provider columns yet |
 | Real-time collaborative Markdown | Content in Postgres with per-item versions; CodeMirror 6 editor. Later: add `item_content_updates(item_id, seq, update BYTEA)` + snapshot table for Yjs updates, a WebSocket endpoint, and `y-codemirror.next`. Saved versions remain checkpoints |
 | Multiple images | `attachments` table independent of `items`; adding `item_attachments` later is additive |
 | Mobile app | Same pinned OpenAPI contract; separate repo |

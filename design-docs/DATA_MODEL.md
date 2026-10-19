@@ -156,15 +156,16 @@ rejects a price without a currency (422) rather than guessing.
 
 ### 2.1 Kind metadata (`items.metadata`)
 
-Since 1.1.0 (migration `000002_restructure`, F-007) the kind lives on the list, the item's metadata is validated against its list's kind, and each kind has a sort key (`release_year`, `first_air_year`, `displacement_cc`, `power_hp`, `megapixels`; none for generic). Prices are stored as `min`/`max`; the API also accepts a single `amount` (stored as `min` = `max`). Since 0.7.0 (migration `000007_price_kinds`, F009-B1) a price exists only on `motorcycle`, `car` and `camera` items: for `generic`, `movie` and `tv_show` the server rejects one and a price sort, and migration 000007 moved their existing prices into a "## From 1.3" content block.
+Since 1.1.0 (migration `000002_restructure`, F-007) the kind lives on the list. Prices are stored as `min`/`max`; the API also accepts a single `amount` (stored as `min` = `max`). Since 0.7.0 (migration `000007_price_kinds`, F009-B1) a price exists only on `motorcycle`, `car` and `camera` items: for `generic`, `movie` and `tv_show` the server rejects one and a price sort, and migration 000007 moved their existing prices into a "## From 1.3" content block.
 
-Metadata is validated in Go by a per-kind validator registry (`internal/items/kinds`). Unknown keys are rejected (400 `unknown_field`, or 422 for a wrong kind),
-all keys are optional, and `null` is not stored (the key is omitted). Text fields are trimmed and limited to 100 chars unless noted.
+Since F-014 (migrations `000014_kind_definitions` and `000015_field_sort_modes`), `kind_definitions` and `kind_fields` are workspace-scoped, versioned records. The six built-in kinds and their current stable keys are seeded as locked definitions; custom kinds and fields are mutable subject to optimistic concurrency. A kind stores nullable `default_icon`, `default_sort_field`, and `default_pinned_fields` (at most two), plus `allows_price`. A custom kind is created before it has fields, so those defaults can be set or changed later by a partial kind update once its fields exist; a default must name one of the kind's current fields, or `price` when allowed. Deleting a field strips its metadata values transactionally and clears references to it.
+
+Metadata is validated in Go against the list kind's definitions (`internal/items/kinds`), with dedicated built-in validators retained for `streaming` and price. Unknown keys are rejected (400 `unknown_field`, or 422 for a wrong type), all keys are optional, and `null` is not stored (the key is omitted). Text fields are trimmed and limited to 100 chars unless noted.
 Shared sub-shapes:
 - `imdb_url`: string matching `^https://(www\.|m\.)?imdb\.com/title/tt\d{7,10}/?$`
 - `streaming`: `{ "country": "IT" (ISO 3166-1 alpha-2, required within the object), "platforms": [string ≤ 60], ≤ 30 entries, unique case-insensitively, "paid_platforms": optional subset of `platforms` (per-title rent/buy only; subscription, free and ad-supported availability is not paid; stored in the platform's casing) }`
 
-| Kind | Key | Type / rule |
+| Built-in kind | Seeded field key | Type / rule |
 |---|---|---|
 | `generic` | none | must be `{}` |
 | `movie` | `release_year` | int 1870–2100 |
