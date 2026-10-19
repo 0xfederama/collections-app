@@ -43,6 +43,8 @@ Price is never shown by default: the user adds it ("+ Add price") as a single pr
 
 MVP kinds (D-028). Every kind-specific field is **optional**. Exact types and ranges are in DATA_MODEL §2.1.
 
+> Since F-014 the kinds below are the **built-in, locked** definitions (data seeded in the database, not code). You can add custom fields to them and create your own kinds in Settings → Kinds & fields; every field can be pinned, sorted and filtered. See [F-014](features/F-014-custom-fields-and-kinds.md).
+
 | Kind | UI label | Kind fields | Sort key |
 |---|---|---|---|
 | `generic` | Item | none | — |

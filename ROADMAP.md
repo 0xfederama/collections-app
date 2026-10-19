@@ -41,7 +41,8 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 7 | **web 2.2.0** | UI polish 2 (F-009): price only on kinds that have it, ordered pinned fields, Move/Delete at the bottom, one icon tile, cleaner streaming row, centred empty Trash | ✅ Merged 2026-10-16 (2.2.0 bumped in #39, tag pending) | Oct 2026 |
 | 8 | **backend 1.4.0 + web 2.3.0** | List icons (emoji or built-in, searchable, coloured), paste an image, empty trash, trash auto-purge (F-012, `api-v0.8.0`) | ✅ Released `v1.4.0`, `v2.3.0` (2026-10-16) | Oct 2026 |
 | 9 | **backend 1.5.0 + web 2.4.0** | TMDB lookup: smart title match, auto-filled fields, poster, director (sort/filter), metadata language, attribution (F-013, `api-v0.9.0`) | ✅ Released `v1.5.0`, `v2.4.0` (2026-10-17) | Oct 2026 |
-| — | next | Pool, in this order: custom fields + types → collaborative Markdown → accounts (backend 2.0) → security review → internet exposure + public API | ⚪ Pool | 2027 |
+| 10 | **backend 1.6.0 + web 2.5.0** | Custom fields and custom kinds, defined per kind in Settings → Kinds & fields; pin, sort and filter on any field; built-in kinds become locked data (F-014, `api-v0.10.0`/`0.10.1`; fixes `v1.6.1`) | ✅ Released `v1.6.0`, `v2.5.0` (2026-10-19) | Oct 2026 |
+| — | next | Pool, in this order: collaborative Markdown → accounts (backend 2.0) → security review → internet exposure + public API (to be re-planned by you) | ⚪ Pool | 2027 |
 | — | future | List import, advanced search | 🔭 Future | — |
 
 ```mermaid
@@ -248,6 +249,7 @@ Committed, in this order (set by you, 2026-10-15), after the UI refresh. The re-
 
 ## Changelog
 - 2026-10-16: **F-009 merged** (backend 1.3.0 / api-v0.7.0 tagged; web#37 squashed `80a40bb` incl. F-010 new-list folder and F-011 review fixes). Web 2.2.0 bumped (web#39, audit clean); tag v2.2.0 pending.
+- 2026-10-19: **F-014 done** (custom fields + custom kinds; backend 1.6.0/1.6.1, web 2.5.0, `api-v0.10.1`); pool item 5 shipped. The pool is up for a re-plan before the next item.
 - 2026-10-17: **F-012 and F-013 done** (backend 1.4.0/1.5.0, web 2.3.0/2.4.0, `api-v0.8.0`/`api-v0.9.0`); pool items 3 and 4 shipped. Next: pool item 5, custom fields + types. Worker tiers are AI agnostic (D-087). Web `v2.2.0` was never tagged (2.3.0 followed it).
 - 2026-10-16: **F-008 done**; **F-009 UI polish 2** added as Next (web 2.2.0, backend 1.3.0, api-v0.7.0). Icon packs added to Upkeep.
 - 2026-10-15: **F-008 UI polish** added as Next (web 2.1.0, backend 1.2.2), before pool item 3.

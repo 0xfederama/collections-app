@@ -1,6 +1,6 @@
 # F-014 — Custom fields and custom kinds (pool item 5)
 
-Status: **approved** (2026-10-18, answers by the user)    Release: backend 1.6.0, web 2.5.0    Roadmap: ROADMAP.md §7 item 5
+Status: **done** (backend#31/#32/#33, web#52, 2026-10-19)    Release: backend 1.6.0 (+1.6.1 fix), web 2.5.0    Roadmap: ROADMAP.md §7 item 5
 Repos: backend | web    Contract: `api-v0.10.1` (supersedes `api-v0.10.0`)
 
 ## Why
@@ -79,3 +79,4 @@ One web PR: `feature/F014-custom-fields-kinds`. Per D-079/D-081, workers develop
 
 ## Log
 - 2026-10-18: written from the user's answers.
+- 2026-10-19: done. Backend `v1.6.0`/`api-v0.10.0`, contract correction `api-v0.10.1` (#32), user fix #33 restoring default pinned fields on built-in kinds (`v1.6.1`); web `v2.5.0` (#52, e2e 34/34). Open from the web orchestrator, resolved by #33: built-in kinds had no default pins. Still open: kind delete reads affected lists from the tree (no backend preview).
