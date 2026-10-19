@@ -16,15 +16,18 @@ The built-in types grew by accident: motorcycle, car and camera are separate, a 
   - "Change icon" is **removed** from the "…" menu of the list header and **added** to the "…" menu of the list's row in the sidebar, next to the list name.
 - **Plural everywhere:** names in the type menus, Settings → Types & fields, search results (`type_name`) and empty states. New custom types are suggested plural too (placeholder and hint), but the user's name is kept as typed.
 
+- **Camera is removed entirely** (user, 2026-10-20): it is neither a built-in nor converted to a custom type. Existing camera lists become **no-type lists**; each item's camera fields and price are moved into its description as a "From the old type" Markdown block, so nothing is lost silently.
+- **Only the title is ever required.** No field of any type is mandatory, Vehicles and Wishlist included; an item with just a title is always valid. This also holds for the types with automatic lookup (Books, Movies, TV shows): lookup fills fields when it finds a match, and an unmatched item stays valid as typed. A test per built-in type creates an item with a title only.
+- **"Movie" becomes "Movies"** and so on: the displayed labels (and `type_name`) are plural; the internal keys (`movie`, `tv_show`, `book`) do not change.
+
 ## Defaults chosen (to confirm)
-- **Camera is not a built-in any more.** Existing camera lists become a **custom type "Cameras"** (make, model, release year, sensor format, megapixels, price allowed), so no data is lost; the user can delete it later like any custom type.
 - **Motorcycle and Car lists become Vehicles.** make, model, model year, displacement and power map to the Vehicles fields. Fields Vehicles does not have (licence class, fuel type) and **prices** (price now lives on Wishlist and custom types) are moved into the item's description as a "From the old type" Markdown block, as F-007 did; nothing is dropped silently. A custom type or a list with a mix is handled per list by its old type.
-- **Built-ins stay locked** (cannot be deleted or have fields removed), as in F-014. Choosing which built-ins are *shown* is not part of this round.
+- **Built-ins stay locked, explained:** the five built-in types cannot be deleted, and their own fields cannot be removed or changed to another kind of field (F-014), because the lookups, row layouts and default pins rely on them. You can still add your own fields to them, and create or delete custom types freely. Choosing which built-ins are *shown* is not part of this round.
 - **Existing labels:** `type_name` and the type labels become plural by migration; `Runtime` etc. unchanged.
 
 ## User stories
 ### Backend
-- **F018-B1 · Built-in set.** Migration: add `vehicle` and `wishlist` definitions (fields, default pins, default icons `car` and `tag`, price allowed on Wishlist only among built-ins); pluralise the labels of the remaining built-ins; convert camera into the custom type "Cameras"; convert motorcycle and car into `vehicle` with the field mapping and the description block above; reversible where possible, idempotent, tested on a fixture with every old type filled; `make test-backup`. The seed function is replaced, not renamed (as in F-014 #33). A custom type whose key collides with the new keys is handled without data loss and flagged.
+- **F018-B1 · Built-in set.** Migration: add `vehicle` and `wishlist` definitions (fields, default pins, default icons `car` and `tag`, price allowed on Wishlist only among built-ins); pluralise the labels of the remaining built-ins; convert camera lists to no-type lists with the description block; convert motorcycle and car into `vehicle` with the field mapping and the description block above; reversible where possible, idempotent, tested on a fixture with every old type filled; `make test-backup`. The seed function is replaced, not renamed (as in F-014 #33). A custom type whose key collides with the new keys is handled without data loss and flagged.
 - **F018-B2 · Contract and checks.** `api-v0.16.0`: the removed built-in keys disappear from the type enum and the definitions; lookups (TMDB, books), search, pins, sorts and filters keep working by key. `make audit` before the `v2.5.0` tag (D-084).
 
 ### Web
@@ -47,7 +50,7 @@ The icons for services and stores (F-017), hiding built-in types, per-type defau
 | ID | Question | Default |
 |---|---|---|
 | F018-Q1 | Does Vehicles allow a price | No; old prices go to the description |
-| F018-Q2 | Camera | Becomes the custom type "Cameras" |
+| F018-Q2 | Camera | Removed; its lists become no-type, data kept in the description |
 | F018-Q3 | Extra Vehicles fields (fuel type, licence class) | Dropped from the type, kept in the description |
 
 ## Repo breakdown (filled by the repo orchestrators)

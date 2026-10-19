@@ -254,7 +254,7 @@ Committed, in this order (set by you, 2026-10-15), after the UI refresh. The re-
 ## Changelog
 - 2026-10-16: **F-009 merged** (backend 1.3.0 / api-v0.7.0 tagged; web#37 squashed `80a40bb` incl. F-010 new-list folder and F-011 review fixes). Web 2.2.0 bumped (web#39, audit clean); tag v2.2.0 pending.
 - 2026-10-19: **Before the pool, three items added by you:** (1) Books type with automatic lookup (F-016, briefed), (2) icon audit and fix (F-017), (3) type refactor (F-018, to be defined). Order: F-016, then F-017, then F-018.
-- 2026-10-20: F-016 done (many follow-ups, backend 2.4.0 / `api-v0.15.0`, web 2.13.1). **F-018 type refactor planned and moved before F-017** (icons), at your request: five plural built-ins, camera → custom "Cameras", motorcycle + car → Vehicles, no-type list icon, icon edit moved.
+- 2026-10-20: F-016 done (many follow-ups, backend 2.4.0 / `api-v0.15.0`, web 2.13.1). **F-018 type refactor planned and moved before F-017** (icons), at your request: five plural built-ins, camera removed, motorcycle + car → Vehicles, no-type list icon, icon edit moved.
 - 2026-10-19: **F-015 done** (your changes: Settings rework, kind → type, lists without a type; backend 2.0.0/2.0.1, web 2.6.0, `api-v0.11.0`). D-094 records it; accounts become backend 3.0 / web 3.0.
 - 2026-10-19: **F-014 done** (custom fields + custom kinds; backend 1.6.0/1.6.1, web 2.5.0, `api-v0.10.1`); pool item 5 shipped. The pool is up for a re-plan before the next item.
 - 2026-10-17: **F-012 and F-013 done** (backend 1.4.0/1.5.0, web 2.3.0/2.4.0, `api-v0.8.0`/`api-v0.9.0`); pool items 3 and 4 shipped. Next: pool item 5, custom fields + types. Worker tiers are AI agnostic (D-087). Web `v2.2.0` was never tagged (2.3.0 followed it).
