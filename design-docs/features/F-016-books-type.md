@@ -29,7 +29,7 @@ Movies and TV shows are filled from TMDB. Books should work the same way: write 
 
 ### Web
 - **F016-W1 · Book lists.** "Book" is offered in the new-list and change-type menus; items show author, pages, ISBN, first publication year and "Where to get it" in "+ Add field" and in the detail, with the cover.
-- **F016-W2 · Lookup.** Title suggestions, first-result fill, "Wrong match?", re-match and refresh for books, with the same UX as movies (poster becomes cover).
+- **F016-W2 · Lookup.** (Revised 2026-10-19, web 2.8.1) No title picker for books: the title is typed and committed, then the backend fills the item from the first Open Library result (cover included, typed values kept). While the create runs the UI shows a "Looking up details on Open Library…" status; a slow or failed lookup still creates the item unchanged. The movie/TV picker is unchanged; `GET /books/suggestions` and `source_id` are unused by the web. "Wrong match?"/re-match/refresh are not built (removed for movies in 2.6.0).
 - **F016-W3 · Row layout.** Rows render up to three pins as above (compact, thumbnail and grid): writer with the title, pages next to it, store tiles on the far right; pinned-field picker and Settings → Types & fields allow 3 pins. Looks right at 375 px.
 - **F016-W4 · Stores UI.** A multi-choice dropdown like the streaming platforms, in the item and as a preferred-stores choice in Settings; provider tiles use the shared icon tile (letter tile until F-017 supplies the final icons).
 - **Release:** web 2.7.0; update the affected e2e specs and add one for a book (suggestion, fill, layout, stores) against the test stack fixture; `npm run audit` before the `v2.7.0` tag. Both themes keep zero serious or critical axe findings.
@@ -99,3 +99,4 @@ Gate, once at the end by the orchestrator: `npm run check`, `npm run e2e` on a f
 - 2026-10-19: backend done: PR backend#36 squash-merged `ed4ee06`, tags `api-v0.12.0` and `v2.1.0`; tasks T1 to T4 as above (T1 simple, T2 simple, T3 and T4 complex), migrations 000019 to 000022; see D-095 to D-098.
 - 2026-10-19: planned from the user's request.
 - 2026-10-19 (web): "Wrong match?", re-match and refresh are NOT built for books: the web removed them for movies in 2.6.0 (#46), and F-016 asks for the same UX as movies. `useLookupItem` stays unused. Add Open Library credit to Settings → About.
+- 2026-10-19 (web): Open Library suggestions were too slow (2-5 s, 503s), so W2 became lookup on commit with a status line (web 2.8.1, `v2.8.1`). Also web 2.7.1 (pane contrast, type icons) and 2.8.0 (book links Google/Goodreads/Amazon by Settings country; backend country-aware store links pending).
