@@ -27,7 +27,7 @@ The built-in types grew by accident: motorcycle, car and camera are separate, a 
 
 ## User stories
 ### Backend
-- **F018-B1 · Built-in set.** Migration: add `vehicle` and `wishlist` definitions (fields, default pins, default icons `car` and `tag`, price allowed on Wishlist only among built-ins); pluralise the labels of the remaining built-ins; turn camera lists into no-type lists;convert motorcycle and car into `vehicle` with the field mapping and the description block above; idempotent, tested on a fixture with every old type filled; `make test-backup`. The seed function is replaced, not renamed (as in F-014 #33). A custom type whose key collides with the new keys is handled without data loss and flagged.
+- **F018-B1 · Built-in set.** Migration: add `vehicle` and `wishlist` definitions (fields, default pins, default icons `car` and `tag`, price allowed on Wishlist only among built-ins); pluralise the labels of the remaining built-ins; turn camera lists into no-type lists; convert motorcycle and car into `vehicle` with the field mapping above (dropped fields and prices are discarded); idempotent, tested on a fixture with every old type filled; `make test-backup`. The seed function is replaced, not renamed (as in F-014 #33). A custom type whose key collides with the new keys is handled without data loss and flagged.
 - **F018-B2 · Contract and checks.** `api-v0.16.0`: the removed built-in keys disappear from the type enum and the definitions; lookups (TMDB, books), search, pins, sorts and filters keep working by key. `make audit` before the `v2.5.0` tag (D-084).
 
 ### Web
