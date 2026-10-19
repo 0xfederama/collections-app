@@ -69,6 +69,7 @@ services:
       LOG_FORMAT: json
       TMDB_API_KEY: ${TMDB_API_KEY:-}
       OPENLIBRARY_CONTACT: ${OPENLIBRARY_CONTACT:-}
+      HARDCOVER_API_KEY: ${HARDCOVER_API_KEY:-}
     volumes:
       - appdata:/data
     healthcheck:
