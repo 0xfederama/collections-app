@@ -24,7 +24,7 @@ Link building is a pure function of data the web already has, so it belongs here
 - **F020-W3 · Split the big files.** Along the real seams, with their tests, one PR per area: settings (Types & fields, Settings form), items (inline field, editors, draft model), lists and tree (list view, items view, tree dialogs, sortable), quick add.
 - **F020-W4 · Data layer.** One client module, query-key factories, mutation helpers, error mapping; remove ad-hoc `fetch` and duplicated invalidation.
 - **F020-W5 · Dev tooling and generated code.** Gate the dev gallery and mocks out of the production bundle (verify with the build output), drop what is unused, keep the contract sync flow (`api:sync`, `api:check`).
-- **F020-W6 · Adopt `api-v1.0.0`.** After the backend tags it: sync the contract, adapt names, run the full gate and e2e; remove leftovers of the old contract; final clean-up pass by a fresh reviewer session (`/code-review` at high effort and `/simplify`).
+- **F020-W6 · Adopt `api-v1.0.0`.** After the backend tags it: sync the contract, adapt names, run the full gate and e2e; remove leftovers of the old contract; final clean-up pass by a fresh reviewer session (`/code-review` at medium effort and `/simplify`).
 - **Release:** web 2.18.0; `npm run check`, `npm run e2e` on a fresh `./deploy/test`, `npm run audit` before the tag.
 
 ## PR plan
