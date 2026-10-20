@@ -75,6 +75,7 @@ Accounts and permissions (pool item 7), collaborative Markdown, new features, UI
 | F019-Q3 | Hard deletes anywhere besides purge | No |
 
 ## Repo breakdown (filled by the repo orchestrator)
+- **F019-B0 done 2026-10-20** (orchestrator-tier spike, no worker): Huma v2 confirmed, depguard per-file layer rules proven, baseline feasible. Report and proposed changes to the defaults: [F-019-B0-report.md](F-019-B0-report.md). Task specs for B1+ are written after the user confirms the report.
 
 ## Log
 - 2026-10-21: planned from the user's request.
