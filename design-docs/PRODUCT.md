@@ -45,14 +45,15 @@ MVP kinds (D-028). Every kind-specific field is **optional**. Exact types and ra
 
 > Since F-015 "kind" is called **type** (API and UI) and the built-in generic kind is gone: a list may have no type. Since F-014 the kinds below are the **built-in, locked** definitions (data seeded in the database, not code). You can add custom fields to them and create your own kinds in Settings → Kinds & fields; every field can be pinned, sorted and filtered. See [F-014](features/F-014-custom-fields-and-kinds.md).
 
-| Kind | UI label | Kind fields | Sort key |
+| Type (key) | Name | Type fields | Default sort |
 |---|---|---|---|
-| `generic` | Item | none | — |
-| `movie` | Movie | release year, runtime (min), IMDb URL, streaming platforms + country | release year |
-| `tv_show` | TV show | first-air year, end year (empty = ongoing), seasons, IMDb URL, streaming platforms + country | first-air year |
-| `motorcycle` | Motorcycle | make, model, model year, displacement (cc), power (hp), licence class (AM/A1/A2/A) | displacement |
-| `car` | Car | make, model, model year, fuel type, power (hp) | power |
-| `camera` | Photo camera | make, model, release year, sensor format, megapixels | megapixels |
+| `book` | Books | author, pages, ISBN, where to get it (looked up automatically) | title |
+| `vehicle` | Vehicles | make, model, year, engine size (cc), power (hp) | title |
+| `movie` | Movies | release year, runtime (min), IMDb URL, streaming platforms + country, director (looked up automatically) | release year |
+| `tv_show` | TV shows | first-air year, end year, seasons, IMDb URL, streaming platforms + country (looked up automatically) | first-air year |
+| `wishlist` | Wishlist | price (single or range, added with "+") | title |
+
+A list with **no type** has only the common fields. Camera, motorcycle, car and the generic type no longer exist (F-018, D-105). Only the title is ever required.
 
 - Units are metric. The streaming country defaults to the workspace setting (`IT`).
 - The item title stays free text (e.g. "Ducati Monster 937 SP"). Make and model are separate structured fields and are not derived from the title.

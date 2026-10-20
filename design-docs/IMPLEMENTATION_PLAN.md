@@ -81,6 +81,12 @@ Wherever a later task says "in CI", read it as "in the local `make check` / `npm
 
 **Checkpoint C4: the user accepts the MVP.**
 
+## M6 — Architecture refactor (after the MVP and F-018, D-106)
+
+Behaviour-preserving rebuild of the internals; briefs hold the stories: [F-019 backend](features/F-019-backend-architecture.md) (B0 spike, B1 baseline migration, B2 schema simplification, B3 features in layers, B4 lookup/integrations, B5 contract + docs) and [F-020 web](features/F-020-web-architecture.md) (W1 links in the web, W2 conventions and lint, W3 split big files, W4 data layer, W5 dev tooling, W6 adopt `api-v1.0.0`). The links move (F020-W1) comes first because it unblocks removing `store_links` / `platform_links` from the API.
+
+**Checkpoint C5: the user accepts the cleaned-up services.**
+
 ## Parallel-safety rules
 
 - At most one open PR touching `api/openapi.yaml` at a time, and at most one touching `db/migrations/`.

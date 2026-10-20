@@ -44,8 +44,10 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 10 | **backend 1.6.0 + web 2.5.0** | Custom fields and custom kinds, defined per kind in Settings → Kinds & fields; pin, sort and filter on any field; built-in kinds become locked data (F-014, `api-v0.10.0`/`0.10.1`; fixes `v1.6.1`) | ✅ Released `v1.6.0`, `v2.5.0` (2026-10-19) | Oct 2026 |
 | 11 | **backend 2.0.0 + web 2.6.0** | Settings rework; "kind" becomes "type"; lists can have no type; price follows the type definition (F-015, `api-v0.11.0`, breaking) | ✅ Released `v2.0.0`/`v2.0.1`, `v2.6.0` (2026-10-19) | Oct 2026 |
 | 12 | **backend 2.4.0 + web 2.13.1** | **Books type** with lookup (Open Library + Hardcover), store and streaming links, up to 3 pins (F-016, `api-v0.12.0` to `0.15.0`, many follow-ups) | ✅ Done (2026-10-19/20) | Oct 2026 |
-| 13 | backend 2.5.0 + web 2.14.0 | **Type refactor** (F-018): five plural built-ins (Books, Vehicles, Movies, TV shows, Wishlist), no-type list icon, icon editing from the header and sidebar | 🟡 Next (planned 2026-10-20) | Oct 2026 |
-| 14 | web | **Icon audit and fix** (F-017): every link, store and streaming icon correct, official SVGs vendored, all visually the same size | 🟡 After F-018 (to be briefed) | Oct 2026 |
+| 13 | backend 2.5.0 + web 2.14.0 | **Type refactor** (F-018): five plural built-ins, no-type list glyph, icon editing from the header and sidebar | ✅ Done (2026-10-20) | Oct 2026 |
+| 14 | backend 2.6.0 | **Backend architecture refactor** (F-019): layers (handler → service → repository), simple queries, soft deletes, one baseline migration, code-first generated OpenAPI (`api-v1.0.0`) | 🟡 Next (planned 2026-10-21) | Oct–Nov 2026 |
+| 15 | web 2.18.0 | **Web architecture refactor** (F-020): feature slices with lint-enforced boundaries, big files split, one data layer, link building moves from the backend to the web | 🟡 Next, in parallel with F-019 where possible | Oct–Nov 2026 |
+| 16 | web | **Icon audit and fix** (F-017): every link, store and streaming icon correct, official SVGs vendored, all visually the same size | 🟡 After F-019/F-020 (to be briefed) | Oct 2026 |
 | — | then | Pool: collaborative Markdown → accounts (backend 3.0) → security review → internet exposure + public API | ⚪ Pool | 2027 |
 | — | future | List import, advanced search | 🔭 Future | — |
 
@@ -254,6 +256,7 @@ Committed, in this order (set by you, 2026-10-15), after the UI refresh. The re-
 ## Changelog
 - 2026-10-16: **F-009 merged** (backend 1.3.0 / api-v0.7.0 tagged; web#37 squashed `80a40bb` incl. F-010 new-list folder and F-011 review fixes). Web 2.2.0 bumped (web#39, audit clean); tag v2.2.0 pending.
 - 2026-10-19: **Before the pool, three items added by you:** (1) Books type with automatic lookup (F-016, briefed), (2) icon audit and fix (F-017), (3) type refactor (F-018, to be defined). Order: F-016, then F-017, then F-018.
+- 2026-10-21: F-018 done. **Architecture refactor added before the icon work (F-017):** F-019 backend (layers/DAO, simple queries, soft deletes, one baseline migration, code-first OpenAPI `api-v1.0.0`) and F-020 web (feature slices, big files split, one data layer, link building moves to the web). Prod unused, so no compatibility; behaviour preserved, e2e unchanged.
 - 2026-10-20: F-016 done (many follow-ups, backend 2.4.0 / `api-v0.15.0`, web 2.13.1). **F-018 type refactor planned and moved before F-017** (icons), at your request: five plural built-ins, camera removed, motorcycle + car → Vehicles, no-type list icon, icon edit moved.
 - 2026-10-19: **F-015 done** (your changes: Settings rework, kind → type, lists without a type; backend 2.0.0/2.0.1, web 2.6.0, `api-v0.11.0`). D-094 records it; accounts become backend 3.0 / web 3.0.
 - 2026-10-19: **F-014 done** (custom fields + custom kinds; backend 1.6.0/1.6.1, web 2.5.0, `api-v0.10.1`); pool item 5 shipped. The pool is up for a re-plan before the next item.
