@@ -30,8 +30,21 @@ Link building is a pure function of data the web already has, so it belongs here
 ## PR plan
 W1, W2, W3 (several PRs), W4, W5 before the contract; W6 together with the backend's contract-changing PR. Each PR is squash-merged by the orchestrator, leaves the app working and the e2e green. Do not mix refactors with feature changes.
 
+
+## Execution model (user decision 2026-10-21, overrides the D-087 tier choice for this refactor)
+- **All code is written by simple-tier workers (Haiku 5.5 or GPT 6 Luna, medium)**, even for the complex tasks. The orchestrator tier plans, reviews and runs the gates. Escalate a task to the complex tier only after a simple worker has failed it twice, and say so in the Repo breakdown.
+- **So the plan must be expanded by the repo orchestrator into task specs.** This brief fixes the design and the order; it does not say which files change. Before dispatching, the orchestrator writes one spec per task (kept in the Repo breakdown or a `tasks/` note in the PR): the files to create, change or delete; the target type and function signatures; the exact tests that must pass (and which existing tests must stay green); what the worker must not touch; the layer rules to respect. A task is small enough to be reviewed as one diff (about 300 changed lines at most, one seam at a time).
+- **Characterization first.** Before a seam is rebuilt, a task adds tests that pin its current behaviour (component, hook or e2e level). Workers then rebuild until those tests pass unchanged. This is what makes a small model safe on a big refactor.
+- **Machine checks beat review.** The layer and import rules are enforced by lint or a test (web boundary lint (ESLint)), so a worker cannot quietly break the architecture; the orchestrator reviews the FLAGS and the diff of the risky parts only.
+
+## Additional scope (added 2026-10-21)
+- **Unused code and dependencies:** `knip` (or equivalent) in the final pass to remove unused files, exports and packages.
+- **Accessibility lint:** `eslint-plugin-jsx-a11y` on top of the axe e2e checks.
+- **Lazy routes and a bundle report:** route-level code splitting where it helps, and the build prints the bundle sizes (no hard budget, D-034). Evaluate the React Compiler and remove hand-written memoisation only if the compiler is adopted and the e2e stay green.
+- **Docs that match:** `frontend-web/docs` and the README describe the new structure; `CLAUDE.md` / `AGENTS.md` keep one source of truth.
+
 ## Constraints
-- Lean workflow D-079/D-081, AI-agnostic tiers (D-087): complex worker tier for W3 and W4, simple for mechanical moves, the links tables and docs.
+- Lean workflow D-079/D-081, AI-agnostic tiers (D-087): see Execution model: simple-tier workers for all code (D-107).
 - Frosted Gallery and D-083 stay untouched; the word is "type" (D-094).
 - No new runtime dependency without a line in the PR saying why; a boundary-lint plugin is the expected exception if the built-in rules are not enough.
 

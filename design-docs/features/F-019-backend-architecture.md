@@ -43,8 +43,22 @@ api/openapi.yaml         GENERATED (make spec), never edited by hand
 ## PR plan
 Several PRs, because one rewrite PR would be unreviewable. Suggested split: B0 (spike, may be discarded or kept as the first slice) · B1 · B2 · B3 (up to six PRs) · B4 · B5. Each is squash-merged by the orchestrator after the gate and leaves the API working for the current web, **except** the contract-changing PR (B5 and the link removal), which is merged together with the web adoption in F-020. Tags: only `api-v1.0.0` and the final release.
 
+
+## Execution model (user decision 2026-10-21, overrides the D-087 tier choice for this refactor)
+- **All code is written by simple-tier workers (Haiku 5.5 or GPT 6 Luna, medium)**, even for the complex tasks. The orchestrator tier plans, reviews and runs the gates. Escalate a task to the complex tier only after a simple worker has failed it twice, and say so in the Repo breakdown.
+- **So the plan must be expanded by the repo orchestrator into task specs.** This brief fixes the design and the order; it does not say which files change. Before dispatching, the orchestrator writes one spec per task (kept in the Repo breakdown or a `tasks/` note in the PR): the files to create, change or delete; the target type and function signatures; the exact tests that must pass (and which existing tests must stay green); what the worker must not touch; the layer rules to respect. A task is small enough to be reviewed as one diff (about 300 changed lines at most, one seam at a time).
+- **Characterization first.** Before a seam is rebuilt, a task adds tests that pin its current behaviour (HTTP-level for the backend, component or e2e level for the web). Workers then rebuild until those tests pass unchanged. This is what makes a small model safe on a big refactor.
+- **Machine checks beat review.** The layer and import rules are enforced by lint or a test (backend `depguard`-style rules or an import test; web boundary lint), so a worker cannot quietly break the architecture; the orchestrator reviews the FLAGS and the diff of the risky parts only.
+
+## Additional scope (added 2026-10-21)
+- **Ready for accounts without building them:** every repository method takes the workspace scope from the request context through one small `scope` helper, so adding users and permissions later (pool 7) touches one place, not every query. No behaviour change today.
+- **Consistent API shape:** one pagination style, one error-code list (documented in the spec), uniform `version` / ETag handling, consistent field naming, and no unused endpoint or field left in the spec.
+- **Lint and tools as code:** `golangci-lint` v2 config in the repo with the boundary rules, `go tool` directives for sqlc and the spec generator, `govulncheck` in `make audit`, a dead-code check (`deadcode`) in the final pass.
+- **Fast, reliable tests:** repository tests on a real Postgres (one container per package, parallel tests), service tests with fakes, handler tests on the generated router; per-package coverage printed (no threshold, D-034); no test depends on another's data.
+- **Docs that match:** README quick start, one architecture page with a diagram of the layers, and `docs/modules` regenerated from the new structure; `CLAUDE.md` / `AGENTS.md` keep one source of truth (one imports or links the other) instead of two copies.
+
 ## Constraints
-- Lean workflow D-079/D-081, AI-agnostic tiers (D-087): orchestrator tier for B0 and the review passes; complex worker tier for B1, B2, B3 and B4; simple tier for docs, mechanical moves and tests.
+- Lean workflow D-079/D-081, AI-agnostic tiers (D-087): orchestrator tier for B0 and the review passes; see Execution model: simple-tier workers for all code (D-107).
 - Tests never call real networks; the TMDB/book fixtures of D-090 stay.
 - No new runtime dependency without a line in the PR saying why (Huma is the expected exception).
 
