@@ -58,7 +58,36 @@ New features, visual design, backend work, accounts.
 | F020-Q2 | Keep the MSW mock layer | Remove if the e2e on the real backend and small local fixtures cover its uses |
 | F020-Q3 | Boundary lint tool | ESLint `no-restricted-imports` first, a plugin only if it is not enough |
 
-## Repo breakdown (filled by the repo orchestrator)
+## Repo breakdown (filled by the repo orchestrator, 2026-10-20)
+
+Execution: every task below is written by a simple-tier `worker` (Haiku 5.5, medium); no task has been escalated (escalation after two failed attempts is recorded here when it happens). Workers do not run the full gate; the orchestrator runs `npm run check` once per PR and `npm run e2e` (fresh `./deploy/test`) for PRs that touch behaviour. Each PR: worktree in `../frontend-web-<tag>`, squash merge, branch and worktree deleted. Common do-not-touch for every task: `src/generated/`, `api/`, `e2e/` (unless the task says so), `CLAUDE.md`, design docs; no new dependency; no visual or behaviour change. Common verification per task: its targeted vitest files, `npm run typecheck`, `npx eslint .` (0 errors), `npm run knip`, prettier on touched files.
+
+### W1 · `links` feature: DONE ([web#81](https://github.com/0xfederama/collections-app-frontend-web/pull/81), squash `b98ef1b`)
+- W1.1 `features/links/model/stores.ts` (+test, 61 cases ported from the backend's Go table): `amazonDomain(country)`, `storeLink(provider, {isbn,title,country}) -> string|null`, Go-compatible `queryEscape`.
+- W1.2 `features/links/model/streaming.ts` (+test, 43 cases): `normalizePlatform`, `streamingSearchLink(platform, title) -> string|null`.
+- W1.3 `git mv` of `items/links.ts` and its test to `links/model/external.*`, public face `links/index.ts`; importers updated.
+- W1.4 `FieldBlock` (item stores) and `ItemEntry` (row store and streaming tiles) call the builders (country from Settings); `store_links` / `platform_links` are no longer read (tests assert that hostile values in them are ignored).
+- Gate: `npm run check`, e2e 50/50 (6 setup POSTs failed once on the cold stack, passed on rerun). Open for the backend (F-019-B4/B5): the API can drop `store_links` and `platform_links`.
+
+### W2 · conventions and enforcement: DONE ([web#82](https://github.com/0xfederama/collections-app-frontend-web/pull/82), squash `e090149`)
+- W2.1 tsconfig `noImplicitOverride` + `noImplicitReturns` (`exactOptionalPropertyTypes` deliberately off: 76 errors against the generated types); ESLint `jsx-a11y` (npm override because its last release peers ESLint <= 9), `no-explicit-any`, `no-non-null-assertion` in production code, `max-lines` warning at 250; 25 a11y sites carry a written disable reason, none changed.
+- W2.2 `eslint.boundaries.js` (`no-restricted-imports`, rules A/B/C) with `eslint.boundaries.baseline.js` (73 legacy files, only shrinks) and `src/boundaries.test.ts`.
+- W2.3 `knip` (`knip.json`, part of `npm run check`); about 50 unused exports and some dead code removed.
+- W2.4 `docs/architecture.md`; `AGENTS.md` is a symlink to `CLAUDE.md`.
+- Follow-up found: `StoreChoices` error text is not linked to its trigger (`aria-describedby`); a real a11y gap, not in this refactor (behaviour change).
+
+### W3 · feature faces and splitting the big files (in progress)
+Order: **W3-0 feature faces first** (so new files never need a baseline exemption), then four independent area PRs (settings, items, lists and tree, quickadd), then the leftovers.
+- **W3-0 `refactor/feature-faces`**: an explicit-export `index.ts` for each feature (`tree`, `items`, `lists`, `settings`, and the small `home`, `search`, `trash`, `health`, `stores`, `quickadd`), exporting exactly what outsiders import; test kits move behind `<feature>/testing.ts` (allowed by the boundary rule); every outside import goes through the face; baseline shrinks to what is left. Tasks F1 tree (35 import sites), F2 items (40), F3 lists + settings (48), F4 the rest (about 30). Verification: whole `npm test`, build, e2e (module cycles lists/tree/items may surface at load).
+- **A · settings split (`refactor/settings-split`)**: A1 characterization tests for `TypesFieldsPane` (loading/error, 412 reload, create error, change-lists, field delete cancel); A2 `settings/types/model.ts` (`fieldTypes`, `fieldTypeWord`, `TypeDefaultsDraft`, `defaultsFromType`, `sameNullableList`, `errorText`, new `defaultsPatch`, `isDefaultsDirty`, `defaultFieldOptions`) with table tests; A3 `TypeRow.tsx`, `FieldRow.tsx`; A4 `CreateTypeDialog`, `DeleteTypeDialog`, `ChangeListsDialog`, `DeleteFieldDialog` (dialog-local state moves in); A5 `useTypesPane` hook, pane left as layout; A6 `SettingsForm`: `useLeaveGuard`, banners, `CollectionFields`, `MediaFields`, `metadataLanguageOptions` to `form.ts`. Must stay green unchanged: `TypesFieldsPane.test.tsx`, `SettingsPage.test.tsx`, `form.test.ts`.
+- **B · items split (`refactor/items-split`)**: B1 `form/draft.ts` into `price.ts`, `validate.ts`, `serverErrors.ts`, `patch.ts` (pure, `draft.test.ts` unchanged); B2 `inline/InlineField.tsx` into `controls.tsx` (`PenButton`, `EditorButtons`, `focusRing`) and `FieldEditor.tsx`; B3 `inline/editors.tsx` into `PriceInputs`, `StreamingInputs`, `StoresInputs`; B4 `DescriptionField` view/editor and `ImageSection` splits. Existing `InlineField.test.tsx`, `ItemView.test.tsx`, `content.test.tsx`, `ImageSection.test.tsx` stay green.
+- **C · lists and tree (`refactor/lists-tree-split`)**: C1 `ItemEntry` (`TileLink`, `PinnedSlot` to `ItemPinned.tsx`); C2 `ItemsView` (`ItemsSkeleton`, `DraftRow`, `SortableEntry` to their own files); C3 `ListView` (`useListQueryState` hook: `?q=`, `?sort=`, debounce); C4 `ListDescription` view/editor files; C5 `useTreeDialogs` (`findNode`, `Vanished`, per-dialog render parts). `ListView.test.tsx` (1293 lines) is the characterization.
+- **D · quickadd (`refactor/quickadd-split`)**: D1 characterization if `QuickAddDialog` lacks coverage; D2 split into `useQuickAdd` hook, field parts and `useListChoices`.
+- `components/ui/sortable.tsx` (253 effective lines, the single pre-1.0 `@dnd-kit` adapter, D-061) keeps one file with a written `max-lines` reason.
+
+### W4 data layer, W5 dev tooling, W6 contract: specs are written when each starts (W4 after the splits, W5 after W4; W6 waits for the backend tag `api-v1.0.0`, none exists yet: checked with `git ls-remote` on 2026-10-20).
+
 
 ## Log
 - 2026-10-21: planned from the user's request.
+- 2026-10-20: W1 and W2 merged (web#81, web#82); W3 in progress, see the breakdown.
