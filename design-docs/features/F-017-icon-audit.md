@@ -1,6 +1,6 @@
 # F-017 — Icon audit and fix (links, stores, streaming)
 
-Status: **planned** (2026-10-30, rule set by the user)    Release: web 2.19.0    Roadmap: ROADMAP.md §6
+Status: **done** (2026-10-30, web#94, `v2.19.0`; see D-109)    Release: web 2.19.0    Roadmap: ROADMAP.md §6
 Repos: web (no contract change)
 
 ## Why
@@ -54,6 +54,18 @@ New link or store providers, per-country availability, icon packs for the list i
 | F017-Q2 | How many TMDB providers beyond the listed ones | The top providers for the countries in the Settings list, capped at about 25 |
 
 ## Repo breakdown (filled by the repo orchestrator)
+| Task | Story | Branch | Result | PR |
+|---|---|---|---|---|
+| Inventory (34 icons: links, book stores, streaming) and sourcing in the brief's order, README table with source/licence/date | F017-W1 | `feature/F017-icon-audit` | done by the orchestrator; no icon ended as a letter tile | [web#94](https://github.com/0xfederama/collections-app-frontend-web/pull/94) |
+| Registry `src/components/serviceIcons/` (key, label, aliases, asset, `tile`, `fit`), picker lists derived from it, `ServiceIcon` and every tile use migrated, old WebP favicons removed, registry test (file ↔ entry) | F017-W2 | same | done (simple-tier workers from task specs) | same |
+| Dev gallery `/dev/ui#service-icons` (every icon at every size, light and dark), screenshots in the PR | F017-W3 | same | done | same |
+
+Outcome: `npm run check` green, e2e green on a fresh stack after re-running 3 infrastructure flakes, `npm run audit` 0; streaming picker grew from 7 to 19 services.
+
+### Deviations and caveats
+- **Source fallback:** Wikimedia Commons was used as a fallback source for **Amazon** and **Apple Books** (the brand publishes no usable SVG); licence tags are recorded in the README. Hulu comes from svgl (wordmark); Open Library's own repository icon.
+- **Brand rasters embedded as SVG wrappers:** where a brand only publishes a raster (Prime Video, Disney+, Infinity, RaiPlay, Kobo, Bookshop.org, Discovery+, Peacock, TIMvision, Rakuten TV) the official PNG is base64-embedded **unmodified** in a 100x100 SVG (no redrawing, no resampling). This is brief fallback 4 (a clean official raster, converted without redrawing); the registry stays all-SVG.
+- **Low resolution:** TIMvision (96 px) and Rakuten TV (64 px) are the best icons those brands serve; the rest are sharp up to the largest tile (36 px).
 
 ## Log
 - 2026-10-30: planned; coverage of Simple Icons checked (see the decision rule).
