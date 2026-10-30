@@ -154,11 +154,7 @@ git pull --recurse-submodules                # 2. new code (updates backend/ and
 curl -fsS http://127.0.0.1:8081/readyz
 ```
 
-**One-off steps after specific upgrades** (run once, after step 4):
-
-| Upgrading to | Run | Why |
-|---|---|---|
-| backend 1.2.1 | `./deploy/prod exec api /app/api strip-images` | Removes EXIF/GPS and other metadata from images uploaded before 1.2.1 (F-005). Idempotent: a second run changes nothing. New uploads are stripped on upload |
+**One-off steps after specific upgrades:** none at the moment. (The old `strip-images` backfill of 1.2.1 was removed with the F-019 refactor; production was not in use.) Add a row here when a release needs a manual step.
 
 If `migrate` fails, the api does not start (the old one is already replaced, so the app is down): read
 `./deploy/prod logs migrate`, then roll back.

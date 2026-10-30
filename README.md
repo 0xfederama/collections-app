@@ -53,7 +53,7 @@ Open the web URL: Home shows "Your lists" and "Recently updated" (empty on a bla
 
 - **Same-origin by design (D-033, D-016).** The browser only calls relative `/api/...`. In dev Vite forwards it, in
   production Caddy does. There is no CORS code.
-- **Contract first.** The backend owns `backend/api/openapi.yaml` (OpenAPI 3.0.3). The web app vendors a
+- **One contract.** The backend generates `backend/api/openapi.yaml` (OpenAPI 3.1) from its handler code. The web app vendors a
   pinned copy and generates its API client from it, so the two repos never drift silently.
 - **Postgres holds everything relational**, including Markdown content and its versions. Only image files live on disk.
 - **No monorepo (D-001).** Two independently buildable repos, joined by this parent repo (D-043).
@@ -64,7 +64,7 @@ Open the web URL: Home shows "Your lists" and "Recently updated" (empty on a bla
 |---|---|
 | Backend | Go 1.27, chi, pgx v5, sqlc, golang-migrate, `log/slog`, testcontainers-go, golangci-lint |
 | Database | PostgreSQL 18 (`pg_trgm` for search later) |
-| Contract | OpenAPI 3.0.3, oapi-codegen strict chi server, Redocly lint |
+| Contract | OpenAPI 3.1 generated from the code (Huma on chi), Redocly lint |
 | Web | React 19, TypeScript 6 (strict), Vite 8, Tailwind 4, React Router 8 |
 | Web, more | TanStack Query, openapi-fetch, Radix UI primitives, dnd-kit, CodeMirror 6, react-markdown, Fontsource |
 | Tests | Go: `go test` + real Postgres. Web: Vitest + Testing Library (jsdom). E2E (Playwright + axe) is post-MVP |
@@ -121,7 +121,7 @@ No GitHub Actions or Dependabot for now (D-031). Gates run locally, and the resu
 
 | Repo | Command | Covers today |
 |---|---|---|
-| `backend/` | `make check` (Docker running, Node 24+) | gofmt, golangci-lint (goimports, noctx), Redocly spec lint, shellcheck, sqlc/oapi-codegen drift, `go test ./...` with a real Postgres, compose exposure check, Docker build |
+| `backend/` | `make check` (Docker running, Node 24+) | gofmt, golangci-lint (goimports, noctx), Redocly spec lint, shellcheck, sqlc and generated-spec drift, `go test ./...` with a real Postgres, compose exposure check, Docker build |
 | `frontend-web/` | `npm ci && npm run check` (Docker running) | Prettier, ESLint, `tsc`, API contract check, Vitest, `vite build`, production image build |
 | either | `make audit` / `npm run audit` | Vulnerability scans (need network, not part of `check`) |
 
