@@ -101,9 +101,9 @@ Dev code was already gated at build time (`import.meta.env.DEV` for `/dev/ui`, `
 4. Move `StoreChoices` logos behind a lazy boundary so `stores/screens` (the only carve-out in the boundary rules) can go.
 5. Bugs found, not fixed (behaviour): the Types pane change-lists dropdown offers the type being deleted; `StoreChoices` error text is not linked to its trigger (`aria-describedby`).
 
-### W6 adopt `api-v1.0.0`: BLOCKED. No `api-v1*` tag in `../backend` (checked again 2026-10-20 with `git ls-remote`); `npm run api:sync`, adapting names, and removing the leftover `store_links`/`platform_links` reads of the old contract wait for it.
+### W6 adopt `api-v1.0.0`: DONE (web#92, main `08add56`, 2026-10-31). Contract synced; the spec has no examples, so the MSW fixtures are hand-owned in `src/mocks/fixtures.ts`; enums are web-owned unions; nullable slices are normalised once in each `queryFn`. Gate green (1661 tests), e2e 51/51 on a fresh `./deploy/test`, `npm run audit` 0 (after `npm audit fix` for a transitive `undici` advisory). Reviews: /code-review 6 findings (2 fixed, 4 skipped), /simplify. **Backend asks:** (1) `Item.price`, `ItemSummary.price`, `ItemSummary.image` are typed non-null but sent as `null` (add `nullable:"true"`); the web widens them until fixed. (2) Say what `former_path: null` means in Trash (web reads it as top level).
 
-### Release web 2.18.0: not tagged yet (version in package.json is 2.17.0). Gate before the tag: `npm run check`, `npm run e2e` (51/51 on a fresh `./deploy/test`), `npm run audit` (0 vulnerabilities, 2026-10-20) all green on `main` `a521b4f`.
+### Release web 2.18.0: tagged `v2.18.0` on `08add56` (2026-10-31).
 
 **Note on e2e (found during this feature):** `./deploy/test` runs a Vite dev server on the MAIN checkout of `frontend-web/` (compose mounts `../../frontend-web`), not on a worktree. To e2e a branch, check it out (detached) in the main checkout first, or the run tests `main`.
 
