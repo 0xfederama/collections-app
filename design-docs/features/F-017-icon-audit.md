@@ -66,6 +66,8 @@ Outcome: `npm run check` green, e2e green on a fresh stack after re-running 3 in
 - **Source fallback:** Wikimedia Commons was used as a fallback source for **Amazon** and **Apple Books** (the brand publishes no usable SVG); licence tags are recorded in the README. Hulu comes from svgl (wordmark); Open Library's own repository icon.
 - **Brand rasters embedded as SVG wrappers:** where a brand only publishes a raster (Prime Video, Disney+, Infinity, RaiPlay, Kobo, Bookshop.org, Discovery+, Peacock, TIMvision, Rakuten TV) the official PNG is base64-embedded **unmodified** in a 100x100 SVG (no redrawing, no resampling). This is brief fallback 4 (a clean official raster, converted without redrawing); the registry stays all-SVG.
 - **Low resolution:** TIMvision (96 px) and Rakuten TV (64 px) are the best icons those brands serve; the rest are sharp up to the largest tile (36 px).
+- **Scope grew in follow-ups (web 2.19.1):** after 2.19.0 the registry was extended and corrected. Final sources: **Amazon, Apple Books, RaiPlay and TIMvision** come from Wikimedia Commons; **Netflix, Hulu and Google Play** come from svgl and gilbarbara/logos. (This supersedes the Hulu and TIMvision source notes above.)
 
 ## Log
 - 2026-10-30: planned; coverage of Simple Icons checked (see the decision rule).
+- 2026-10-30: shipped as web 2.19.0 and 2.19.1 (follow-ups, see caveats).
