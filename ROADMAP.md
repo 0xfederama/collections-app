@@ -48,7 +48,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 14 | backend 2.6.0 | **Backend architecture refactor** (F-019): layers (handler → service → repository), simple queries, soft deletes, one baseline migration, code-first generated OpenAPI (`api-v1.0.0`) | ✅ Done (2026-10-31, backend 2.6.0, `api-v1.0.0`/`api-v1.0.1`) | Oct–Nov 2026 |
 | 15 | web 2.18.0 | **Web architecture refactor** (F-020): feature slices with lint-enforced boundaries, big files split, one data layer, link building moves from the backend to the web | ✅ Done (2026-10-31, web 2.18.1) | Oct–Nov 2026 |
 | 16 | web | **Icon audit and fix** (F-017): every link, store and streaming icon correct; per-icon official SVGs (no single pack covers all, checked), one registry, one tile size | ✅ Done (2026-10-30, web 2.19.0 and 2.19.1) | Oct 2026 |
-| — | then | Pool: collaborative Markdown → accounts (backend 3.0) → security review → internet exposure + public API | ⚪ Pool | 2027 |
+| — | then | Pool: accounts (backend 3.0) → security review → internet exposure + public API → collaborative Markdown | ⚪ Pool | 2027 |
 | — | future | List import, advanced search | 🔭 Future | — |
 
 ```mermaid
@@ -95,7 +95,7 @@ flowchart LR
         COL["Collaborative Markdown"]
         P3["backend 2.0 · Accounts"]
         SEC["Security review & hardening<br/>→ internet exposure + public API"]
-        F005 --> ICO --> P2 --> UDK --> COL --> P3 --> SEC
+        F005 --> ICO --> P2 --> UDK --> P3 --> SEC --> COL
     end
     F007 --> F003 --> F002 --> POOL
 ```
@@ -209,9 +209,9 @@ Committed, in this order (set by you, 2026-10-15), after the UI refresh. The re-
 | 3 | **List icons + F-004 product gaps** (brief: F-012) | An interchangeable icon per list: an emoji or one from a built-in icon set (Notion-style, no photos), the current icon as default. Paste an image from the clipboard (copy an image or take a screenshot, then Cmd+V on an item to set it as its image, without saving a file first); "Empty trash" with confirmation; optional trash auto-purge after N days (off by default) | backend 1.2 / web 2.1 |
 | 4 | **TMDB + automatic image lookup** (brief: F-013) | Movie and TV lookup when creating an item, metadata refresh, streaming availability by country, attribution, rate limits; an image fetched automatically when an item is added (TMDB for movies and TV, another provider to check for the other kinds). User-entered values are never silently overwritten. No IMDb scraping. Starts with a check of the providers' terms | backend 1.3 / web 2.2 |
 | 5 | **Custom fields + custom types** (brief: F-014) | Two steps, wanted by the user (2026-10-15): **(a) custom fields on any list**, e.g. a *Director* on a movie list, shown in the item, **pinnable** in rows (F-002 stores pinned fields by key for this) and usable to **filter and sort** (today the filter is title-only); **(b) custom types**: create your own item kinds with their own fields, sort key, default pinned fields and links, replacing the fixed kind list. Fits the validator registry + `metadata` JSONB, but needs field and kind definitions stored per workspace/list | backend 1.4 / web 2.3 |
-| 6 | **Real-time collaborative Markdown** | Two people editing the same description live. Path kept open: Yjs + CodeMirror 6, content already versioned in Postgres (ARCHITECTURE §7) | backend 1.5 / web 2.4 |
-| 7 | **Accounts & access control** | Users, memberships, authorization; every table already carries `workspace_id` (revisit `item_content_versions`, Q-05 finding 5) | **backend 3.0** / web 3.0 |
-| 8 | **Security review & hardening → internet exposure + public API** | A thorough security review and hardening pass (threat model, auth/session review, rate limiting, headers, dependency and container audit, pentest-style checks). Internet exposure and a public API happen only after it, or within it. The public API needs a full re-discussion first (PRODUCT §13, Phase 4) | after backend 2.0 |
+| 6 | **Accounts & access control** | Users, memberships, authorization; every table already carries `workspace_id` (revisit `item_content_versions`, Q-05 finding 5) | **backend 3.0** / web 3.0 |
+| 7 | **Security review & hardening → internet exposure + public API** | A thorough security review and hardening pass (threat model, auth/session review, rate limiting, headers, dependency and container audit, pentest-style checks). Internet exposure and a public API happen only after it, or within it. The public API needs a full re-discussion first (PRODUCT §13, Phase 4) | after backend 2.0 |
+| 9 | **Real-time collaborative Markdown** | Two people editing the same description live. Path kept open: Yjs + CodeMirror 6, content already versioned in Postgres (ARCHITECTURE §7) | after #8: needs accounts for presence and names |
 
 ## 8. Future (on the roadmap, not yet ordered)
 
@@ -256,6 +256,7 @@ Committed, in this order (set by you, 2026-10-15), after the UI refresh. The re-
 ## Changelog
 - 2026-10-16: **F-009 merged** (backend 1.3.0 / api-v0.7.0 tagged; web#37 squashed `80a40bb` incl. F-010 new-list folder and F-011 review fixes). Web 2.2.0 bumped (web#39, audit clean); tag v2.2.0 pending.
 - 2026-10-19: **Before the pool, three items added by you:** (1) Books type with automatic lookup (F-016, briefed), (2) icon audit and fix (F-017), (3) type refactor (F-018, to be defined). Order: F-016, then F-017, then F-018.
+- 2026-10-30: **Collaborative Markdown moved after the security review** (you, 2026-10-30): pool is now accounts → security review/exposure → collaborative Markdown. **Frontend restyling** is next, chosen with the web orchestrator.
 - 2026-10-30: F-017 follow-up shipped as web 2.19.1 (D-110 display order); flaky drag-reorder e2e added to Upkeep.
 - 2026-10-30: **F-017 done** (web 2.19.0, web#94, D-109): 34 SVG icons behind one registry, picker 7 → 19 services; Amazon and Apple Books from Wikimedia Commons, brand rasters embedded as SVG wrappers. Next: the pool (collaborative Markdown → accounts → security review).
 - 2026-10-30: dev DB reset on the new baseline. **F-017 icons planned:** Simple Icons lacks Amazon, Prime Video, Disney+, Kobo, Bookshop.org, Open Library, Apple Books, TIMvision, Infinity, RaiPlay and others, so icons are sourced as per-icon SVGs (official sources first) behind one registry.
