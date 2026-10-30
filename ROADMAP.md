@@ -48,6 +48,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 14 | backend 2.6.0 | **Backend architecture refactor** (F-019): layers (handler → service → repository), simple queries, soft deletes, one baseline migration, code-first generated OpenAPI (`api-v1.0.0`) | ✅ Done (2026-10-31, backend 2.6.0, `api-v1.0.0`/`api-v1.0.1`) | Oct–Nov 2026 |
 | 15 | web 2.18.0 | **Web architecture refactor** (F-020): feature slices with lint-enforced boundaries, big files split, one data layer, link building moves from the backend to the web | ✅ Done (2026-10-31, web 2.18.1) | Oct–Nov 2026 |
 | 16 | web | **Icon audit and fix** (F-017): every link, store and streaming icon correct; per-icon official SVGs (no single pack covers all, checked), one registry, one tile size | ✅ Done (2026-10-30, web 2.19.0 and 2.19.1) | Oct 2026 |
+| 17 | web 2.20.0 | **Web restyle "Editorial"** (F-021): new tokens, type scale and self-hosted fonts across every screen, no behaviour change | ✅ Done (2026-10-30, web 2.20.0, web#96, D-111) | Oct 2026 |
 | — | then | Pool: accounts (backend 3.0) → security review → internet exposure + public API → collaborative Markdown | ⚪ Pool | 2027 |
 | — | future | List import, advanced search | 🔭 Future | — |
 
@@ -256,6 +257,7 @@ Committed, in this order (set by you, 2026-10-15), after the UI refresh. The re-
 ## Changelog
 - 2026-10-16: **F-009 merged** (backend 1.3.0 / api-v0.7.0 tagged; web#37 squashed `80a40bb` incl. F-010 new-list folder and F-011 review fixes). Web 2.2.0 bumped (web#39, audit clean); tag v2.2.0 pending.
 - 2026-10-19: **Before the pool, three items added by you:** (1) Books type with automatic lookup (F-016, briefed), (2) icon audit and fix (F-017), (3) type refactor (F-018, to be defined). Order: F-016, then F-017, then F-018.
+- 2026-10-30: **F-021 web restyle "Editorial" done** (web 2.20.0, web#96, D-111). Next: the pool (accounts → security review → collaborative Markdown).
 - 2026-10-30: **Collaborative Markdown moved after the security review** (you, 2026-10-30): pool is now accounts → security review/exposure → collaborative Markdown. **Frontend restyling** is next, chosen with the web orchestrator.
 - 2026-10-30: F-017 follow-up shipped as web 2.19.1 (D-110 display order); flaky drag-reorder e2e added to Upkeep.
 - 2026-10-30: **F-017 done** (web 2.19.0, web#94, D-109): 34 SVG icons behind one registry, picker 7 → 19 services; Amazon and Apple Books from Wikimedia Commons, brand rasters embedded as SVG wrappers. Next: the pool (collaborative Markdown → accounts → security review).
