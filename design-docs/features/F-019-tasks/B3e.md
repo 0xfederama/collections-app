@@ -1,0 +1,13 @@
+# F019-B3e task specs: images (PR 8)
+
+Branch `refactor/F019-B3e-images`, worktree `/Users/federico/Developer/collections-app/backend-F019-B3e`. Rules/patterns as B3a..d.md. Existing tests unchanged: `internal/images/*_test.go` (process, strip, sweeper), `internal/httpapi/images_test.go` (714 lines), `purge_orphans_test.go`.
+Pure files stay as they are (`process.go`, `strip.go`, thumbnails) and keep their tests. `internal/storage` (FileStore) is a platform-like dependency; unchanged.
+
+## T1 · model + repository
+`internal/images/model.go` (Attachment, Processed stays in process.go), `repository.go` (Postgres, InTx, Repo; workspace from ctx): InsertAttachment, GetAttachment, DeleteAttachment (returns keys), ListAttachmentKeys, ListUnreferencedAttachments, plus the item-image writes on the items table as SEAMS (`// SEAM: moves to items`): LockItem (FOR UPDATE, returns version + current image refs), SetItemImageAttachment, SetItemImageURL, ClearItemImage (each bumps version/updated_at as today). Integration tests on testdb. Not wired.
+
+## T2 · service
+`service.go`: SetUpload, SetURL, Delete, Open (file + thumbnail), Sweep + RunSweeper (sweeper.go moves its queries to the Repo), exactly the current rules: files written BEFORE the tx, previous attachment row deleted INSIDE the tx, old files deleted AFTER commit, failures only logged; storage keys generated; URL validation (`cleanURL`); filename cleaning; version check "i-N" before anything else; the response item comes from an `ItemReader` interface (`Get(ctx, id) (items.Item, error)`) declared in service.go and satisfied by `*items.Service`. Orphan sweeper: 1 h grace with the injected clock. Tests with fake Repo + `storage` fake/temp dir: stale version leaves no files, previous file deleted only after commit, failed delete leaves an orphan the sweeper removes, URL/filename rules.
+
+## T3 · handler on Huma, retire the old service
+`handler.go`/`wire.go`: setItemImage (ONE operation accepting `multipart/form-data` (field `file`, optional filename) or `application/json` `{url}`: declare both request media types on the operation and read `RawBody`/content type yourself, size limit 10 MiB + 64 KiB for multipart, 64 KiB JSON, upload deadline 2 min as the old guard set), deleteItemImage, and the file-serving GET(s) (read `httpapi/images.go` and the spec: headers `Content-Type`, `Content-Disposition`, cache headers, 404 problem). `If-Match "i-N"` handled before the body is read (use the `ifMatchFirst` pattern from items). Register in the router; delete `httpapi/images.go`, `images/service.go` old, the guard's image entries and its multipart branch if now unused. Remove `images` from the archtest legacy allowlist. Delete unused queries; `make generate`.
