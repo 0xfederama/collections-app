@@ -121,7 +121,7 @@ active, and destructive variants are defined for every interactive primitive.
 
 ## 11. Design system
 
-> **Since web 2.0.0** the visual design is **Frosted Gallery** and items are edited in place (D-083). The brief, sketches and assets in [`features/F-002-ui-refresh.md`](features/F-002-ui-refresh.md) and `features/F-002-assets/` take precedence over older details in this file where they differ.
+> **Since web 2.20.0** the visual design is **Editorial** ([`features/F-021-web-restyle.md`](features/F-021-web-restyle.md)): Space Grotesk / Geist / Geist Mono (self-hosted), white and near-black neutrals, one blue accent (`#2d5bff`), radius 6 / 8 / 12 / 16, no blur, medium list rows. Its "Decisions" table takes precedence over the typography, radius, colour and surface details below, and over the Frosted Gallery direction of web 2.0.0 (F-002, D-083), which it replaces. Items are still edited in place (D-083).
 
 Tokens live in `src/styles/tokens.css` as CSS custom properties, mapped into Tailwind's theme. **Light and dark themes are both MVP** (D-030).
 Components only use semantic tokens (`--bg`, `--surface`, `--text`, `--text-muted`, `--border`, `--accent`, …), never raw palette values.

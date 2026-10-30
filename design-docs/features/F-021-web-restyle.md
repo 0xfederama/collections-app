@@ -1,6 +1,6 @@
 # F-021 — Web restyle ("Editorial")
 
-Status: **approved**    Release: web 2.20.0 (minor)    Roadmap: ROADMAP.md (frontend restyling, next after F-017)
+Status: **done** (2026-10-30, web#96, `v2.20.0`)    Release: web 2.20.0 (minor)    Roadmap: ROADMAP.md (frontend restyling, next after F-017)
 Repos: web only (no backend, no contract change)    Approved by the user: 2026-10-30
 
 ## Why
@@ -104,6 +104,12 @@ web 2.20.0), a DECISIONS entry for the Editorial tokens and type scale (fonts re
 ## Repo breakdown (filled by the web orchestrator)
 | Task | Story | Branch | Worker result | Flags reviewed | PR |
 |---|---|---|---|---|---|
+| Tokens, fonts | W1 | feature/f021-web-restyle | done | yes (contrast fixes on dark accent-fg and border-strong) | web#96 |
+| Primitives | W2 | same | done | yes | web#96 |
+| Shell, list view | W3, W4 | same | done | yes (count stays after items, chip shows the number too) | web#96 |
+| Item page, other screens | W5, W6 | same | done | yes | web#96 |
+| Review fixes, docs, 2.20.0 | W7 | same | done (6 review findings fixed) | yes | web#96 |
 
 ## Log
 - 2026-10-30: direction decided with the user on the mockup canvas; brief drafted and approved; web orchestrator started W1.
+- 2026-10-30: shipped as web 2.20.0 (web#96). Q-F021-1: Fontsource packages. Q-F021-2: no row numbers. Folder names in the sidebar stay normal text (mono uppercase truncated badly); display size is fluid (32 px on phones).
