@@ -1,6 +1,6 @@
 # F-020 — Web architecture refactor
 
-Status: **planned** (2026-10-21, from the user's request; defaults below to confirm in the first report)    Release: web 2.18.0 (see F020-Q1)    Roadmap: ROADMAP.md §6
+Status: **done** (2026-10-31; web#81-#93, `v2.18.0`, `v2.18.1` on `api-v1.0.1`; see D-108)    Release: web 2.18.0 (see F020-Q1)    Roadmap: ROADMAP.md §6
 Repos: web    Contract: adopts `api-v1.0.0` (F-019)    Companion: [F-019](F-019-backend-architecture.md) (backend)
 
 ## Why

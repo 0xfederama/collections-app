@@ -119,6 +119,8 @@ Links open in a new tab with `rel="noopener noreferrer"`. URLs are built with pr
 Theme (System / Light / Dark, per device, not synced), workspace name, streaming country (ISO 3166-1 alpha-2, default `IT`), default currency (default `EUR`),
 Markdown history limit (default 20), and Delete trash automatically (Off / 7 / 30 / 90 days, saved immediately; F-012).
 
+> **Log viewer (F-019-B6):** when `LOGS_UI=true` the backend serves its recent logs at `/admin/logs/view` (JSON at `/admin/logs`), from an in-memory buffer; off by default in production, no auth yet (loopback/tailnet only until the security review).
+
 ## 13. Roadmap (order is fixed)
 
 1. **MVP**: everything in this document.

@@ -1,6 +1,6 @@
 # F-019 — Backend architecture refactor ("as if we had just started")
 
-Status: **planned** (2026-10-21, from the user's request; defaults below to confirm in the first report)    Release: backend 2.6.0 (see F019-Q1)    Roadmap: ROADMAP.md §6
+Status: **done** (2026-10-31; backend#51-#65, `api-v1.0.0`/`api-v1.0.1`, `v2.6.0`; see D-108)    Release: backend 2.6.0 (see F019-Q1)    Roadmap: ROADMAP.md §6
 Repos: backend (parent: docs)    Contract: `api-v1.0.0`    Companion: [F-020](F-020-web-architecture.md) (web)
 
 ## Why

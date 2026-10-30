@@ -1,8 +1,7 @@
 # API Design
 
 The private REST API is used by `collections-app-frontend-web`. Base path is `/api/v1`, and bodies are JSON (`application/json`) unless noted.
-This document is the input to `backend/api/openapi.yaml` (repo `collections-app-backend`). Once the spec exists, **the spec wins**, and
-divergences are fixed in the same PR.
+This document was the input to the contract. Since F-019 (`api-v1.0.0`) `backend/api/openapi.yaml` is **generated from the handler code** (`make spec`, drift-checked in `make check`) and is the only source of truth; this document is background and may be out of date, the spec wins. Error codes are listed in the spec's `Problem` description. The web syncs the contract with `npm run api:sync` (current: `api-v1.0.1`).
 
 > `/api/v1` is **not** a public API product (PRODUCT §13, Phase 4). There is no auth in MVP, so it is private-network only.
 

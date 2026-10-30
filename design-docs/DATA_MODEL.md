@@ -4,6 +4,8 @@ The DDL below is **normative intent**. The backend agent turns it into migration
 any semantic change needs a DECISIONS.md entry. All timestamps are `TIMESTAMPTZ NOT NULL DEFAULT now()`
 unless noted. `updated_at` is **set by the application** in every UPDATE query (no triggers), and sqlc queries must include it.
 
+> **Since F-019 (D-108):** the schema is one baseline migration `000001_init` (the 25 earlier migrations are squashed; later changes append normal migrations after it). Built-in types are seeded from Go, not SQL functions or triggers. The current table definitions are `backend/db/migrations/000001_init.up.sql`; the DDL below remains the intent and is not edited per migration.
+
 ## 1. Conventions
 
 - PKs: `UUID DEFAULT gen_random_uuid()`.

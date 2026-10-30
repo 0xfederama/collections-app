@@ -4,6 +4,8 @@
 > agent verify current stable versions and maintenance status, and record them in DECISIONS.md and each repo's
 > CLAUDE.md. Never take versions from memory or from old examples.
 
+> **Since F-019 (D-108)** the backend is built in layers: per feature `handler.go` (Huma operations) → `service.go` (rules, no SQL, no HTTP) → `repository.go` (the only file that runs sqlc queries), with `internal/platform/*` for plumbing and `internal/integrations/*` for TMDB, Open Library and Hardcover; layer rules are enforced by `.golangci.yml` depguard and an architecture test. The OpenAPI spec is **generated from the handlers** (Huma, OpenAPI 3.1). The authoritative, current description is `backend/docs/architecture.md`; where this document differs on backend internals (sections below were written for the MVP), that page wins. The web follows feature slices with lint-enforced boundaries (`frontend-web/docs`, F-020).
+
 ## 1. System overview
 
 ```text
