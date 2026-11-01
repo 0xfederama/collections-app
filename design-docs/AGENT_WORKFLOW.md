@@ -150,6 +150,13 @@ Dispatch rules:
 
 ---
 
+## 3b. Migrations and prod releases (D-116)
+
+- The app is in use. Migration 1.0 is the frozen baseline. Each feature with schema changes owns **one** migration (next number, e.g. 1.1); until that feature is released to prod, fix-ups edit the same file in place, never add a new one.
+- Repo orchestrators write migrations in their PR and run them on dev/test (fresh start: baseline + pending migrations). They never touch prod.
+- Prod release is done only by the top-level orchestrator after the user says yes in chat: list versions and migration, back up prod, deploy, then mark the migration released (frozen forever).
+- Contract changes stay backward compatible within a major version.
+
 ## 4. CLAUDE.md upkeep
 
 Each repo keeps a `CLAUDE.md` (template: `templates/CLAUDE.backend.md` / `templates/CLAUDE.web.md`) **plus** a `README.md`:
