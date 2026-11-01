@@ -24,8 +24,9 @@ Status: brief (2026-11-01). Repos: backend, frontend-web. Workflow v2 lean (one 
 
 ## Repo breakdown
 - backend: done in one PR (backend#66): B1+B2 by a complex-tier worker, B3 by a simple-tier worker. Released 2.7.0, contract `api-v2.0.0`.
-- web: pending.
+- web: done in one PR (web#103), released 2.21.0 (`9ddce37`, D-113).
 
 ## Log
 - 2026-11-01: brief written.
 - 2026-11-01: backend done (backend#66, 2.7.0, `api-v2.0.0`, D-112). Baseline migration edited in place: reset dev DBs.
+- 2026-11-01: web done (web#103, 2.21.0, D-113). F-022 complete. Open: TMDB's live Apple store name; shared service picker component (review skip).

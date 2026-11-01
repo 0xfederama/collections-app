@@ -49,7 +49,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 15 | web 2.18.0 | **Web architecture refactor** (F-020): feature slices with lint-enforced boundaries, big files split, one data layer, link building moves from the backend to the web | ✅ Done (2026-10-31, web 2.18.1) | Oct–Nov 2026 |
 | 16 | web | **Icon audit and fix** (F-017): every link, store and streaming icon correct; per-icon official SVGs (no single pack covers all, checked), one registry, one tile size | ✅ Done (2026-10-30, web 2.19.0 and 2.19.1) | Oct 2026 |
 | 17 | web 2.20.0 | **Web restyle "Editorial"** (F-021): new tokens, type scale and self-hosted fonts across every screen, no behaviour change | ✅ Done (2026-10-30, web 2.20.0, web#96, D-111) | Oct 2026 |
-| 18 | **backend 2.7.0 + web 2.21.0** | **Simplify and my services** (F-022): custom types and pin settings removed, owned streaming services in Settings, missing icons and white tiles | 🔶 Backend done (2.7.0, `api-v2.0.0`, backend#66, D-112); web next | Nov 2026 |
+| 18 | **backend 2.7.0 + web 2.21.0** | **Simplify and my services** (F-022): custom types and pin settings removed, owned streaming services in Settings, missing icons and white tiles | ✅ Done (backend 2.7.0 `api-v2.0.0` backend#66; web 2.21.0 web#103; D-112, D-113) | Nov 2026 |
 | — | then | Pool: accounts (backend 3.0) → security review → internet exposure + public API → collaborative Markdown | ⚪ Pool | 2027 |
 | — | future | List import, advanced search | 🔭 Future | — |
 
@@ -258,6 +258,7 @@ Committed, in this order (set by you, 2026-10-15), after the UI refresh. The re-
 ## Changelog
 - 2026-10-16: **F-009 merged** (backend 1.3.0 / api-v0.7.0 tagged; web#37 squashed `80a40bb` incl. F-010 new-list folder and F-011 review fixes). Web 2.2.0 bumped (web#39, audit clean); tag v2.2.0 pending.
 - 2026-10-19: **Before the pool, three items added by you:** (1) Books type with automatic lookup (F-016, briefed), (2) icon audit and fix (F-017), (3) type refactor (F-018, to be defined). Order: F-016, then F-017, then F-018.
+- 2026-11-01: **F-022 web done** (web 2.21.0, web#103, pointer `9ddce37`): custom-type UI and Pinned control removed (fixed pins per type in the web), "My streaming services" in Settings > Media filters item and row streaming (empty = all), Apple TV Store / Amazon Video reuse the Apple TV+ / Prime Video marks, Chili added, every inset mark on a white tile. F-022 complete. Open: check TMDB's live name for the Apple store ("Apple TV" vs "Apple TV Store").
 - 2026-11-01: **F-022 backend done** (backend 2.7.0, backend#66, `api-v2.0.0`, D-112): custom types and pinned-field config removed, `owned_streaming_services` in settings. Baseline migration edited in place: reset dev DBs. Next: F-022 web.
 - 2026-10-30: **F-021 web restyle "Editorial" done** (web 2.20.0, web#96, D-111). Next: the pool (accounts → security review → collaborative Markdown).
 - 2026-10-30: **Collaborative Markdown moved after the security review** (you, 2026-10-30): pool is now accounts → security review/exposure → collaborative Markdown. **Frontend restyling** is next, chosen with the web orchestrator.
