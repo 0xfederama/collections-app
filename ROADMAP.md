@@ -50,7 +50,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 16 | web | **Icon audit and fix** (F-017): every link, store and streaming icon correct; per-icon official SVGs (no single pack covers all, checked), one registry, one tile size | ✅ Done (2026-10-30, web 2.19.0 and 2.19.1) | Oct 2026 |
 | 17 | web 2.20.0 | **Web restyle "Editorial"** (F-021): new tokens, type scale and self-hosted fonts across every screen, no behaviour change | ✅ Done (2026-10-30, web 2.20.0, web#96, D-111) | Oct 2026 |
 | 18 | **backend 2.7.0 + web 2.21.0** | **Simplify and my services** (F-022): custom types and pin settings removed, owned streaming services in Settings, missing icons and white tiles | ✅ Done (backend 2.7.0 `api-v2.0.0` backend#66; web 2.21.0 web#103; D-112, D-113) | Nov 2026 |
-| 19 | **backend 2.8.0 + web** | **No custom fields** (F-023): Settings "Types & fields" and custom fields removed; types are code; backend treated as not yet started (one baseline schema, no migrations) | ✅ Done (backend 2.8.0 backend#67; web 2.22.0 web#105; D-114, D-115) | Nov 2026 |
+| 19 | **backend 2.8.0 + web 2.22.0** | **No custom fields** (F-023): Settings "Types & fields" and custom fields removed; types are code; backend treated as not yet started (one baseline schema, no migrations) | ✅ Done (backend 2.8.0 backend#67; web 2.22.0 web#105; D-114, D-115) | Nov 2026 |
 | — | then | Pool: accounts (backend 3.0) → security review → internet exposure + public API → collaborative Markdown | ⚪ Pool | 2027 |
 | — | future | List import, advanced search | 🔭 Future | — |
 
