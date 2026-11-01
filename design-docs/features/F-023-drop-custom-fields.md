@@ -13,3 +13,4 @@ Status: brief (2026-11-01). Repos: backend, frontend-web. Workflow v2 lean.
 
 ## Log
 - 2026-11-01: brief written.
+- 2026-11-01: B1 done (backend#67, squash `9664fca`, backend 2.8.0, `api-v3.0.0`). Repo breakdown: one complex-tier worker (removal + registry), one PR. `make check`, `make smoke` on a fresh test stack, `make audit` clean.

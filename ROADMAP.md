@@ -50,6 +50,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 16 | web | **Icon audit and fix** (F-017): every link, store and streaming icon correct; per-icon official SVGs (no single pack covers all, checked), one registry, one tile size | ✅ Done (2026-10-30, web 2.19.0 and 2.19.1) | Oct 2026 |
 | 17 | web 2.20.0 | **Web restyle "Editorial"** (F-021): new tokens, type scale and self-hosted fonts across every screen, no behaviour change | ✅ Done (2026-10-30, web 2.20.0, web#96, D-111) | Oct 2026 |
 | 18 | **backend 2.7.0 + web 2.21.0** | **Simplify and my services** (F-022): custom types and pin settings removed, owned streaming services in Settings, missing icons and white tiles | ✅ Done (backend 2.7.0 `api-v2.0.0` backend#66; web 2.21.0 web#103; D-112, D-113) | Nov 2026 |
+| 19 | **backend 2.8.0 + web** | **No custom fields** (F-023): Settings "Types & fields" and custom fields removed; types are code; backend treated as not yet started (one baseline schema, no migrations) | 🟡 Backend done (2.8.0 `api-v3.0.0` backend#67; D-114); web W1 todo | Nov 2026 |
 | — | then | Pool: accounts (backend 3.0) → security review → internet exposure + public API → collaborative Markdown | ⚪ Pool | 2027 |
 | — | future | List import, advanced search | 🔭 Future | — |
 
@@ -256,6 +257,7 @@ Committed, in this order (set by you, 2026-10-15), after the UI refresh. The re-
 - This file is updated when a feature ships, starts, or changes horizon. Detailed task history stays in STATUS.md.
 
 ## Changelog
+- 2026-11-01: **F-023 backend done** (backend 2.8.0, backend#67, `api-v3.0.0`, D-114; 2.x because 3.0.0 is reserved for accounts): custom fields, the five field operations and the `type_definitions`/`type_fields` tables removed; built-in types are code; `GET /types` kept from the registry. Baseline schema edited in place: reset dev and test DBs. Next: F-023 W1. TMDB check: the Apple subscription is now named "Apple TV" (id 350), the store "Apple TV Store" (id 2); "Amazon Prime Video with Ads" (id 2100) and the "… Amazon Channel" entries do not resolve in the web registry yet (web follow-up).
 - 2026-10-16: **F-009 merged** (backend 1.3.0 / api-v0.7.0 tagged; web#37 squashed `80a40bb` incl. F-010 new-list folder and F-011 review fixes). Web 2.2.0 bumped (web#39, audit clean); tag v2.2.0 pending.
 - 2026-10-19: **Before the pool, three items added by you:** (1) Books type with automatic lookup (F-016, briefed), (2) icon audit and fix (F-017), (3) type refactor (F-018, to be defined). Order: F-016, then F-017, then F-018.
 - 2026-11-01: **F-022 web done** (web 2.21.0, web#103, pointer `9ddce37`): custom-type UI and Pinned control removed (fixed pins per type in the web), "My streaming services" in Settings > Media filters item and row streaming (empty = all), Apple TV Store / Amazon Video reuse the Apple TV+ / Prime Video marks, Chili added, every inset mark on a white tile. F-022 complete. Open: check TMDB's live name for the Apple store ("Apple TV" vs "Apple TV Store").
