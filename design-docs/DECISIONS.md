@@ -183,3 +183,7 @@ Sources: GitHub releases API, proxy.golang.org, go.dev, Docker Hub, npm registry
 - The `item_metadata` table is replaced by D-006.
 - The `/trash/{type}/{id}` endpoints are replaced by D-013, and `POST /items/{id}/image` by D-008.
 - Paginated `GET /folders` and `GET /lists` are replaced by D-012.
+
+## D-112 — Simpler customization, owned streaming services (F-022, 2026-11-01)
+
+Custom item types are removed (only the five built-in types, D-105) and pinned fields are fixed per type in code, no longer configurable. Custom fields stay. Settings gain `owned_streaming_services` (provider keys; empty = show all), and the web hides the rest. Breaking contract `api-v2.0.0`; the baseline migration was edited in place (prod unused), so dev databases must be reset. Supersedes the custom-kind and pin parts of F-014.

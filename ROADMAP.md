@@ -32,6 +32,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 | # | Release | Theme | Status | Window |
 |---|---|---|---|---|
 | — | **1.0 MVP** | Organize, describe and protect a shared collection | ✅ Released `v1.0.0` (2026-10-15) | Oct 2026 |
+| 18 | **backend 2.7.0 + web 2.21.0** | **Simplify and my services** (F-022): custom types and pin settings removed, owned streaming services in Settings, missing icons and white tiles | 🔶 Backend done (2.7.0, `api-v2.0.0`, backend#66, D-112); web next | Nov 2026 |
 | 1 | **1.0.1** | Polish from the release checks (F-006) | ✅ Released `v1.0.1` (2026-10-15) | Oct 2026 |
 | 2 | — | Exploration session: you used the fresh test env and listed what to change | ✅ Done (2026-10-15) | Oct 2026 |
 | 3 | **1.1.0** | Lists and items restructure + exploration fixes (F-007): one kind per list, trimmed fields, addable price, list description, 6 UI fixes. Last shared version (D-080) | ✅ Released `v1.1.0` (2026-10-15) | Oct 2026 |
@@ -257,6 +258,7 @@ Committed, in this order (set by you, 2026-10-15), after the UI refresh. The re-
 ## Changelog
 - 2026-10-16: **F-009 merged** (backend 1.3.0 / api-v0.7.0 tagged; web#37 squashed `80a40bb` incl. F-010 new-list folder and F-011 review fixes). Web 2.2.0 bumped (web#39, audit clean); tag v2.2.0 pending.
 - 2026-10-19: **Before the pool, three items added by you:** (1) Books type with automatic lookup (F-016, briefed), (2) icon audit and fix (F-017), (3) type refactor (F-018, to be defined). Order: F-016, then F-017, then F-018.
+- 2026-11-01: **F-022 backend done** (backend 2.7.0, backend#66, `api-v2.0.0`, D-112): custom types and pinned-field config removed, `owned_streaming_services` in settings. Baseline migration edited in place: reset dev DBs. Next: F-022 web.
 - 2026-10-30: **F-021 web restyle "Editorial" done** (web 2.20.0, web#96, D-111). Next: the pool (accounts → security review → collaborative Markdown).
 - 2026-10-30: **Collaborative Markdown moved after the security review** (you, 2026-10-30): pool is now accounts → security review/exposure → collaborative Markdown. **Frontend restyling** is next, chosen with the web orchestrator.
 - 2026-10-30: F-017 follow-up shipped as web 2.19.1 (D-110 display order); flaky drag-reorder e2e added to Upkeep.

@@ -22,5 +22,10 @@ Status: brief (2026-11-01). Repos: backend, frontend-web. Workflow v2 lean (one 
 - W3: Settings selector for owned streaming services; hide unselected services everywhere streaming is shown; empty = all.
 - W4: icon registry: map Apple TV Store → Apple TV+, Amazon Video → Prime Video, add Chili (official SVG, vendored); white tile for every icon lacking a background.
 
+## Repo breakdown
+- backend: done in one PR (backend#66): B1+B2 by a complex-tier worker, B3 by a simple-tier worker. Released 2.7.0, contract `api-v2.0.0`.
+- web: pending.
+
 ## Log
 - 2026-11-01: brief written.
+- 2026-11-01: backend done (backend#66, 2.7.0, `api-v2.0.0`, D-112). Baseline migration edited in place: reset dev DBs.
