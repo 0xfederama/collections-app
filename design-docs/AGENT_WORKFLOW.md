@@ -51,7 +51,7 @@ not separate sessions.
 - Security-sensitive, schema, contract (`api/openapi.yaml`), migration, concurrency, trash and storage work: the worker
   **must** flag it as `[CRUCIAL]`, and the orchestrator reviews those parts.
 - `docs-keeper` (simple tier) still updates `docs/` before every PR. `researcher` (complex tier) still handles version and library research.
-- Running the app for a check: `./deploy/test up -d --fresh` from the parent, never the user's dev data.
+- Running the app for a check: `./deploy/dev up -d --fresh` from the parent; never use or wipe `./deploy/test`, the user's manual environment (D-117).
 
 ### Test runs: wisely, not by reflex (D-076)
 Run the smallest set of checks that proves the change. A full suite re-run is a tool, not a ritual.
@@ -62,7 +62,7 @@ Run the smallest set of checks that proves the change. A full suite re-run is a 
 | Worker, before reporting | Its targeted tests and the static checks, green. The **full gate** only when the task touches shared code: the API contract or generated client, schema/migrations/sqlc, shared query keys or hooks, build config, dependencies, Docker/compose/Caddy. The report's Verification says exactly what ran. |
 | Orchestrator, before opening a PR | The full gate (`make check` / `npm run check`) **once**, on the final commit. Not after every worker, and not again if nothing changed since the last green run. |
 | Docs, README or comment-only change | No tests. Formatting of the touched files at most. |
-| Slow suites: e2e, smoke on `./deploy/test`, `make test-backup`, browser checks | Only when the change touches what they cover (backup scripts → `make test-backup`; compose, Dockerfile, Caddy or CSP → stack smoke; user flows → e2e), or before a release tag. Never "just in case". |
+| Slow suites: e2e, smoke on `./deploy/dev`, `make test-backup`, browser checks | Only when the change touches what they cover (backup scripts → `make test-backup`; compose, Dockerfile, Caddy or CSP → stack smoke; user flows → e2e), or before a release tag. Never "just in case". |
 | A test fails and looks flaky | Re-run that test only, not the whole suite. |
 | Before a release tag (any repo) | Dependency audit (D-084): backend `make audit` (govulncheck), web `npm run audit`. A high or critical finding that affects shipped code blocks the tag until it is fixed or explicitly accepted by the user. |
 
@@ -156,6 +156,7 @@ Dispatch rules:
 - Repo orchestrators write migrations in their PR and run them on dev/test (fresh start: baseline + pending migrations). They never touch prod.
 - Prod release is done only by the top-level orchestrator after the user says yes in chat: list versions and migration, back up prod, deploy, then mark the migration released (frozen forever).
 - Contract changes stay backward compatible within a major version.
+- Releases (D-117): each repo tags versions and CI builds arm64 images to GHCR; a tag is not a deploy. The user approves prod by publishing a GitHub Release (latest) in that repo; orchestrators may leave a draft. The Pi polls once a minute with a read-only token and deploys the backend before the web.
 
 ## 4. CLAUDE.md upkeep
 

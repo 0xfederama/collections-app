@@ -1,15 +1,34 @@
 #!/usr/bin/env bash
-# dev: your everyday local environment. Data persists; the web app is the Vite dev server (hot reload).
+# dev: the environment for automated checks (unit/integration/e2e/smoke, agents). Disposable: wipe it any time.
 #
-#   ./deploy/dev up -d            build and start in the background (omit -d to follow the logs)
-#   ./deploy/dev down             stop; the data is kept
-#   ./deploy/dev <compose cmd>    anything docker compose does: ps, logs -f api, restart web, ...
+#   ./deploy/dev up -d            start in the background
+#   ./deploy/dev up -d --fresh    wipe the database and uploaded files, then start on a blank DB
+#   ./deploy/dev down [--fresh]   stop (and wipe)
+#   ./deploy/dev <compose cmd>    ps, logs -f api, exec db psql -U collection, ...
 #
-# web http://localhost:5173   api http://localhost:8080   settings: deploy/local/dev.env
+# web http://localhost:5183   api http://localhost:8090   settings: deploy/local/dev.env
 set -euo pipefail
 ENV_NAME="dev"
 # shellcheck source=deploy/lib.sh
 . "$(dirname "$0")/lib.sh"
 
+fresh=0
+args=()
+for a in "$@"; do
+  if [ "$a" = --fresh ]; then fresh=1; else args+=("$a"); fi
+done
+
 use_local_stack
-run_local "$@"
+
+if [ "$fresh" = 1 ]; then
+  say "wiping the database and uploaded files"
+  docker compose down --remove-orphans
+  # Only the data volumes: node_modules stays, so the next start skips a full npm ci.
+  docker volume rm -f "${COMPOSE_PROJECT_NAME}_pgdata" "${COMPOSE_PROJECT_NAME}_appdata" >/dev/null
+  if [ "${#args[@]}" = 0 ] || [ "${args[0]}" = down ]; then
+    ok "stopped and wiped"
+    exit 0
+  fi
+fi
+
+run_local ${args[@]+"${args[@]}"}

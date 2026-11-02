@@ -5,14 +5,14 @@ Three environments, one command each. Every command takes any `docker compose` s
 
 | | `./deploy/dev` | `./deploy/test` | `./deploy/prod` |
 |---|---|---|---|
-| For | Everyday development | Trying things, demos, manual test runs | The real app on your home server |
-| Web | http://localhost:5173 (Vite, hot reload) | http://localhost:5183 (Vite, hot reload) | http://127.0.0.1:8081 (Caddy, built SPA) |
-| API | http://localhost:8080 | http://localhost:8090 | not published (behind web) |
-| Data | Persistent | Disposable: `--fresh` wipes it | Persistent, with backups |
+| For | Automated checks: unit, integration, e2e, smoke (agents) | Your manual testing | The real app (Raspberry Pi, LAN) |
+| Web | http://localhost:5183 (Vite, hot reload) | http://localhost:5173 (Vite, hot reload) | http://127.0.0.1:8081 (Caddy, built SPA) |
+| API | http://localhost:8090 | http://localhost:8080 | not published (behind web) |
+| Data | Disposable: `--fresh` wipes it | Persistent, never touched by agents | Persistent, with backups |
 | Settings | `local/dev.env` | `local/test.env` | `server/.env` (from `server/.env.example`) |
-| Secrets | `backend/.env` | `backend/.env` (must exist) | `server/.env` |
+| Secrets | `backend/.env` (must exist) | `backend/.env` | `server/.env` |
 | Compose file | `local/compose.yaml` | `local/compose.yaml` | `server/compose.yaml` |
-| Project / volumes | `collections-app` | `collections-app-test` | `collections-app-prod` |
+| Project / volumes | `collections-app-dev` | `collections-app` | `collections-app-prod` |
 
 dev and test have different ports and volumes, so they run side by side. Everything binds `127.0.0.1` only (AT-18).
 

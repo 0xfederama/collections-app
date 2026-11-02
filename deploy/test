@@ -1,34 +1,15 @@
 #!/usr/bin/env bash
-# test: a disposable copy of dev with its own data and ports, so it runs next to dev. Wipe it any time.
+# test: your manual testing environment. Data persists; agents never use or wipe it. Vite dev server (hot reload).
 #
-#   ./deploy/test up -d            start in the background
-#   ./deploy/test up -d --fresh    wipe the database and uploaded files, then start on a blank DB
-#   ./deploy/test down [--fresh]   stop (and wipe)
-#   ./deploy/test <compose cmd>    ps, logs -f api, exec db psql -U collection, ...
+#   ./deploy/test up -d            build and start in the background (omit -d to follow the logs)
+#   ./deploy/test down             stop; the data is kept
+#   ./deploy/test <compose cmd>    anything docker compose does: ps, logs -f api, restart web, ...
 #
-# web http://localhost:5183   api http://localhost:8090   settings: deploy/local/test.env
+# web http://localhost:5173   api http://localhost:8080   settings: deploy/local/test.env
 set -euo pipefail
 ENV_NAME="test"
 # shellcheck source=deploy/lib.sh
 . "$(dirname "$0")/lib.sh"
 
-fresh=0
-args=()
-for a in "$@"; do
-  if [ "$a" = --fresh ]; then fresh=1; else args+=("$a"); fi
-done
-
 use_local_stack
-
-if [ "$fresh" = 1 ]; then
-  say "wiping the database and uploaded files"
-  docker compose down --remove-orphans
-  # Only the data volumes: node_modules stays, so the next start skips a full npm ci.
-  docker volume rm -f "${COMPOSE_PROJECT_NAME}_pgdata" "${COMPOSE_PROJECT_NAME}_appdata" >/dev/null
-  if [ "${#args[@]}" = 0 ] || [ "${args[0]}" = down ]; then
-    ok "stopped and wiped"
-    exit 0
-  fi
-fi
-
-run_local ${args[@]+"${args[@]}"}
+run_local "$@"

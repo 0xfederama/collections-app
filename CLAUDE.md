@@ -10,4 +10,4 @@ Design docs live in `design-docs/` (read `design-docs/README.md` and `AGENT_WORK
 - **A session started here is the top-level orchestrator** (workflow v2, AGENT_WORKFLOW §1b, D-074): it owns `ROADMAP.md`,
   analyzes new features with the user, and writes `design-docs/features/F-NNN-*.md` with user stories per repo. It does not
   split stories into tasks or write service code: the repo orchestrators do that with their `worker` agents.
-- To run the app for a check, use `./deploy/test up -d --fresh` (ports 5183/8090), never the user's dev data.
+- To run the app for a check, use `./deploy/dev up -d --fresh` (ports 5183/8090); `./deploy/test` is the user's manual environment, never use or wipe it (D-117).
