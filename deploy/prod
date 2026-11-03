@@ -98,10 +98,10 @@ case "$cmd" in
   backup)
     dest="${1:-$backups}"
     mkdir -p "$dest"
-    exec "$root/backend/scripts/backup.sh" "$dest"
+    exec "$here/backup/backup.sh" "$dest"
     ;;
-  restore) exec "$root/backend/scripts/restore.sh" "$@" ;;
-  verify) exec "$root/backend/scripts/verify-restore.sh" "$@" ;;
+  restore) exec "$here/backup/restore.sh" "$@" ;;
+  verify) exec "$here/backup/verify-restore.sh" "$@" ;;
   prune) prune "$@" ;;
   backup-status) backup_status "$@" ;;
   check) exec "$here/check.sh" ;;
