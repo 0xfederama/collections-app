@@ -37,17 +37,15 @@ services:
 
   # Runs once per `up`, applies pending migrations, exits. The api starts only after it succeeded.
   migrate:
-    image: migrate/migrate:v4.20.1
+    image: ghcr.io/0xfederama/collections-app-backend:${BACKEND_VERSION:-none}
     <<: *hardening
+    read_only: true
     depends_on:
       db:
         condition: service_healthy
     environment:
       DATABASE_URL: postgres://db:5432/collection?user=collection&password=${POSTGRES_PASSWORD:?}&sslmode=disable
-    volumes:
-      - ../../backend/db/migrations:/migrations:ro
-    entrypoint: ["/bin/sh", "-c"]
-    command: ['exec migrate -path /migrations -database "$$DATABASE_URL" up']
+    command: ["migrate"]
     restart: "no"
 
   api:

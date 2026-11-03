@@ -3,7 +3,8 @@
 # collection-release.timer; does nothing when both versions are already deployed.
 #
 # Publishing a Release (marked latest) in a repo is the prod approval. A tag alone is not.
-# Order: backend first (backup, migrations from the backend submodule at the tag, api), then web.
+# Order: backend first (backup, migrations embedded in the api image, api), then web.
+# Every run also fast-forwards this checkout: pushed deploy/ changes apply within a minute.
 # Needs GITHUB_TOKEN (read-only) in deploy/server/.env: API rate limit and GHCR pulls.
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
@@ -41,6 +42,14 @@ latest() {
   [ -f "$body" ] && jq -r '.tag_name // empty' "$body" | sed 's/^v//'
 }
 
+before="$(git -C "$root" rev-parse HEAD)"
+git -C "$root" pull -q --ff-only || echo "[release] git pull failed (local changes on the Pi?)" >&2
+if [ "$before" != "$(git -C "$root" rev-parse HEAD)" ] && [ -f "$versions" ] \
+  && ! git -C "$root" diff --quiet "$before" HEAD -- deploy/; then
+  echo "[release] deploy/ changed ($before -> $(git -C "$root" rev-parse --short HEAD)), re-applying"
+  "$root/deploy/prod" up -d --remove-orphans
+fi
+
 be="$(latest collections-app-backend)"
 web="$(latest collections-app-frontend-web)"
 [ -n "$be" ] || [ -n "$web" ] || exit 0
@@ -50,12 +59,9 @@ log() { echo "[release] $*"; }
 save() { printf 'BACKEND_VERSION=%s\nWEB_VERSION=%s\n' "$BACKEND_VERSION" "$WEB_VERSION" >"$versions"; }
 
 echo "$GITHUB_TOKEN" | docker login ghcr.io -u 0xfederama --password-stdin >/dev/null
-git -C "$root" pull -q --ff-only
 
 if [ -n "$be" ] && [ "$be" != "$BACKEND_VERSION" ]; then
   log "backend $BACKEND_VERSION -> $be"
-  git -C "$root/backend" fetch -q --tags origin
-  git -C "$root/backend" -c advice.detachedHead=false checkout -q "v$be"
   if [ -n "$BACKEND_VERSION" ]; then "$root/deploy/prod" backup; fi
   BACKEND_VERSION="$be"
   BACKEND_VERSION="$be" "$root/deploy/prod" pull api
