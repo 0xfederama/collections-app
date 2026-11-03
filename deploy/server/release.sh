@@ -47,7 +47,7 @@ git -C "$root" pull -q --ff-only || echo "[release] git pull failed (local chang
 if [ "$before" != "$(git -C "$root" rev-parse HEAD)" ] && [ -f "$versions" ] \
   && ! git -C "$root" diff --quiet "$before" HEAD -- deploy/; then
   echo "[release] deploy/ changed ($before -> $(git -C "$root" rev-parse --short HEAD)), re-applying"
-  "$root/deploy/prod" up -d --remove-orphans
+  "$root/deploy/prod" up -d --remove-orphans || echo "[release] re-apply failed, continuing with the release check" >&2
 fi
 
 be="$(latest collections-app-backend)"
