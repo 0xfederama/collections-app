@@ -1,0 +1,11 @@
+# Deploys newly published GitHub Releases (D-117). Install: see deploy/README.md "Raspberry Pi".
+[Unit]
+Description=Collections App release check and deploy
+Wants=network-online.target docker.service
+After=network-online.target docker.service
+
+[Service]
+Type=oneshot
+User=fede
+WorkingDirectory=/home/fede/collections-app
+ExecStart=/home/fede/collections-app/deploy/server/release.sh

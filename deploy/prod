@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# prod: the real app on your home server. Images are built here (Caddy web + api); only web publishes a port.
+# prod: the real app on the Raspberry Pi. Images are pulled from GHCR (D-117); only web publishes a port.
 #
 #   ./deploy/prod check                   exposure check: run it first and after every deploy/server/.env edit
-#   ./deploy/prod up -d --build           build and start (any docker compose command works: ps, logs -f api, down)
+#   ./deploy/prod up -d                   start the released versions (any docker compose command works: ps, logs -f api, down)
+#   ./deploy/prod release                 deploy the latest published releases now (the timer runs this every minute)
 #   ./deploy/prod backup [dest]           Postgres + images (default $BACKUP_DIR, /srv/collection/backups)
 #   ./deploy/prod restore <dir> [--force] restore a backup (asks before replacing data)
 #   ./deploy/prod verify <dir>            compare a backup with the running database
@@ -28,6 +29,12 @@ set -a
 # shellcheck disable=SC1091
 . "$here/.env"
 set +a
+# Deployed versions (written by release.sh); values already in the environment win.
+if [ -f "$here/versions.env" ]; then
+  while IFS== read -r k v; do
+    [ -n "$k" ] && [ -z "${!k:-}" ] && export "$k=$v"
+  done <"$here/versions.env"
+fi
 # PROD_PROJECT is only for trial runs next to a real prod stack (own containers and volumes); leave it unset on the server.
 export COMPOSE_FILE="$here/compose.yaml" COMPOSE_PROJECT_NAME="${PROD_PROJECT:-collections-app-prod}"
 backups="${BACKUP_DIR:-/srv/collection/backups}"
@@ -98,5 +105,6 @@ case "$cmd" in
   prune) prune "$@" ;;
   backup-status) backup_status "$@" ;;
   check) exec "$here/check.sh" ;;
+  release) exec "$here/release.sh" ;;
   *) exec docker compose "$cmd" "$@" ;;
 esac

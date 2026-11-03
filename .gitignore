@@ -3,3 +3,5 @@
 .claude/settings.local.json
 /frontend-web-*/
 /backend-*/
+deploy/server/versions.env
+deploy/server/.release-state/

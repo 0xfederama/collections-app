@@ -1,8 +1,9 @@
-# Production stack for a home server (BACKUP_AND_DEPLOYMENT §5, D-069, D-071).
-# Images are built here, on the server, from the submodules: no registry.
+# Production stack on the Raspberry Pi (D-117). Images are pulled from GHCR, never built here.
+# Versions come from deploy/server/versions.env (gitignored), written by release.sh from each repo's
+# latest published GitHub Release ("none" until the first one); migrations come from the backend submodule checked out at that tag.
 #
-#   cp deploy/server/.env.example deploy/server/.env   # set POSTGRES_PASSWORD
-#   ./deploy/prod up -d --build              # same as: docker compose -f deploy/server/compose.yaml up -d --build
+#   cp deploy/server/.env.example deploy/server/.env   # set POSTGRES_PASSWORD and the keys
+#   ./deploy/prod up -d                                # what release.sh runs after a new release
 #
 # Only `web` publishes a port: 127.0.0.1:${WEB_PORT:-8081} unless WEB_BIND names another address (opt-in).
 # `db` and `api` are reachable only inside the compose network.
@@ -50,7 +51,7 @@ services:
     restart: "no"
 
   api:
-    build: ../../backend
+    image: ghcr.io/0xfederama/collections-app-backend:${BACKEND_VERSION:-none}
     <<: *hardening
     # Distroless image, user 65532 (nonroot). Only /data (the volume) is writable.
     read_only: true
@@ -82,7 +83,7 @@ services:
 
   # Caddy: serves the SPA and proxies /api and /readyz to api:8080 (image: Q-03w, frontend-web/Dockerfile).
   web:
-    build: ../../frontend-web
+    image: ghcr.io/0xfederama/collections-app-frontend-web:${WEB_VERSION:-none}
     <<: *hardening
     # The image (D-072) runs as UID 10001 with the Caddy file capability removed, so no capability is needed.
     read_only: true
