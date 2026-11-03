@@ -72,8 +72,8 @@ else
   compress=(gzip -c)
 fi
 echo "archiving images ($files_name)"
-# `-T /dev/null` writes an empty archive when nothing was uploaded yet.
-carrier ro sh -c 'cd /data && if [ -d images ]; then tar -cf - images; else tar -cf - -T /dev/null; fi' |
+# Nothing uploaded yet: archive an empty directory (busybox tar refuses `-T /dev/null`).
+carrier ro sh -c 'if [ -d /data/images ]; then cd /data && tar -cf - images; else mkdir -p /tmp/empty && tar -cf - -C /tmp/empty .; fi' |
   "${compress[@]}" >"$work/$files_name"
 [ -s "$work/$files_name" ] || die "image archive is empty"
 

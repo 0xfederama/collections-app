@@ -62,9 +62,11 @@ echo "$GITHUB_TOKEN" | docker login ghcr.io -u 0xfederama --password-stdin >/dev
 
 if [ -n "$be" ] && [ "$be" != "$BACKEND_VERSION" ]; then
   log "backend $BACKEND_VERSION -> $be"
-  if [ -n "$BACKEND_VERSION" ]; then "$root/deploy/prod" backup; fi
+  # Pull first and back up with the new version set: the backup restarts the api at the end, and
+  # that restart must already use the new image (its migrate step may need the new binary).
+  BACKEND_VERSION="$be" "$root/deploy/prod" pull api migrate
+  if [ -n "$BACKEND_VERSION" ]; then BACKEND_VERSION="$be" "$root/deploy/prod" backup; fi
   BACKEND_VERSION="$be"
-  BACKEND_VERSION="$be" "$root/deploy/prod" pull api
   BACKEND_VERSION="$be" "$root/deploy/prod" up -d db migrate api
   save
   log "backend $be is live"
