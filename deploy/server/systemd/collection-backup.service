@@ -9,5 +9,6 @@ After=network-online.target docker.service
 Type=oneshot
 User=fede
 WorkingDirectory=/home/fede/collections-app
-ExecStart=/home/fede/collections-app/deploy/prod backup
+# Shares release.sh's lock, so a backup and a deploy never run at the same time.
+ExecStart=/usr/bin/flock /home/fede/collections-app/deploy/server/.release-state/lock /home/fede/collections-app/deploy/prod backup
 ExecStartPost=/home/fede/collections-app/deploy/prod prune

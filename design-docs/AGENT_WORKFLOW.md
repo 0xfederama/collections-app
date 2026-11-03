@@ -156,6 +156,7 @@ Dispatch rules:
 - Repo orchestrators write migrations in their PR and run them on dev/test (fresh start: baseline + pending migrations). They never touch prod.
 - Prod release is done only by the top-level orchestrator after the user says yes in chat: list versions and migration, back up prod, deploy, then mark the migration released (frozen forever).
 - Contract changes stay backward compatible within a major version.
+- Migrations are expand/contract (D-118): the previous release's backend must keep working on the new schema; drops, renames and tighter constraints ship in a later release. Each migration file is one transaction.
 - Releases (D-117): each repo tags versions and CI builds arm64 images to GHCR; a tag is not a deploy. The user approves prod by publishing a GitHub Release (latest) in that repo; orchestrators may leave a draft. The Pi polls once a minute with a read-only token and deploys the backend before the web.
 
 ## 4. CLAUDE.md upkeep
