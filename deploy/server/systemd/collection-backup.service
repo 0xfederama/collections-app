@@ -12,3 +12,5 @@ WorkingDirectory=/home/fede/collections-app
 # Shares release.sh's lock, so a backup and a deploy never run at the same time.
 ExecStart=/usr/bin/flock /home/fede/collections-app/deploy/server/.release-state/lock /home/fede/collections-app/deploy/prod backup
 ExecStartPost=/home/fede/collections-app/deploy/prod prune
+# Encrypted copy on Google Drive (roadmap #21); fails the unit if the upload fails.
+ExecStartPost=/home/fede/collections-app/deploy/server/offsite.sh upload
