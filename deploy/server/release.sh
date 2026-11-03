@@ -16,6 +16,16 @@ mkdir -p "$state"
 exec 9>"$state/lock"
 flock -n 9 || exit 0
 
+# Sync deploy/ first; if this script itself changed, restart with the new copy (the lock fd is inherited),
+# so a fix pushed to release.sh is never run by the old version.
+if [ -z "${RELEASE_REEXEC:-}" ]; then
+  before="$(git -C "$root" rev-parse HEAD)"
+  git -C "$root" pull -q --ff-only || echo "[release] git pull failed (local changes on the Pi?)" >&2
+  if [ "$before" != "$(git -C "$root" rev-parse HEAD)" ]; then
+    RELEASE_REEXEC=1 RELEASE_BEFORE="$before" exec "$here/release.sh"
+  fi
+fi
+
 set -a
 # shellcheck disable=SC1091
 . "$here/.env"
@@ -42,16 +52,17 @@ latest() {
   [ -f "$body" ] && jq -r '.tag_name // empty' "$body" | sed 's/^v//'
 }
 
-before="$(git -C "$root" rev-parse HEAD)"
-git -C "$root" pull -q --ff-only || echo "[release] git pull failed (local changes on the Pi?)" >&2
-if [ "$before" != "$(git -C "$root" rev-parse HEAD)" ] && [ -f "$versions" ] \
-  && ! git -C "$root" diff --quiet "$before" HEAD -- deploy/; then
-  echo "[release] deploy/ changed ($before -> $(git -C "$root" rev-parse --short HEAD)), re-applying"
+if [ -n "${RELEASE_BEFORE:-}" ] && [ -f "$versions" ] && ! git -C "$root" diff --quiet "$RELEASE_BEFORE" HEAD -- deploy/; then
+  echo "[release] deploy/ changed ($RELEASE_BEFORE -> $(git -C "$root" rev-parse --short HEAD)), re-applying"
   "$root/deploy/prod" up -d --remove-orphans || echo "[release] re-apply failed, continuing with the release check" >&2
 fi
 
 be="$(latest collections-app-backend)"
 web="$(latest collections-app-frontend-web)"
+# A version that failed to deploy is not retried every minute: publish a newer release (or delete
+# .release-state/<repo>.failed) to try again.
+[ "$be" = "$(cat "$state/backend.failed" 2>/dev/null)" ] && be="$BACKEND_VERSION"
+[ "$web" = "$(cat "$state/web.failed" 2>/dev/null)" ] && web="$WEB_VERSION"
 [ -n "$be" ] || [ -n "$web" ] || exit 0
 [ "$be" = "$BACKEND_VERSION" ] && [ "$web" = "$WEB_VERSION" ] && exit 0
 
@@ -64,20 +75,36 @@ if [ -n "$be" ] && [ "$be" != "$BACKEND_VERSION" ]; then
   log "backend $BACKEND_VERSION -> $be"
   # Pull first and back up with the new version set: the backup restarts the api at the end, and
   # that restart must already use the new image (its migrate step may need the new binary).
-  BACKEND_VERSION="$be" "$root/deploy/prod" pull api migrate
-  if [ -n "$BACKEND_VERSION" ]; then BACKEND_VERSION="$be" "$root/deploy/prod" backup; fi
-  BACKEND_VERSION="$be"
-  BACKEND_VERSION="$be" "$root/deploy/prod" up -d db migrate api
-  save
-  log "backend $be is live"
+  if (
+    set -e
+    BACKEND_VERSION="$be" "$root/deploy/prod" pull api migrate
+    if [ -n "$BACKEND_VERSION" ]; then BACKEND_VERSION="$be" "$root/deploy/prod" backup; fi
+    BACKEND_VERSION="$be" "$root/deploy/prod" up -d --wait db migrate api
+  ); then
+    BACKEND_VERSION="$be"
+    save
+    log "backend $be is live"
+  else
+    echo "$be" >"$state/backend.failed"
+    log "FAILED to deploy backend $be; rolling back to ${BACKEND_VERSION:-none} (not retried until a newer release)"
+    if [ -n "$BACKEND_VERSION" ]; then
+      "$root/deploy/prod" up -d --no-deps api || log "rollback failed: if a migration ran, restore the backup taken above"
+    fi
+    exit 1
+  fi
 fi
 
 if [ -n "$web" ] && [ "$web" != "$WEB_VERSION" ]; then
   [ -n "$BACKEND_VERSION" ] || { log "web $web waits for a backend release"; exit 0; }
   log "web ${WEB_VERSION:-none} -> $web"
-  WEB_VERSION="$web"
-  WEB_VERSION="$web" "$root/deploy/prod" pull web
-  WEB_VERSION="$web" "$root/deploy/prod" up -d web
-  save
-  log "web $web is live"
+  if WEB_VERSION="$web" "$root/deploy/prod" pull web && WEB_VERSION="$web" "$root/deploy/prod" up -d --wait web; then
+    WEB_VERSION="$web"
+    save
+    log "web $web is live"
+  else
+    echo "$web" >"$state/web.failed"
+    log "FAILED to deploy web $web; rolling back to ${WEB_VERSION:-none} (not retried until a newer release)"
+    [ -z "$WEB_VERSION" ] || "$root/deploy/prod" up -d --no-deps web || true
+    exit 1
+  fi
 fi
