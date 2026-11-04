@@ -53,12 +53,12 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 19 | **backend 2.8.0 + web 2.22.0** | **No custom fields** (F-023): Settings "Types & fields" and custom fields removed; types are code; backend treated as not yet started (one baseline schema, no migrations) | ✅ Done (backend 2.8.0 backend#67; web 2.22.0 web#105; D-114, D-115) | Nov 2026 |
 | 20 | **deploy + backend 2.8.1–2.8.3 + web 2.22.1–2.22.2** | **Raspberry Pi prod** (F-024): Pi 3B+ on the LAN, GHCR arm64 images, per-repo GitHub Releases as prod approval, one-minute release check, migrations in the api image, preflight on a DB copy and health-gated rollback (D-116 to D-118) | ✅ Live 2026-11-03 | Nov 2026 |
 | 21 | deploy | **Off-Pi backups to Google Drive** (rclone, encrypted, token authorised on the Mac) | ✅ Done 2026-11-04 (rclone crypt, nightly upload, 30 kept) | Nov 2026 |
-| 22 | deploy | **Test stack on the Pi**: GitHub pre-releases deploy to a separate, empty test stack on port 8081 (`./deploy/pitest`); prod keeps the release marked latest (D-119) | 🔄 Enable on the Pi | Nov 2026 |
-| 23 | web | **Lighter web app + mobile fixes**: bundle-size and load audit (it is already a static client-side SPA served by Caddy), plus fixes for the mobile layout (list to be collected from the user) | ⏳ | Nov 2026 |
+| 22 | deploy | **Test stack on the Pi**: GitHub pre-releases deploy to a separate, empty test stack on port 8081 (`./deploy/pitest`); prod keeps the release marked latest (D-119) | ✅ Done 2026-11-04 (live on 8081) | Nov 2026 |
+| 23 | web | **Mobile fixes** (F-025): no zoom on focus, one-row list toolbar, compact header, sidebar padding, long press for Move/Delete with drag reorder kept, smaller link icons, drop the manual-sorting hint | 🔄 Brief ready | Nov 2026 |
 | 24 | deploy | **Email alerts**: failed release, failed or stale backup, rollback, disk nearly full, Pi offline (dead-man switch) | ⏳ | Nov 2026 |
 | 25 | deploy + backend | **Hosted logs and latency charts** (light agent shipping to a free hosted dashboard; lifts the "no metrics" rule) | ⏳ | Nov 2026 |
 | 26 | local doc | **Pi operations guide** (kept only on your machine, not in git): full setup from an empty SD card, how the repos sit on the Pi, push vs release, where the logs are, runbooks for failures, re-setup from scratch, restore from Google Drive | ⏳ | Nov 2026 |
-| — | then | Pool: accounts (backend 3.0) → security review → internet exposure + public API → collaborative Markdown | ⚪ Pool | 2027 |
+| — | then | Pool: accounts (backend 3.0) → lighter web app (bundle and load audit, once e2e covers it) → security review → internet exposure + public API → collaborative Markdown | ⚪ Pool | 2027 |
 | — | future | List import, advanced search | 🔭 Future | — |
 
 ```mermaid
