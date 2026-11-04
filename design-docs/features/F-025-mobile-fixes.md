@@ -35,3 +35,4 @@ Status: brief (2026-11-04). Repos: frontend-web only. Workflow v2 lean. Roadmap 
 - 2026-11-04: B1 done (backend#73, tag v2.8.4 with a draft release, D-121). Existing items: use the per-item lookup refresh.
 - 2026-11-04: W8–W10 done (web#110, web 2.24.0, D-122); e2e 59/59 (51 desktop, 8 mobile-webkit); 09-list-icons flake fixed. Open: lookup refresh overwrites a user-edited director (docs say edits survive).
 - 2026-11-04: B2 done (backend#74, tag v2.9.0 with a draft release, D-123, D-124). Open: confirm the TMDB terms allow keeping weekly-refreshed data indefinitely; later contract release drops the legacy retention columns.
+- 2026-11-04: W11 web parts 2–4 in progress (`feature/f025-w11`). Part 1 "Refresh details" waits for the backend list-level refresh (D-123): not in backend main, api-v3.0.0 or any PR; 2.25.0 ships once it lands.
