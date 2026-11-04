@@ -22,3 +22,4 @@ Status: brief (2026-11-04). Repos: frontend-web only. Workflow v2 lean. Roadmap 
 
 ## Log
 - 2026-11-04: brief written.
+- 2026-11-04: W1–W7 done (web#109, web 2.23.0, D-120). Mobile-webkit e2e 5/5; desktop e2e 55 pass + 1 flaky dark-mode contrast check in `09-list-icons` (passes alone). To check on a real phone: long press in manual sort, rows outside manual sort, the floating menu button on loading/error pages.
