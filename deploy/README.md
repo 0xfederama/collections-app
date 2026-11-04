@@ -183,3 +183,13 @@ and check your items and images in the browser. `restore` runs `verify` itself b
 ./deploy/prod ps | logs -f api | restart api | down      # any docker compose command works
 ./deploy/prod check                                       # exposure check, also run it after editing deploy/server/.env
 ```
+
+## pitest (test stack on the Pi, D-119)
+
+A second, empty stack next to prod on the Pi: `./deploy/pitest` takes the same commands as `./deploy/prod`
+(project `collections-app-pitest`, own volumes, `deploy/server/versions-test.env`, port `TEST_WEB_PORT`, 8081).
+
+- Enable: `TEST_STACK=1` in `deploy/server/.env`, and allow the port on the LAN (`sudo ufw allow from 192.168.1.0/24 to any port 8081 proto tcp`).
+- Flow: tag `vX.Y.Z`, publish the GitHub Release as a **pre-release**: test gets it within a minute. When it looks right, edit the release, untick pre-release and set it as latest: prod gets it.
+- The release check runs test first; a failure there is logged as `[release test]` and never blocks prod. Same preflight and rollback, no backups.
+- Wipe it: `./deploy/pitest down -v`.

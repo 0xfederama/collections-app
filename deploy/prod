@@ -11,6 +11,8 @@
 #   ./deploy/prod offsite upload|list|get <name>  encrypted backup copies on Google Drive
 #   ./deploy/prod backup-status [hours]   fail if the newest backup is missing, incomplete or older than [hours] (26)
 #
+# PI_STACK=test (or ./deploy/pitest) runs the same commands on the test stack: own project, volumes, versions and port.
+#
 # web http://127.0.0.1:8081 (or WEB_BIND)   settings + secrets: deploy/server/.env   guide: deploy/README.md
 set -euo pipefail
 ENV_NAME="prod"
@@ -30,14 +32,24 @@ set -a
 # shellcheck disable=SC1091
 . "$here/.env"
 set +a
+# Test stack on the Pi (roadmap #22): same compose file, separate project, volumes, versions and port.
+versions_file="$here/versions.env"
+project="${PROD_PROJECT:-collections-app-prod}"
+if [ "${PI_STACK:-prod}" = test ]; then
+  ENV_NAME="pitest"
+  versions_file="$here/versions-test.env"
+  project="collections-app-pitest"
+  export WEB_PORT="${TEST_WEB_PORT:-8081}" WORKSPACE_NAME="${WORKSPACE_NAME:-Our Collection} (test)"
+  export BACKUP_DIR="${TEST_BACKUP_DIR:-${BACKUP_DIR:-/srv/collection/backups}-test}"
+fi
 # Deployed versions (written by release.sh); values already in the environment win.
-if [ -f "$here/versions.env" ]; then
+if [ -f "$versions_file" ]; then
   while IFS== read -r k v; do
     [ -n "$k" ] && [ -z "${!k:-}" ] && export "$k=$v"
-  done <"$here/versions.env"
+  done <"$versions_file"
 fi
 # PROD_PROJECT is only for trial runs next to a real prod stack (own containers and volumes); leave it unset on the server.
-export COMPOSE_FILE="$here/compose.yaml" COMPOSE_PROJECT_NAME="${PROD_PROJECT:-collections-app-prod}"
+export COMPOSE_FILE="$here/compose.yaml" COMPOSE_PROJECT_NAME="$project"
 backups="${BACKUP_DIR:-/srv/collection/backups}"
 
 
@@ -107,6 +119,6 @@ case "$cmd" in
   backup-status) backup_status "$@" ;;
   check) exec "$here/check.sh" ;;
   offsite) exec "$here/offsite.sh" "$@" ;;
-  release) exec "$here/release.sh" ;;
+  release) RELEASE_STACK="${PI_STACK:-prod}" exec "$here/release.sh" ;;
   *) exec docker compose "$cmd" "$@" ;;
 esac

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# pitest: the test stack on the Raspberry Pi (roadmap #22). Same commands as ./deploy/prod, on its own
+# project (collections-app-pitest), volumes, versions (deploy/server/versions-test.env) and port (TEST_WEB_PORT, 8081).
+# It tracks the newest published release of each repo, pre-releases included; prod tracks only the one marked latest.
+# Enable it with TEST_STACK=1 in deploy/server/.env. It starts empty and never touches prod data.
+#
+#   ./deploy/pitest ps | logs -f api | down     any docker compose command
+#   ./deploy/pitest release                     deploy the newest releases to test now (the timer does it every minute)
+#   ./deploy/pitest down -v                     wipe the test stack (prod is untouched)
+set -euo pipefail
+case "${1:-}" in "" | -h | --help | help) awk 'NR == 1 { next } /^#/ { sub(/^# ?/, ""); print; next } { exit }' "$0"; exit 0 ;; esac
+PI_STACK=test exec "$(dirname "$0")/prod" "$@"
