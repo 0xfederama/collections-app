@@ -27,7 +27,7 @@ Status: brief (2026-11-04). Repos: frontend-web only. Workflow v2 lean. Roadmap 
 
 - W12 **View switcher**: same height and style as the other toolbar buttons, moved to the left end of the toolbar row (web and mobile).
 - W13 **No auto-open on create (phones)**: creating an item on a phone keeps the user on the list instead of opening the item.
-- W14 **Library page instead of a drawer (phones)**: on phones the sidebar becomes a full page ("Library", iOS Mail/Notes/Files pattern): folders and lists as rows, Settings and Trash as normal rows in their own section at the end (no bottom bar). Tapping a list pushes it; the list's leading slot shows a back control to Library instead of the hamburger. Desktop keeps the sidebar.
+- W14 **Home as the root page (phones)**: on phones the drawer is merged into Home ("Library" idea superseded), iOS Mail/Notes/Files pattern): folders and lists as rows, Settings and Trash as normal rows in their own section at the end (no bottom bar). Tapping a list pushes it; the list's leading slot shows a back control to Library instead of the hamburger. Desktop keeps the sidebar.
 
 ## Acceptance
 - e2e on a mobile viewport (Playwright device emulation, WebKit where possible) covers W2, W3, W5 and the 16px rule of W1; desktop e2e still passes.
@@ -41,3 +41,4 @@ Status: brief (2026-11-04). Repos: frontend-web only. Workflow v2 lean. Roadmap 
 - 2026-11-04: B2 done (backend#74, tag v2.9.0 with a draft release, D-123, D-124). Open: confirm the TMDB terms allow keeping weekly-refreshed data indefinitely; later contract release drops the legacy retention columns.
 - 2026-11-04: W11 web parts 2–4 in progress (`feature/f025-w11`). Part 1 "Refresh details" waits for the backend list-level refresh (D-123): not in backend main, api-v3.0.0 or any PR; 2.25.0 ships once it lands.
 - 2026-11-04: B2 amended (backend#75, v2.10.0 draft, api-v3.1.0, D-125): refresh mode kept, list refresh added; v2.9.0 superseded. Web: list page … menu calls POST /lists/{id}/lookup-refresh and repeats while remaining > 0.
+- 2026-11-05: W12–W14 and polish done (web 2.26.0–2.28.1); backend B2 refresh on demand (2.10.0, D-125). Promoted to prod by the user. F-025 complete.
