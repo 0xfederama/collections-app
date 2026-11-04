@@ -104,11 +104,20 @@ drop_preflight() { psql_admin -c "DROP DATABASE IF EXISTS collection_preflight" 
 #   4. migrate the real database and start the new api, waiting until it is healthy
 # If 4 fails, the old api starts again on the migrated schema. That works because every migration
 # must be backward compatible with the previous release (expand/contract, D-118).
+# A release published before its image build finished is not a failure: wait and retry next minute.
+if [ -n "$be" ] && [ "$be" != "$BACKEND_VERSION" ] && ! BACKEND_VERSION="$be" prod pull -q api migrate >/dev/null 2>&1; then
+  log "backend $be: image not on GHCR yet (build still running?), retrying next minute"
+  be="$BACKEND_VERSION"
+fi
+if [ -n "$web" ] && [ "$web" != "$WEB_VERSION" ] && ! WEB_VERSION="$web" prod pull -q web >/dev/null 2>&1; then
+  log "web $web: image not on GHCR yet (build still running?), retrying next minute"
+  web="$WEB_VERSION"
+fi
+
 if [ -n "$be" ] && [ "$be" != "$BACKEND_VERSION" ]; then
   log "backend ${BACKEND_VERSION:-none} -> $be"
   if (
     set -e
-    BACKEND_VERSION="$be" prod pull api migrate
     if [ -n "$BACKEND_VERSION" ]; then
       prod stop api
       [ "$stack" = test ] || prod backup
@@ -136,7 +145,7 @@ fi
 if [ -n "$web" ] && [ "$web" != "$WEB_VERSION" ]; then
   [ -n "$BACKEND_VERSION" ] || { log "web $web waits for a backend release"; exit 0; }
   log "web ${WEB_VERSION:-none} -> $web"
-  if WEB_VERSION="$web" prod pull web && WEB_VERSION="$web" prod up -d --no-deps --wait web; then
+  if WEB_VERSION="$web" prod up -d --no-deps --wait web; then
     WEB_VERSION="$web"
     save
     log "web $web is live"
