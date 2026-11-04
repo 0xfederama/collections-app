@@ -36,3 +36,4 @@ Status: brief (2026-11-04). Repos: frontend-web only. Workflow v2 lean. Roadmap 
 - 2026-11-04: W8–W10 done (web#110, web 2.24.0, D-122); e2e 59/59 (51 desktop, 8 mobile-webkit); 09-list-icons flake fixed. Open: lookup refresh overwrites a user-edited director (docs say edits survive).
 - 2026-11-04: B2 done (backend#74, tag v2.9.0 with a draft release, D-123, D-124). Open: confirm the TMDB terms allow keeping weekly-refreshed data indefinitely; later contract release drops the legacy retention columns.
 - 2026-11-04: W11 web parts 2–4 in progress (`feature/f025-w11`). Part 1 "Refresh details" waits for the backend list-level refresh (D-123): not in backend main, api-v3.0.0 or any PR; 2.25.0 ships once it lands.
+- 2026-11-04: B2 amended (backend#75, v2.10.0 draft, api-v3.1.0, D-125): refresh mode kept, list refresh added; v2.9.0 superseded. Web: list page … menu calls POST /lists/{id}/lookup-refresh and repeats while remaining > 0.
