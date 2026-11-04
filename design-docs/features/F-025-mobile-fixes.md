@@ -25,6 +25,10 @@ Status: brief (2026-11-04). Repos: frontend-web only. Workflow v2 lean. Roadmap 
 - B2 backend **Weekly movie and TV refresh** (D-123): maintenance refreshes every movie and TV series weekly, overwriting all fetched fields including user edits, keeping user images; books never; keep the `refresh` mode with the same overwrite rule and add a list-level refresh.
 - W11 **List polish + Refresh details**: "Refresh details" in the list page's … menu; less vertical space between the description and the toolbar; search becomes an icon button on phones like Filter/Sort (expands on tap); no white band at the bottom of the page on iOS Safari (safe area, page background).
 
+- W12 **View switcher**: same height and style as the other toolbar buttons, moved to the left end of the toolbar row (web and mobile).
+- W13 **No auto-open on create (phones)**: creating an item on a phone keeps the user on the list instead of opening the item.
+- W14 **Library page instead of a drawer (phones)**: on phones the sidebar becomes a full page ("Library", iOS Mail/Notes/Files pattern): folders and lists as rows, Settings and Trash as normal rows in their own section at the end (no bottom bar). Tapping a list pushes it; the list's leading slot shows a back control to Library instead of the hamburger. Desktop keeps the sidebar.
+
 ## Acceptance
 - e2e on a mobile viewport (Playwright device emulation, WebKit where possible) covers W2, W3, W5 and the 16px rule of W1; desktop e2e still passes.
 - Checked on `./deploy/dev`; the user checks on the Pi test stack after a pre-release.
