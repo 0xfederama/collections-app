@@ -22,7 +22,8 @@ Status: brief (2026-11-04). Repos: frontend-web only. Workflow v2 lean. Roadmap 
 - W10 **Menu button in the page header**: no floating button. One leading slot in each page's own header row: top-level pages show the menu icon there, sub-pages (item page) show the back control there and the menu stays reachable from the list. The title never shifts under or around an overlay.
 - B1 backend **Latin-script names**: movie/TV titles and person names (directors) come in the app's language; when TMDB only has a non-Latin form (Korean, Japanese, Chinese, Cyrillic…), fall back to the English translation, then a Latin `original_title` / `also_known_as`, before the non-Latin original. Optional backfill for stored items.
 
-- B2 backend **Weekly movie and TV refresh** (D-123): maintenance refreshes every movie and TV series weekly, overwriting all fetched fields including user edits, keeping user images; books never; remove the `refresh` lookup mode.
+- B2 backend **Weekly movie and TV refresh** (D-123): maintenance refreshes every movie and TV series weekly, overwriting all fetched fields including user edits, keeping user images; books never; keep the `refresh` mode with the same overwrite rule and add a list-level refresh.
+- W11 **List polish + Refresh details**: "Refresh details" in the list page's … menu; less vertical space between the description and the toolbar; search becomes an icon button on phones like Filter/Sort (expands on tap); no white band at the bottom of the page on iOS Safari (safe area, page background).
 
 ## Acceptance
 - e2e on a mobile viewport (Playwright device emulation, WebKit where possible) covers W2, W3, W5 and the 16px rule of W1; desktop e2e still passes.
