@@ -16,6 +16,12 @@ Status: brief (2026-11-04). Repos: frontend-web only. Workflow v2 lean. Roadmap 
 - W6 **Smaller link icons** (all widths): the Google, Letterboxd, IMDb, streaming services and other link icons in the expanded item are smaller.
 - W7 **Remove the hint** (all widths): drop the "switch to manual sorting to…" line.
 
+## Follow-up stories (user, 2026-11-04)
+- W8 **Filter and sort controls**: filter uses the mobile icon button at all widths; sort becomes a matching control labelled "Sort" (not the current sort value), coherent with Filter. The active sort stays visible inside its menu (and as a small indicator if needed).
+- W9 **Row metadata**: movie rows always show the director next to the runtime; book rows show the author with the page count before it. Lowest priority: dropped first when space is short. Streaming services (movies) and author (books) win over the other fields.
+- W10 **Menu button in the page header**: no floating button. One leading slot in each page's own header row: top-level pages show the menu icon there, sub-pages (item page) show the back control there and the menu stays reachable from the list. The title never shifts under or around an overlay.
+- B1 backend **Latin-script names**: movie/TV titles and person names (directors) come in the app's language; when TMDB only has a non-Latin form (Korean, Japanese, Chinese, Cyrillic…), fall back to the English translation, then a Latin `original_title` / `also_known_as`, before the non-Latin original. Optional backfill for stored items.
+
 ## Acceptance
 - e2e on a mobile viewport (Playwright device emulation, WebKit where possible) covers W2, W3, W5 and the 16px rule of W1; desktop e2e still passes.
 - Checked on `./deploy/dev`; the user checks on the Pi test stack after a pre-release.
