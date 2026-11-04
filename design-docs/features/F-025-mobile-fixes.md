@@ -34,3 +34,4 @@ Status: brief (2026-11-04). Repos: frontend-web only. Workflow v2 lean. Roadmap 
 - 2026-11-04: W1–W7 done (web#109, web 2.23.0, D-120). Mobile-webkit e2e 5/5; desktop e2e 55 pass + 1 flaky dark-mode contrast check in `09-list-icons` (passes alone). To check on a real phone: long press in manual sort, rows outside manual sort, the floating menu button on loading/error pages.
 - 2026-11-04: B1 done (backend#73, tag v2.8.4 with a draft release, D-121). Existing items: use the per-item lookup refresh.
 - 2026-11-04: W8–W10 done (web#110, web 2.24.0, D-122); e2e 59/59 (51 desktop, 8 mobile-webkit); 09-list-icons flake fixed. Open: lookup refresh overwrites a user-edited director (docs say edits survive).
+- 2026-11-04: B2 done (backend#74, tag v2.9.0 with a draft release, D-123, D-124). Open: confirm the TMDB terms allow keeping weekly-refreshed data indefinitely; later contract release drops the legacy retention columns.
