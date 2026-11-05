@@ -45,7 +45,7 @@ set +a
 # (network blip) sends nothing; healthchecks.io alerts when no ok ping arrives for its grace time
 # (expired token, dead timer, Pi offline). Deploy results go to "collection-deploy".
 hc() { [ "$stack" = prod ] && "$here/hc.sh" "$@"; return 0; }
-[ "$stack" = prod ] && trap '[ $? -eq 0 ] && "$here/hc.sh" collection-release ok' EXIT
+[ "$stack" = prod ] && trap '[ $? -eq 0 ] && "$here/hc.sh" collections-release ok' EXIT
 
 # Test first: a failure there is logged and never stops the prod check.
 if [ "$stack" = prod ] && [ "${TEST_STACK:-}" = 1 ]; then
@@ -117,7 +117,7 @@ waiting() {
   if [ "$(cut -d' ' -f1 "$f" 2>/dev/null)" != "$2" ]; then echo "$2 $(date +%s)" >"$f"; return 0; fi
   since="$(cut -d' ' -f2 "$f")"
   if [ $(( $(date +%s) - since )) -gt 3600 ] && ! grep -q ' alerted$' "$f"; then
-    hc collection-deploy fail "$1 $2: image still not on GHCR after an hour (check the release-image workflow)"
+    hc collections-deploy fail "$1 $2: image still not on GHCR after an hour (check the release-image workflow)"
     echo "$2 $since alerted" >"$f"
   fi
 }
@@ -151,12 +151,12 @@ if [ -n "$be" ] && [ "$be" != "$BACKEND_VERSION" ]; then
     BACKEND_VERSION="$be"
     save
     log "backend $be is live"
-    hc collection-deploy ok "backend $be is live"
+    hc collections-deploy ok "backend $be is live"
   else
     drop_preflight
     echo "$be" >"$state/${pfx}backend.failed"
     log "FAILED to deploy backend $be; back to ${BACKEND_VERSION:-none} (not retried until a newer release)"
-    hc collection-deploy fail "backend $be failed, rolled back to ${BACKEND_VERSION:-none}: see journalctl -u collection-release"
+    hc collections-deploy fail "backend $be failed, rolled back to ${BACKEND_VERSION:-none}: see journalctl -u collection-release"
     [ -z "$BACKEND_VERSION" ] || prod up -d --no-deps --wait api || log "the previous api did not come back: check '${stack_cmd#"$root/"} logs api'"
     exit 1
   fi
@@ -169,11 +169,11 @@ if [ -n "$web" ] && [ "$web" != "$WEB_VERSION" ]; then
     WEB_VERSION="$web"
     save
     log "web $web is live"
-    hc collection-deploy ok "web $web is live"
+    hc collections-deploy ok "web $web is live"
   else
     echo "$web" >"$state/${pfx}web.failed"
     log "FAILED to deploy web $web; rolling back to ${WEB_VERSION:-none} (not retried until a newer release)"
-    hc collection-deploy fail "web $web failed, rolled back to ${WEB_VERSION:-none}: see journalctl -u collection-release"
+    hc collections-deploy fail "web $web failed, rolled back to ${WEB_VERSION:-none}: see journalctl -u collection-release"
     [ -z "$WEB_VERSION" ] || prod up -d --no-deps --wait web || log "the previous web did not come back: check '${stack_cmd#"$root/"} logs web'"
     exit 1
   fi

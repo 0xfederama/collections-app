@@ -16,4 +16,4 @@ ExecStartPost=/home/fede/collections-app/deploy/prod prune
 ExecStartPost=/home/fede/collections-app/deploy/server/offsite.sh upload
 # Alert (roadmap #24): success or failure of the whole unit goes to the healthchecks.io check
 # "collection-backup"; a missed nightly ping also alerts (stale backup).
-ExecStopPost=/home/fede/collections-app/deploy/server/hc.sh collection-backup ${SERVICE_RESULT}
+ExecStopPost=/home/fede/collections-app/deploy/server/hc.sh collections-backup ${SERVICE_RESULT}
