@@ -20,3 +20,4 @@ Status: brief (2026-11-05). Repos: backend, frontend-web. Workflow v2 lean.
 
 ## Log
 - 2026-11-05: brief written.
+- 2026-11-05: backend B1 (PR 0xfederama/collections-app-backend#78, contract `api-v3.2.0`: `listItems?availability=available|included`, 409 `duplicate_title`) and B2 (#79) merged; released as `v2.11.0`. Web builds against `api-v3.2.0`. Open: lookup refresh/rematch can still overwrite a title into a duplicate; the Go streaming registry mirrors the web's `streamingEntries.ts`.
