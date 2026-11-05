@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Pi health ping (roadmap #24), every 5 minutes via collection-health.timer. Pings the healthchecks.io
-# check "collection-pi": ok when everything is fine, fail with the reasons otherwise. If the Pi is off
+# Pi health ping (roadmap #24), every minute via collection-health.timer. Pings the healthchecks.io
+# check "raspberrypi": ok when everything is fine, fail with the reasons otherwise. If the Pi is off
 # or offline, the pings stop and healthchecks.io alerts after the grace time.
 set -uo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
@@ -24,9 +24,9 @@ for svc in db api web; do
 done
 
 if [ "${#problems[@]}" -eq 0 ]; then
-  "$here/hc.sh" collection-pi ok "disk ${disk}%, ${avail} MB free"
+  "$here/hc.sh" raspberrypi ok "disk ${disk}%, ${avail} MB free"
 else
   msg="$(IFS='; '; echo "${problems[*]}")"
   echo "[health] $msg" >&2
-  "$here/hc.sh" collection-pi fail "$msg"
+  "$here/hc.sh" raspberrypi fail "$msg"
 fi
