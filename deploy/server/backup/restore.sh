@@ -28,7 +28,9 @@ check_backup_dir "$backup"
 
 manifest_migration="$(jq -r '.migration_version' "$MANIFEST")"
 local_migration="$(latest_local_migration)"
-if [ "$manifest_migration" -gt "$local_migration" ]; then
+# On the Pi there is no backend checkout: the migrations live in the api image (BACKEND_VERSION), and
+# `migrate` below fails loudly if the backup is newer than that image. Only compare when a checkout exists.
+if [ "$local_migration" -gt 0 ] && [ "$manifest_migration" -gt "$local_migration" ]; then
   die "the backup is at migration $manifest_migration but this checkout only has up to $local_migration: update the code first"
 fi
 
