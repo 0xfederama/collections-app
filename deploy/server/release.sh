@@ -41,6 +41,12 @@ set -a
 set +a
 : "${GITHUB_TOKEN:?set GITHUB_TOKEN in deploy/server/.env}"
 
+# Alerts (roadmap #24, prod only): every finished run pings "collection-release". A single failed run
+# (network blip) sends nothing; healthchecks.io alerts when no ok ping arrives for its grace time
+# (expired token, dead timer, Pi offline). Deploy results go to "collection-deploy".
+hc() { [ "$stack" = prod ] && "$here/hc.sh" "$@"; return 0; }
+[ "$stack" = prod ] && trap '[ $? -eq 0 ] && "$here/hc.sh" collection-release ok' EXIT
+
 # Test first: a failure there is logged and never stops the prod check.
 if [ "$stack" = prod ] && [ "${TEST_STACK:-}" = 1 ]; then
   RELEASE_STACK="test" "$here/release.sh" || true
@@ -105,12 +111,24 @@ drop_preflight() { psql_admin -c "DROP DATABASE IF EXISTS collection_preflight" 
 # If 4 fails, the old api starts again on the migrated schema. That works because every migration
 # must be backward compatible with the previous release (expand/contract, D-118).
 # A release published before its image build finished is not a failure: wait and retry next minute.
+# Only if the image is still missing after an hour (build broken?) is it reported, once.
+waiting() {
+  local f="$state/${pfx}$1.waiting" since
+  if [ "$(cut -d' ' -f1 "$f" 2>/dev/null)" != "$2" ]; then echo "$2 $(date +%s)" >"$f"; return 0; fi
+  since="$(cut -d' ' -f2 "$f")"
+  if [ $(( $(date +%s) - since )) -gt 3600 ] && ! grep -q ' alerted$' "$f"; then
+    hc collection-deploy fail "$1 $2: image still not on GHCR after an hour (check the release-image workflow)"
+    echo "$2 $since alerted" >"$f"
+  fi
+}
 if [ -n "$be" ] && [ "$be" != "$BACKEND_VERSION" ] && ! BACKEND_VERSION="$be" prod pull -q api migrate >/dev/null 2>&1; then
   log "backend $be: image not on GHCR yet (build still running?), retrying next minute"
+  waiting backend "$be"
   be="$BACKEND_VERSION"
 fi
 if [ -n "$web" ] && [ "$web" != "$WEB_VERSION" ] && ! WEB_VERSION="$web" prod pull -q web >/dev/null 2>&1; then
   log "web $web: image not on GHCR yet (build still running?), retrying next minute"
+  waiting web "$web"
   web="$WEB_VERSION"
 fi
 
@@ -133,10 +151,12 @@ if [ -n "$be" ] && [ "$be" != "$BACKEND_VERSION" ]; then
     BACKEND_VERSION="$be"
     save
     log "backend $be is live"
+    hc collection-deploy ok "backend $be is live"
   else
     drop_preflight
     echo "$be" >"$state/${pfx}backend.failed"
     log "FAILED to deploy backend $be; back to ${BACKEND_VERSION:-none} (not retried until a newer release)"
+    hc collection-deploy fail "backend $be failed, rolled back to ${BACKEND_VERSION:-none}: see journalctl -u collection-release"
     [ -z "$BACKEND_VERSION" ] || prod up -d --no-deps --wait api || log "the previous api did not come back: check '${stack_cmd#"$root/"} logs api'"
     exit 1
   fi
@@ -149,9 +169,11 @@ if [ -n "$web" ] && [ "$web" != "$WEB_VERSION" ]; then
     WEB_VERSION="$web"
     save
     log "web $web is live"
+    hc collection-deploy ok "web $web is live"
   else
     echo "$web" >"$state/${pfx}web.failed"
     log "FAILED to deploy web $web; rolling back to ${WEB_VERSION:-none} (not retried until a newer release)"
+    hc collection-deploy fail "web $web failed, rolled back to ${WEB_VERSION:-none}: see journalctl -u collection-release"
     [ -z "$WEB_VERSION" ] || prod up -d --no-deps --wait web || log "the previous web did not come back: check '${stack_cmd#"$root/"} logs web'"
     exit 1
   fi

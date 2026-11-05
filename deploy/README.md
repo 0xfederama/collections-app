@@ -193,3 +193,18 @@ A second, empty stack next to prod on the Pi: `./deploy/pitest` takes the same c
 - Flow: tag `vX.Y.Z`, publish the GitHub Release as a **pre-release**: test gets it within a minute. When it looks right, edit the release, untick pre-release and set it as latest: prod gets it.
 - The release check runs test first; a failure there is logged as `[release test]` and never blocks prod. Same preflight and rollback, no backups.
 - Wipe it: `./deploy/pitest down -v`.
+
+## Alerts (healthchecks.io, roadmap #24)
+
+The Pi never sends mail: it pings healthchecks.io, which notifies you (email, Telegram, ntfy, Signal, …).
+Set `HC_PING_KEY` in `deploy/server/.env`; the checks are created on the first ping. Then set each check's schedule:
+
+| Check | Pinged by | Set period / grace | Alerts when |
+| --- | --- | --- | --- |
+| `collection-release` | every finished prod release run (each minute) | 1 min / 15 min | no successful run for 15 min: expired token, dead timer, Pi offline |
+| `collection-deploy` | each prod deploy | 365 days / 1 day | a deploy failed and rolled back, or an image is still missing an hour after its release |
+| `collection-backup` | the nightly backup unit (backup, prune, Drive upload) | cron `15 3 * * *`, your time zone / 2 h | the backup failed, or did not run (stale) |
+| `collection-pi` | `collection-health.timer`, every 5 min | 5 min / 15 min | disk over `HEALTH_DISK_MAX`%, memory low, a prod container unhealthy, or the Pi is off |
+
+A release waiting for its image (build still running) is not an alert. Test stack (`pitest`) failures are only logged.
+Install the health timer: `sudo cp deploy/server/systemd/collection-health.* deploy/server/systemd/collection-backup.service /etc/systemd/system/ && sudo systemctl daemon-reload && sudo systemctl enable --now collection-health.timer`.

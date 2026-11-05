@@ -56,7 +56,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 22 | deploy | **Test stack on the Pi**: GitHub pre-releases deploy to a separate, empty test stack on port 8081 (`./deploy/pitest`); prod keeps the release marked latest (D-119) | ✅ Done 2026-11-04 (live on 8081) | Nov 2026 |
 | 23 | web | **Mobile fixes** (F-025): no zoom on focus, one-row list toolbar, compact header, sidebar padding, long press for Move/Delete with drag reorder kept, smaller link icons, drop the manual-sorting hint | ✅ Done 2026-11-05 (web 2.23.0–2.28.1, backend 2.8.4–2.10.0) | Nov 2026 |
 | 23b | backend + web | **List polish, availability filters, unique titles** (F-026) | ✅ Done 2026-11-05 (backend 2.11.0–2.11.2, web 2.29.0, D-126, D-127) | Nov 2026 |
-| 24 | deploy | **Email alerts**: failed release, failed or stale backup, rollback, disk nearly full, Pi offline (dead-man switch) | ⏳ | Nov 2026 |
+| 24 | deploy | **Alerts via healthchecks.io**: failed deploy or rollback, failed or stale backup, release check stuck, disk or memory low, prod container unhealthy, Pi offline | 🔄 Built, to enable on the Pi | Nov 2026 |
 | 25 | deploy + backend | **Hosted logs and latency charts** (light agent shipping to a free hosted dashboard; lifts the "no metrics" rule) | ⏳ | Nov 2026 |
 | 26 | local doc | **Pi operations guide** (kept only on your machine, not in git): full setup from an empty SD card, how the repos sit on the Pi, push vs release, where the logs are, runbooks for failures, re-setup from scratch, restore from Google Drive | ⏳ | Nov 2026 |
 | — | then | Pool: accounts (backend 3.0) → lighter web app (bundle and load audit, once e2e covers it) → security review → internet exposure + public API → collaborative Markdown | ⚪ Pool | 2027 |
