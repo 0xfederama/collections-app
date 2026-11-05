@@ -14,6 +14,9 @@ x-hardening: &hardening
     - no-new-privileges:true
   cap_drop:
     - ALL
+  # Logs go to the systemd journal (docker logs still works); the logs service ships them (roadmap #25).
+  logging:
+    driver: journald
 
 services:
   db:
@@ -101,6 +104,34 @@ services:
       start_period: 5s
     restart: unless-stopped
 
+  # Ships prod and collections-* unit logs to Grafana Cloud Loki (roadmap #25). Opt-in: COMPOSE_PROFILES=logs
+  # plus LOKI_HOST/LOKI_USER/LOKI_TOKEN in deploy/server/.env. Capped at 48 MB of memory.
+  logs:
+    image: fluent/fluent-bit:5.1.4
+    profiles: ["logs"]
+    <<: *hardening
+    logging:
+      driver: json-file
+      options: { max-size: "1m", max-file: "2" }
+    # Root, but with no capabilities: enough to read the journal files root owns, nothing else.
+    user: "0"
+    read_only: true
+    mem_limit: 48m
+    cpus: 0.25
+    environment:
+      LOKI_HOST: ${LOKI_HOST:-}
+      LOKI_USER: ${LOKI_USER:-}
+      LOKI_TOKEN: ${LOKI_TOKEN:-}
+    volumes:
+      - ./logs/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf:ro
+      # Parent dirs, so Docker never creates /var/log/journal (that would switch journald to persistent).
+      - /var/log:/var/log:ro
+      - /run/log:/run/log:ro
+      - /etc/machine-id:/etc/machine-id:ro
+      - logstate:/state
+    restart: unless-stopped
+
 volumes:
   pgdata:
   appdata:
+  logstate:

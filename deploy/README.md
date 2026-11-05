@@ -208,3 +208,14 @@ Set `HC_PING_KEY` in `deploy/server/.env`; the checks are created on the first p
 
 A release waiting for its image (build still running) is not an alert. Test stack (`pitest`) failures are only logged.
 Install the health timer: `sudo cp deploy/server/systemd/collections-health.* deploy/server/systemd/collections-backup.service /etc/systemd/system/ && sudo systemctl daemon-reload && sudo systemctl enable --now collections-health.timer`.
+
+## Hosted logs and latency charts (Grafana Cloud, roadmap #25, D-128)
+
+Prod containers log to the systemd journal (`docker logs` and `./deploy/prod logs` still work). The optional `logs`
+service (Fluent Bit, capped at 48 MB and a quarter CPU) ships the prod containers' and the `collections-*` units' lines to
+Grafana Cloud Loki (free tier). Latency comes from the API's own request log (`duration_ms`); there is no metrics agent.
+
+- Enable: in `deploy/server/.env` set `COMPOSE_PROFILES=logs`, `LOKI_HOST`, `LOKI_USER`, `LOKI_TOKEN`; the next minute's
+  re-apply (or `./deploy/prod up -d`) starts it. Disable: empty `COMPOSE_PROFILES`, then `./deploy/prod up -d --remove-orphans`.
+- Dashboard: Grafana → Dashboards → Import → `deploy/server/logs/grafana-dashboard.json`, pick the Loki data source.
+- The test stack never ships logs.

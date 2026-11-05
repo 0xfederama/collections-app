@@ -39,6 +39,7 @@ if [ "${PI_STACK:-prod}" = test ]; then
   ENV_NAME="pitest"
   versions_file="$here/versions-test.env"
   project="collections-app-pitest"
+  export COMPOSE_PROFILES=""   # no log shipping from the test stack
   export WEB_PORT="${TEST_WEB_PORT:-8081}" WORKSPACE_NAME="${WORKSPACE_NAME:-Our Collection} (test)"
   export BACKUP_DIR="${TEST_BACKUP_DIR:-${BACKUP_DIR:-/srv/collection/backups}-test}"
 fi
