@@ -55,6 +55,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 21 | deploy | **Off-Pi backups to Google Drive** (rclone, encrypted, token authorised on the Mac) | ✅ Done 2026-11-04 (rclone crypt, nightly upload, 30 kept) | Nov 2026 |
 | 22 | deploy | **Test stack on the Pi**: GitHub pre-releases deploy to a separate, empty test stack on port 8081 (`./deploy/pitest`); prod keeps the release marked latest (D-119) | ✅ Done 2026-11-04 (live on 8081) | Nov 2026 |
 | 23 | web | **Mobile fixes** (F-025): no zoom on focus, one-row list toolbar, compact header, sidebar padding, long press for Move/Delete with drag reorder kept, smaller link icons, drop the manual-sorting hint | ✅ Done 2026-11-05 (web 2.23.0–2.28.1, backend 2.8.4–2.10.0) | Nov 2026 |
+| 23b | backend + web | **List polish, availability filters, unique titles** (F-026) | 🔄 Brief ready | Nov 2026 |
 | 24 | deploy | **Email alerts**: failed release, failed or stale backup, rollback, disk nearly full, Pi offline (dead-man switch) | ⏳ | Nov 2026 |
 | 25 | deploy + backend | **Hosted logs and latency charts** (light agent shipping to a free hosted dashboard; lifts the "no metrics" rule) | ⏳ | Nov 2026 |
 | 26 | local doc | **Pi operations guide** (kept only on your machine, not in git): full setup from an empty SD card, how the repos sit on the Pi, push vs release, where the logs are, runbooks for failures, re-setup from scratch, restore from Google Drive | ⏳ | Nov 2026 |
