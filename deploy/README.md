@@ -127,12 +127,12 @@ Postgres **and** the images, together (a DB-only backup is not enough). The api 
 catches up after downtime). Edit `User=` and the paths if your clone isn't `/home/pi/collections-app`, then:
 
 ```bash
-sudo cp deploy/server/systemd/collection-backup.{service,timer} /etc/systemd/system/
+sudo cp deploy/server/systemd/collections-backup.{service,timer} /etc/systemd/system/
 sudo systemctl daemon-reload
-sudo systemctl enable --now collection-backup.timer
-systemctl list-timers collection-backup.timer   # next run
-sudo systemctl start collection-backup.service  # optional: run one now
-journalctl -u collection-backup.service         # its log
+sudo systemctl enable --now collections-backup.timer
+systemctl list-timers collections-backup.timer   # next run
+sudo systemctl start collections-backup.service  # optional: run one now
+journalctl -u collections-backup.service         # its log
 ```
 
 **Check that it ran:** `./deploy/prod backup-status` fails (non-zero, with the reason) when there is no backup, the newest
@@ -141,7 +141,7 @@ then, or after the server was off.
 
 **Copy backups off the device** (another machine, a NAS, cloud storage you control): the same disk dying takes the live
 data and the backups together. Example, from another machine on your tailnet:
-`rsync -a --delete pi@server:/srv/collection/backups/ ~/collection-backups/`. Backups hold all your data and are not
+`rsync -a --delete pi@server:/srv/collection/backups/ ~/collections-backups/`. Backups hold all your data and are not
 encrypted, so never put them in Git and treat the destination accordingly.
 
 ### Upgrade
@@ -204,7 +204,7 @@ Set `HC_PING_KEY` in `deploy/server/.env`; the checks are created on the first p
 | `collections-release` | every finished prod release run (each minute) | 1 min / 15 min | no successful run for 15 min: expired token, dead timer, Pi offline |
 | `collections-deploy` | each prod deploy | 365 days / 1 day | a deploy failed and rolled back, or an image is still missing an hour after its release |
 | `collections-backup` | the nightly backup unit (backup, prune, Drive upload) | cron `15 3 * * *`, your time zone / 2 h | the backup failed, or did not run (stale) |
-| `raspberrypi` | `collection-health.timer`, every minute | 1 min / 5 min | disk over `HEALTH_DISK_MAX`%, memory low, a prod container unhealthy, or the Pi is off |
+| `raspberrypi` | `collections-health.timer`, every minute | 1 min / 5 min | disk over `HEALTH_DISK_MAX`%, memory low, a prod container unhealthy, or the Pi is off |
 
 A release waiting for its image (build still running) is not an alert. Test stack (`pitest`) failures are only logged.
-Install the health timer: `sudo cp deploy/server/systemd/collection-health.* deploy/server/systemd/collection-backup.service /etc/systemd/system/ && sudo systemctl daemon-reload && sudo systemctl enable --now collection-health.timer`.
+Install the health timer: `sudo cp deploy/server/systemd/collections-health.* deploy/server/systemd/collections-backup.service /etc/systemd/system/ && sudo systemctl daemon-reload && sudo systemctl enable --now collections-health.timer`.

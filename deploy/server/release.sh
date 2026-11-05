@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Deploys the latest published GitHub Release of each service (D-117). Run every minute by
-# collection-release.timer; does nothing when both versions are already deployed.
+# collections-release.timer; does nothing when both versions are already deployed.
 #
 # Publishing a Release (marked latest) in a repo is the prod approval. A tag alone is not.
 # Order: backend first (backup, migrations embedded in the api image, api), then web.
@@ -41,7 +41,7 @@ set -a
 set +a
 : "${GITHUB_TOKEN:?set GITHUB_TOKEN in deploy/server/.env}"
 
-# Alerts (roadmap #24, prod only): every finished run pings "collection-release". A single failed run
+# Alerts (roadmap #24, prod only): every finished run pings "collections-release". A single failed run
 # (network blip) sends nothing; healthchecks.io alerts when no ok ping arrives for its grace time
 # (expired token, dead timer, Pi offline). Deploy results go to "collection-deploy".
 hc() { [ "$stack" = prod ] && "$here/hc.sh" "$@"; return 0; }
@@ -156,7 +156,7 @@ if [ -n "$be" ] && [ "$be" != "$BACKEND_VERSION" ]; then
     drop_preflight
     echo "$be" >"$state/${pfx}backend.failed"
     log "FAILED to deploy backend $be; back to ${BACKEND_VERSION:-none} (not retried until a newer release)"
-    hc collections-deploy fail "backend $be failed, rolled back to ${BACKEND_VERSION:-none}: see journalctl -u collection-release"
+    hc collections-deploy fail "backend $be failed, rolled back to ${BACKEND_VERSION:-none}: see journalctl -u collections-release"
     [ -z "$BACKEND_VERSION" ] || prod up -d --no-deps --wait api || log "the previous api did not come back: check '${stack_cmd#"$root/"} logs api'"
     exit 1
   fi
@@ -173,7 +173,7 @@ if [ -n "$web" ] && [ "$web" != "$WEB_VERSION" ]; then
   else
     echo "$web" >"$state/${pfx}web.failed"
     log "FAILED to deploy web $web; rolling back to ${WEB_VERSION:-none} (not retried until a newer release)"
-    hc collections-deploy fail "web $web failed, rolled back to ${WEB_VERSION:-none}: see journalctl -u collection-release"
+    hc collections-deploy fail "web $web failed, rolled back to ${WEB_VERSION:-none}: see journalctl -u collections-release"
     [ -z "$WEB_VERSION" ] || prod up -d --no-deps --wait web || log "the previous web did not come back: check '${stack_cmd#"$root/"} logs web'"
     exit 1
   fi

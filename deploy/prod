@@ -99,7 +99,7 @@ backup_status() {
   fi
   now="$(date -u +%s)"
   age=$(( (now - epoch) / 3600 ))
-  [ "$age" -le "$max" ] || die "newest backup $newest is ${age}h old (limit ${max}h): check the timer (systemctl status collection-backup.timer)"
+  [ "$age" -le "$max" ] || die "newest backup $newest is ${age}h old (limit ${max}h): check the timer (systemctl status collections-backup.timer)"
   ok "backup-status: newest $newest, ${age}h old"
 }
 

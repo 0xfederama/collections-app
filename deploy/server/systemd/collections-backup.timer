@@ -1,4 +1,4 @@
-# Runs collection-backup.service every night at 03:15; Persistent catches up after the server was off.
+# Runs collections-backup.service every night at 03:15; Persistent catches up after the server was off.
 [Unit]
 Description=Nightly Collections App backup
 

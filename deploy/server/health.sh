@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Pi health ping (roadmap #24), every minute via collection-health.timer. Pings the healthchecks.io
+# Pi health ping (roadmap #24), every minute via collections-health.timer. Pings the healthchecks.io
 # check "raspberrypi": ok when everything is fine, fail with the reasons otherwise. If the Pi is off
 # or offline, the pings stop and healthchecks.io alerts after the grace time.
 set -uo pipefail
