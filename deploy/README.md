@@ -81,7 +81,7 @@ journalctl -fu collections-release                    # wait for "backend X is l
 ```
 
 The units assume user `fede` and the clone at `/home/fede/collections-app`; edit `User=` and the paths otherwise.
-Quote values with spaces in `.env` (`WORKSPACE_NAME="Our Collection"`): the wrapper reads it as a shell file.
+Quote values with spaces in `.env` (`WORKSPACE_NAME="My Lists"`): the wrapper reads it as a shell file.
 
 #### Where the data lives
 
