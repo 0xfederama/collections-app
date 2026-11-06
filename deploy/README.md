@@ -6,7 +6,7 @@ Three environments, one command each. Every command takes any `docker compose` s
 | | `./deploy/dev` | `./deploy/test` | `./deploy/prod` |
 |---|---|---|---|
 | For | Automated checks: unit, integration, e2e, smoke (agents) | Your manual testing | The real app (Raspberry Pi, LAN) |
-| Web | http://localhost:5183 (Vite, hot reload) | http://localhost:5173 (Vite, hot reload) | http://127.0.0.1:8081 (Caddy, built SPA) |
+| Web | http://localhost:5183 (Vite, hot reload) | http://localhost:5173 (Vite, hot reload) | `WEB_BIND:WEB_PORT` (Pi: LAN IP, port 80; Caddy, built SPA) |
 | API | http://localhost:8090 | http://localhost:8080 | not published (behind web) |
 | Data | Disposable: `--fresh` wipes it | Persistent, never touched by agents | Persistent, with backups |
 | Settings | `local/dev.env` | `local/test.env` | `server/.env` (from `server/.env.example`) |
@@ -18,13 +18,13 @@ dev and test have different ports and volumes, so they run side by side. Everyth
 
 ```text
 deploy/
-├── dev  test  prod     the three commands
+├── dev  test  prod     the three commands (+ pitest, the test stack on the Pi)
 ├── lib.sh              shared helpers (help text, colors, env loading)
 ├── local/              dev + test: backend stack + Vite dev server on the frontend-web checkout
 │   ├── compose.yaml
 │   ├── dev.env
 │   └── test.env
-└── server/             prod: images built on the server (Caddy web + api), backups, exposure check
+└── server/             prod + pitest on the Pi: GHCR images, release.sh, backups, alerts, logs, systemd units
     ├── compose.yaml
     ├── .env.example    → copy to .env (gitignored)
     └── check.sh
@@ -50,132 +50,101 @@ cp backend/.env.example backend/.env    # once: set POSTGRES_PASSWORD (URL-safe 
 
 ## prod (home server)
 
-Runs the whole app (Postgres, migrations, API, Caddy web) from a clone of this repo, on a Raspberry Pi (arm64) or a
-Linux box (amd64). Images are **built on the server** (D-069): no registry, nothing is published anywhere.
+Runs the whole app (Postgres, migrations, API, Caddy web) on a Raspberry Pi (arm64, 64-bit OS) from a clone of this repo.
+The Pi **never builds**: a tag `vX.Y.Z` in the backend or web repo builds an arm64 image on GitHub Actions and pushes it to
+GHCR; publishing a GitHub Release from that tag is the deploy approval (D-117). Every minute `collections-release.timer`
+runs `deploy/server/release.sh`, which also fast-forwards this checkout, so pushed `deploy/` changes go live within a minute.
 
 ```text
- browser ──► 127.0.0.1:8081 (or your Tailscale IP) ──► web (Caddy) ──► api ──► db (Postgres)
-                                                          └ serves the SPA, proxies /api   └ volumes: pgdata, appdata
+ browser ──► WEB_BIND:WEB_PORT (LAN IP, port 80) ──► web (Caddy) ──► api ──► db (Postgres)
+                                                       └ serves the SPA, proxies /api   └ volumes: pgdata, appdata
 ```
 
-Only `web` publishes a port. `db` and `api` exist only on the compose network.
+Only `web` publishes a port. `db` and `api` exist only on the compose network. The deployed versions are written by
+`release.sh` to `deploy/server/versions.env` (gitignored).
 
-### Prerequisites
-
-- Docker with Compose v2 (running), `git`, `jq` (backups), optionally `zstd` (otherwise backups use gzip).
-- Disk for the images and build cache (the first build downloads Go, Node and base images), plus room for your data and backups.
-- A Pi needs a 64-bit OS. The first build there is slow (the Go and Node builds run natively); check `docker stats` if it struggles.
+The full step-by-step setup, restore and move-to-a-new-machine guide is kept off git, on your machine.
 
 ### First start
+
+Prerequisites: Docker with Compose v2, `git`, `jq`, `zstd`, `rclone` (off-Pi backups), `ufw`.
 
 ```bash
 git clone --recurse-submodules https://github.com/0xfederama/collections-app.git
 cd collections-app
-cp deploy/server/.env.example deploy/server/.env      # set POSTGRES_PASSWORD (openssl rand -hex 24)
-sudo mkdir -p /srv/collection/backups && sudo chown "$USER" /srv/collection/backups   # or set BACKUP_DIR in .env to a folder you own
-./deploy/prod check                     # exposure check: must print "ok"
-./deploy/prod up -d --build             # first build is slow, later ones use the cache
-curl -fsS http://127.0.0.1:8081/readyz  # prints "ready"
+cp deploy/server/.env.example deploy/server/.env      # fill it in: see the comments in the file
+sudo mkdir -p /srv/collection/backups && sudo chown "$USER" /srv/collection/backups
+./deploy/prod check                                   # exposure check: must print "ok"
+sudo cp deploy/server/systemd/collections-* /etc/systemd/system/ && sudo systemctl daemon-reload
+sudo systemctl enable --now collections-release.timer collections-backup.timer collections-health.timer
+journalctl -fu collections-release                    # wait for "backend X is live" and "web Y is live"
 ```
 
-Open `http://127.0.0.1:8081`. Quote values with spaces in `.env` (`WORKSPACE_NAME="Our Collection"`): the `./deploy/prod` wrapper reads it as a shell file.
-Already cloned without submodules: `git submodule update --init --recursive`.
+The units assume user `fede` and the clone at `/home/fede/collections-app`; edit `User=` and the paths otherwise.
+Quote values with spaces in `.env` (`WORKSPACE_NAME="Our Collection"`): the wrapper reads it as a shell file.
 
 #### Where the data lives
 
 | What | Where | Owner |
 |---|---|---|
-| Postgres data | Docker named volume `collections-app-prod_pgdata` | the container's `postgres` user (set up by the image) |
+| Postgres data | Docker named volume `collections-app-prod_pgdata` | the container's `postgres` user |
 | Uploaded images | Docker named volume `collections-app-prod_appdata`, mounted at `/data` | UID/GID **65532** (the api's distroless `nonroot` user) |
-| Backups | `BACKUP_DIR` in `deploy/server/.env`, default `/srv/collection/backups` | the user who runs `./deploy/prod backup` (mode 0700 inside) |
+| Backups | `BACKUP_DIR` in `deploy/server/.env`, default `/srv/collection/backups`, plus encrypted copies on Google Drive | the user running the backup unit |
 
-Named volumes (D-071) rather than `/srv/collection/{pgdata,data}` bind mounts: Docker creates them with the right owner,
-and the backup/restore scripts wipe and refill volumes by name. To inspect them: `docker volume inspect collections-app-prod_appdata`.
-Do not `chown` or edit inside them by hand. `docker compose down` keeps them; `down --volumes` **deletes your data**.
+Do not `chown` or edit inside the volumes by hand. `down` keeps them; `down --volumes` **deletes your data**.
 
-Container hardening: all capabilities dropped (Postgres gets back the few it needs to start), `no-new-privileges`;
+Container hardening: all capabilities dropped (Postgres gets back the few it needs), `no-new-privileges`;
 the api (UID 65532) and web (UID 10001) run with a read-only root filesystem.
-
-#### Trying prod next to another stack
-
-To rehearse on a machine that already runs prod (or just to try it): `PROD_PROJECT=collections-app-trial ./deploy/prod …` uses its own
-containers and volumes (leave it unset on the real server), and a different `WEB_PORT` and `BACKUP_DIR` in `.env` keep it from clashing.
-Remove it with `PROD_PROJECT=collections-app-trial ./deploy/prod down --volumes`, always with the same variable set.
 
 ### Reaching it from your other devices
 
-The app has **no login** (auth is Phase 3). It must never be reachable from the internet.
+The app has **no login**. It must never be reachable from the internet.
 
-- **Never port-forward** on your router and never publish this on a public IP.
-- Recommended: install [Tailscale](https://tailscale.com/) on the server and your devices, then in `deploy/server/.env` set
-  `WEB_BIND` to the server's Tailscale IP (`tailscale ip -4`) and run `./deploy/prod up -d`. Only devices in your tailnet can then connect.
-- `WEB_BIND` must be one specific address. `./deploy/prod check` refuses `0.0.0.0` and any published port other than
-  the web one, and prints a note when an opt-in address is used.
-- There is no TLS inside the stack (plain HTTP over the private network, Tailscale encrypts the traffic).
+- Set `WEB_BIND` to the Pi's LAN IP (reserved on the router) and `WEB_PORT=80`, and allow the LAN in ufw
+  (`sudo ufw allow from 192.168.1.0/24 to any port 80 proto tcp`). Tailscale works too: bind to the Tailscale IP instead.
+- **Never port-forward** on the router, never `0.0.0.0`, never a public address. `./deploy/prod check` refuses those.
+- No TLS inside the stack (plain HTTP on the private network).
+
+### Releases (upgrade)
+
+Publish a GitHub Release (as pre-release first, see pitest below; then mark it latest). Within a minute the Pi:
+
+1. pulls the new image (if it isn't built yet, it waits and retries every minute);
+2. backend only: stops the api, backs up, runs the new migrations on a throwaway copy of the database, then on the real one;
+3. starts the new container and waits until it is healthy, else starts the old one again and alerts;
+4. removes every image no container uses (old releases), so the SD card does not fill up.
+
+Migrations must be backward compatible with the previous release (expand/contract, D-118), which is what makes step 3's
+rollback safe. To force a check now: `./deploy/prod release`. Logs: `journalctl -u collections-release`.
+
+**Old images left from before the automatic clean-up** (or after a failed deploy): `docker image prune -af` removes every
+image no container uses; the running ones are kept, and a rollback re-pulls from GHCR if ever needed.
 
 ### Backups
 
-Postgres **and** the images, together (a DB-only backup is not enough). The api is stopped for a few seconds while it runs.
+Postgres **and** the uploaded images, together. The api is stopped for a few seconds while it runs.
 
 ```bash
-./deploy/prod backup                    # → $BACKUP_DIR/<UTC timestamp>/{db.dump, files.tar.zst|gz, manifest.json}
+./deploy/prod backup                    # → $BACKUP_DIR/<UTC timestamp>/{db.dump, files.tar.zst, manifest.json}
 ./deploy/prod prune                     # keep the newest backup of each of the last 7 days and 4 ISO weeks
 ./deploy/prod verify <backup-dir>       # compare the running database with a backup
+./deploy/prod backup-status             # fails if the newest backup is missing, incomplete or older than 26 h
+./deploy/prod offsite list|get <name>   # encrypted copies on Google Drive (rclone crypt remote OFFSITE_REMOTE)
 ```
 
-**Schedule it** with the systemd units in `deploy/server/systemd/` (nightly backup at 03:15, then prune; `Persistent=true`
-catches up after downtime). Edit `User=` and the paths if your clone isn't `/home/pi/collections-app`, then:
+`collections-backup.timer` runs backup, prune and the encrypted Drive upload nightly at 03:15 (`Persistent=true` catches
+up after downtime) and pings `collections-backup`. The rclone config (Drive token and crypt passwords) lives only in your
+password manager: without it the Drive copies cannot be read.
+
+### Restore
 
 ```bash
-sudo cp deploy/server/systemd/collections-backup.{service,timer} /etc/systemd/system/
-sudo systemctl daemon-reload
-sudo systemctl enable --now collections-backup.timer
-systemctl list-timers collections-backup.timer   # next run
-sudo systemctl start collections-backup.service  # optional: run one now
-journalctl -u collections-backup.service         # its log
-```
-
-**Check that it ran:** `./deploy/prod backup-status` fails (non-zero, with the reason) when there is no backup, the newest
-has no `manifest.json`, or it is older than 26 hours (`./deploy/prod backup-status 48` for another limit). Run it now and
-then, or after the server was off.
-
-**Copy backups off the device** (another machine, a NAS, cloud storage you control): the same disk dying takes the live
-data and the backups together. Example, from another machine on your tailnet:
-`rsync -a --delete pi@server:/srv/collection/backups/ ~/collections-backups/`. Backups hold all your data and are not
-encrypted, so never put them in Git and treat the destination accordingly.
-
-### Upgrade
-
-```bash
-./deploy/prod backup                         # 1. always first: a migration cannot be undone safely
-git pull --recurse-submodules                # 2. new code (updates backend/ and frontend-web/ to the pinned commits)
-./deploy/prod up -d --build                  # 3. rebuild images; `migrate` runs before the api starts
-./deploy/prod ps                             # 4. migrate = exited (0), the others healthy
-curl -fsS http://127.0.0.1:8081/readyz
-```
-
-**One-off steps after specific upgrades:** none at the moment. (The old `strip-images` backfill of 1.2.1 was removed with the F-019 refactor; production was not in use.) Add a row here when a release needs a manual step.
-
-If `migrate` fails, the api does not start (the old one is already replaced, so the app is down): read
-`./deploy/prod logs migrate`, then roll back.
-
-### Rollback
-
-A migration `down` does not bring back files and can lose data, so rollback means restoring the backup from step 1 with the old code:
-
-```bash
-git checkout <previous parent commit> && git submodule update --init --recursive
 ./deploy/prod restore /srv/collection/backups/<timestamp> --force    # asks you to type "restore"
-./deploy/prod up -d --build
 ```
 
-`restore` refuses a backup newer than the checked-out migrations, so go back to the old code first.
-
-### Restore drill (do it once before you need it)
-
-On a spare machine or after a deliberate wipe: `./deploy/prod down --volumes`, then
-`./deploy/prod restore <backup>` (no `--force` needed on empty volumes), then `./deploy/prod up -d --build`,
-and check your items and images in the browser. `restore` runs `verify` itself before it starts the api.
+It verifies the files, replaces the database and images, runs `verify` and starts the api. The migrations come from the
+running backend image, so restore a backup no newer than the deployed backend. Practise it once a year on the test stack
+or a spare machine (`./deploy/pitest restore <backup>`).
 
 ### Everyday commands
 

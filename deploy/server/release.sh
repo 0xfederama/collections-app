@@ -179,5 +179,7 @@ if [ -n "$web" ] && [ "$web" != "$WEB_VERSION" ]; then
   fi
 fi
 
-# Keep the SD card from filling up: drop images unused for a week (a rollback re-pulls if needed).
-docker image prune -af --filter "until=168h" >/dev/null || true
+# Keep the SD card from filling up: after a successful deploy, drop every image no container uses (old releases
+# of both stacks, dangling layers). Failed deploys exit above, so a rollback always finds its old image.
+# The images of the running containers (prod, test, logs) are never removed.
+docker image prune -af >/dev/null || true

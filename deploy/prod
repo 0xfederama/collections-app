@@ -13,7 +13,7 @@
 #
 # PI_STACK=test (or ./deploy/pitest) runs the same commands on the test stack: own project, volumes, versions and port.
 #
-# web http://127.0.0.1:8081 (or WEB_BIND)   settings + secrets: deploy/server/.env   guide: deploy/README.md
+# web http://WEB_BIND:WEB_PORT   settings + secrets: deploy/server/.env   guide: deploy/README.md
 set -euo pipefail
 ENV_NAME="prod"
 # shellcheck source=deploy/lib.sh
