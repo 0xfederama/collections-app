@@ -59,7 +59,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 24 | deploy | **Alerts via healthchecks.io**: failed deploy or rollback, failed or stale backup, release check stuck, disk or memory low, prod container unhealthy, Pi offline | ✅ Done 2026-11-05 | Nov 2026 |
 | 25 | deploy + backend | **Hosted logs and latency charts** (light agent shipping to a free hosted dashboard; lifts the "no metrics" rule) | ✅ Done 2026-11-05 (D-128) | Nov 2026 |
 | 26 | local doc | **Pi operations guide** (kept only on your machine, not in git): full setup from an empty SD card, how the repos sit on the Pi, push vs release, where the logs are, runbooks for failures, re-setup from scratch, restore from Google Drive | ✅ Done 2026-11-06 (~/Desktop/Collections Pi Guide) | Nov 2026 |
-| — | then | Pool: accounts (backend 3.0) → lighter web app (bundle and load audit, once e2e covers it) → security review → internet exposure + public API → collaborative Markdown | ⚪ Pool | 2027 |
+| — | then | Pool: accounts (backend 3.0) → security review → internet exposure + public API → collaborative Markdown | ⚪ Pool | 2027 |
 | — | future | List import, advanced search | 🔭 Future | — |
 
 ```mermaid
