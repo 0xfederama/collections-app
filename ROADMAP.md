@@ -60,7 +60,8 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 25 | deploy + backend | **Hosted logs and latency charts** (light agent shipping to a free hosted dashboard; lifts the "no metrics" rule) | ✅ Done 2026-11-05 (D-128) | Nov 2026 |
 | 26 | local doc | **Pi operations guide** (kept only on your machine, not in git): full setup from an empty SD card, how the repos sit on the Pi, push vs release, where the logs are, runbooks for failures, re-setup from scratch, restore from Google Drive | ✅ Done 2026-11-06 (~/Desktop/Collections Pi Guide) | Nov 2026 |
 | 27 | backend + web | **Chores and home-screen app**: deploy docs rewritten, image pruning after deploys, tmdb client split, default name "Collections" (backend 2.11.3), iPhone home-screen web app with manifest and icons (web 2.30.0) | ✅ Done 2026-11-06 (D-131) | Nov 2026 |
-| — | future | Development paused 2026-11-06. Future improvements: offline viewing (needs HTTPS), accounts (backend 3.0), security review + internet exposure + public API, collaborative Markdown, list import, advanced search | 🔭 Future | — |
+| 28 | deploy + web | **Remote access**: Cloudflare Tunnel (`cloudflared` on the Pi, optional via `TUNNEL_TOKEN`) + Cloudflare Access on `collections.federama.dev`, login limited to your emails; federama.dev DNS moves to Cloudflare (GitHub Pages records kept); manifest link gets `crossorigin="use-credentials"`. Replaces offline viewing | 📋 Next, you start it later | — |
+| — | future | Development paused 2026-11-06. Future improvements: accounts (backend 3.0), security review + internet exposure + public API, collaborative Markdown, list import, advanced search | 🔭 Future | — |
 
 ```mermaid
 timeline
