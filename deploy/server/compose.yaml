@@ -104,6 +104,24 @@ services:
       start_period: 5s
     restart: unless-stopped
 
+  # Remote access (roadmap #30): Cloudflare Tunnel to collections.federama.dev, behind Cloudflare Access.
+  # Opt-in: add "tunnel" to COMPOSE_PROFILES plus TUNNEL_TOKEN in deploy/server/.env. Outbound only, no port opened;
+  # the public hostname and its target (http://web:8080) are set in the Cloudflare Zero Trust dashboard.
+  tunnel:
+    image: cloudflare/cloudflared:2026.10.7
+    profiles: ["tunnel"]
+    <<: *hardening
+    read_only: true
+    mem_limit: 96m
+    cpus: 0.5
+    command: ["tunnel", "--no-autoupdate", "run"]
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN:-}
+    depends_on:
+      web:
+        condition: service_healthy
+    restart: unless-stopped
+
   # Ships prod and collections-* unit logs to Grafana Cloud Loki (roadmap #25). Opt-in: COMPOSE_PROFILES=logs
   # plus LOKI_HOST/LOKI_USER/LOKI_TOKEN in deploy/server/.env. Capped at 48 MB of memory.
   logs:

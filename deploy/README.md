@@ -105,6 +105,16 @@ The app has **no login**. It must never be reachable from the internet.
 - **Never port-forward** on the router, never `0.0.0.0`, never a public address. `./deploy/prod check` refuses those.
 - No TLS inside the stack (plain HTTP on the private network).
 
+**From anywhere (roadmap #30): Cloudflare Tunnel + Access.** The optional `tunnel` service (`cloudflared`) opens an
+outbound-only connection to Cloudflare, so no port is opened on the router. `collections.federama.dev` reaches the app
+only after a Cloudflare Access login (allowed emails only, one-time email code); Access is the login, since the app has none.
+- Enable: `COMPOSE_PROFILES=logs,tunnel` and `TUNNEL_TOKEN=` in `deploy/server/.env`, then `./deploy/prod up -d`.
+- In Zero Trust: tunnel public hostname `collections.federama.dev` → `http://web:8080`; an Access application on that
+  hostname with an Allow policy for the emails, session about 1 month; a Bypass policy for the public icon files
+  (`/favicon*`, `/apple-touch-icon*`, `/icons/*`, `/manifest.webmanifest`), which iOS may fetch without the login cookie.
+- Never a public hostname without the Access application in front: the tunnel would publish the app to the internet.
+- The test stack never starts the tunnel (its profiles are cleared).
+
 ### Releases (upgrade)
 
 Publish a GitHub Release (as pre-release first, see pitest below; then mark it latest). Within a minute the Pi:
