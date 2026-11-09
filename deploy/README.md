@@ -143,7 +143,9 @@ Postgres **and** the uploaded images, together. The api is stopped for a few sec
 ```
 
 `collections-backup.timer` runs backup, prune and the encrypted Drive upload nightly at 03:15 (`Persistent=true` catches
-up after downtime) and pings `collections-backup`. The rclone config (Drive token and crypt passwords) lives only in your
+up after downtime) and pings `collections-backup`. rclone uses **our own Google Cloud client** (scope `drive.file`, consent screen published), never rclone's shared one,
+which hits Google's quota; `drive.file` only sees files made by the same client ID, so rebuilds must reuse it.
+The rclone config (Drive token and crypt passwords) lives only in your
 password manager: without it the Drive copies cannot be read.
 
 ### Restore

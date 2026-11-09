@@ -235,6 +235,13 @@ Small one-off actions outside the code. Tick them off here when done.
 
 - [ ] **federama.dev transfer to Cloudflare** (started 2026-11-09, waiting for Squarespace, ~5 days): when it completes,
   turn DNSSEC back on in Cloudflare (DNS → Settings → Enable DNSSEC) and check that auto-renew is on.
+- [ ] **Publish both Google OAuth apps by 2026-11-16** (`Collections Backup` for rclone, `Collections` for the Access login;
+  both in Testing mode with you as test user, so their tokens expire 7 days after login): add a placeholder privacy page
+  at `https://federama.dev/privacy`, fill in Branding (name, support email, home page `https://federama.dev`, privacy link,
+  authorized domain `federama.dev`, no logo), then Audience → Publish app. Then `rclone config reconnect gdrive:` once more
+  so the backup token stops expiring, and update the rclone config in 1Password.
+- [ ] **Delete `collections-backups-old` from Google Drive** after 2026-11-16 (old backups made with rclone's shared
+  client, replaced 2026-11-09 by our own client), once the new folder has a week of daily copies.
 - [ ] Backup → wipe → restore drill on a spare machine or card (also listed in Upkeep).
 
 ## 8. Future (on the roadmap, not yet ordered)
