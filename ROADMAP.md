@@ -229,6 +229,14 @@ Committed, in this order (set by you, 2026-10-15), after the UI refresh. The re-
 | 7 | **Security review & hardening → internet exposure + public API** | A thorough security review and hardening pass (threat model, auth/session review, rate limiting, headers, dependency and container audit, pentest-style checks). Internet exposure and a public API happen only after it, or within it. The public API needs a full re-discussion first (PRODUCT §13, Phase 4) | after backend 2.0 |
 | 9 | **Real-time collaborative Markdown** | Two people editing the same description live. Path kept open: Yjs + CodeMirror 6, content already versioned in Postgres (ARCHITECTURE §7) | after #8: needs accounts for presence and names |
 
+## 7b. To-do (manual chores, yours)
+
+Small one-off actions outside the code. Tick them off here when done.
+
+- [ ] **federama.dev transfer to Cloudflare** (started 2026-11-09, waiting for Squarespace, ~5 days): when it completes,
+  turn DNSSEC back on in Cloudflare (DNS → Settings → Enable DNSSEC) and check that auto-renew is on.
+- [ ] Backup → wipe → restore drill on a spare machine or card (also listed in Upkeep).
+
 ## 8. Future (on the roadmap, not yet ordered)
 
 | Idea | Notes |
