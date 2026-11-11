@@ -113,6 +113,50 @@ tables, 7 content bodies, 317 attachments; Drive copy `gdrive-crypt:collections-
 taken on **backend 2.12.0 + web 2.41.0**. Rollback = mark backend `v2.12.0` and web `v2.41.0` as latest, wait for the
 deploy, then `./deploy/prod restore /srv/collection/snapshots/pre-accounts/20261111T133944Z --force`.
 
+## Repo breakdown: backend (backend orch., 2026-11-11; design = D-147)
+One PR per story, in order, on branches `feature/f027-b<N>-<slug>`; one migration `000002_accounts` created in B1 and
+edited in place by B2–B4 until released (D-116). Workers: complex tier (Sonnet 5.5) for B1–B3 and B6 (security,
+schema, concurrency), simple tier for B4–B5. Contract tag `api-v4.0.0` once B5 merges (B6 adds tests only); backend
+`3.0.0` after B6. No GitHub release by the orchestrator.
+
+**Identity (B1).** Order per request on `/api/v1/*` (probes and `/admin` exempt): (1) `Cf-Access-Jwt-Assertion`
+present → verify (go-oidc v3 verifier over our own throttled JWKS cache: refetch on unknown `kid` at most once a
+minute, so forged tokens cannot hammer Cloudflare; `iss` = `https://<ACCESS_TEAM_DOMAIN>`, `aud` = `ACCESS_AUD`,
+`exp`/`nbf`, `email` required) → invalid = 401, never a fallback; (2) else dev identity when `DEV_IDENTITY=true`
+(header `X-Dev-User` or cookie `dev_user`, one of the dev identities; absent → the first); (3) else LAN fallback when
+`LAN_OWNER_FALLBACK=true` **and** the request carries no Cloudflare edge header (`Cf-Ray`, `Cf-Connecting-Ip`) → the
+owner; (4) else 401 `unauthenticated`. `Cf-Access-Authenticated-User-Email` is never read. Users are keyed by
+lower-cased email, created on first request; name/avatar best-effort from the team `get-identity` endpoint
+(cookie `CF_Authorization=<token>`, 3 s timeout, at creation and at most daily; https avatars only), else null (web
+shows the email). Config: `APP_ENV=production` requires `ACCESS_TEAM_DOMAIN` + `ACCESS_AUD` and refuses
+`DEV_IDENTITY=true`; `LAN_OWNER_FALLBACK=true` requires `OWNER_EMAIL`. Dev identities: `OWNER_EMAIL` (or
+`owner@dev.test`), `alice@dev.test`, `bob@dev.test`. The Pi test stack must run `APP_ENV=development` to use them.
+**Ownership (B2).** `owner_user_id` only on top-level folders/lists (null when nested); access to anything is decided by
+its top-level ancestor (the "box"): visible = owner is me, or (B3) the box is a folder shared with me. One `access`
+feature resolves boxes over a per-request snapshot (folders + lists in any state, the caller's memberships). Enforcement:
+(a) one Huma middleware maps every `{id}`/`{batch_id}` path (folder, list, item, attachment, trash batch) to its box and
+answers 404 when not visible, before If-Match; (b) services check body references (create parent, move/restore
+destination, reorder parent, item move list) through a consumer interface, outside `InTx`; (c) tree, search, recent
+items and trash list are filtered to visible boxes. Moves: top-level → into a folder clears the owner; nested → top
+level sets the owner to the mover; same for restore with a destination; restore in place keeps the stored owner.
+Per-user order of top-level entries in `user_top_order` (fallback: the row's `sort_order`). Backfill (decision 15):
+at API startup, under the bootstrap lock, ownerless top-level folders/lists (any state) get the user of `OWNER_EMAIL`
+(created if missing); if such rows exist and `OWNER_EMAIL` is unset the API refuses to start. The SQL migration is
+structure only. Attribution columns are not backfilled (unknown authors stay null).
+**Shares (B3).** `folder_members` (top-level folders only). `POST /folders/{id}/members {email}` (owner; email of a
+user who signed in once; 200 Folder), `DELETE /folders/{id}/members/{user_id}` (owner removes anyone, member removes
+self = leave; 204); no If-Match, no version bump; under the tree lock. Folder payload: `owner_user_id`, `shared`,
+`member_user_ids`; list payload: `owner_user_id`. Owner only (403 `forbidden`): delete/move a top-level shared
+folder, share/unshare. A folder with members cannot move into a folder (409 `folder_shared`); sharing a nested
+folder is 409 `folder_not_top_level`. Members may rename it and edit everything inside. Trash: a batch is visible
+(list, restore, purge, empty) to whoever can see its root's box. Unsharing deletes the member's order row.
+**Who changed (B4).** `created_by_user_id`/`updated_by_user_id` on folders, lists, items (null = unknown or system:
+lookup refresh keeps the previous value); `author_user_id` on content versions; `GET /users` lists known users.
+**B5** drops `workspace_name` (API, config `WORKSPACE_NAME`); the column stays. **B6** derives the endpoint list from
+the spec and fails when an operation has no authorization test.
+New link tables have no FK to folders/lists, so the 2.12.0 purge still works on the new schema (D-118); the new
+purge deletes their rows explicitly.
+
 ## Out of scope
 Per-user settings, Settings → Account editing, ownership transfer, view-only shares, sharing lists or nested folders,
 removing workspaces, a public API.
