@@ -227,7 +227,7 @@ One row per person who reached the API (keyed by lower-cased `email`, unique per
 ## 3. Bootstrap (idempotent)
 
 At API startup, in one transaction: `SELECT pg_advisory_xact_lock(<fixed app constant>)`. If `workspaces` is empty,
-insert a workspace (name from `WORKSPACE_NAME`, default `"Our Collection"`) and its `workspace_settings` row.
+insert a workspace (named "Collections"; `WORKSPACE_NAME` was removed in backend 3.0.0, F-027 B5) and its `workspace_settings` row.
 If more than one workspace exists, fail startup loudly (MVP invariant). The resulting ID is cached in memory.
 
 ## 4. Trash semantics (batch cascade)

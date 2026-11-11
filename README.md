@@ -99,8 +99,8 @@ There is **no authentication** in the MVP, so the API must never be reachable fr
 
 | Where | File | What |
 |---|---|---|
-| `backend/.env` | from `backend/.env.example` | `POSTGRES_PASSWORD` (required), `API_PORT`, `APP_ENV`, `LOG_LEVEL`, `LOG_FORMAT`, `WORKSPACE_NAME`, host-loop `DATABASE_URL`/`DATA_DIR`. Validated at startup, the API refuses to start on bad values |
-| `deploy/server/.env` | from `deploy/server/.env.example` | prod only: `POSTGRES_PASSWORD`, `WEB_PORT`, `WEB_BIND`, `BACKUP_DIR`, `WORKSPACE_NAME`, `LOG_LEVEL` (see [deploy/README.md](deploy/README.md)) |
+| `backend/.env` | from `backend/.env.example` | `POSTGRES_PASSWORD` (required), `API_PORT`, `APP_ENV`, `LOG_LEVEL`, `LOG_FORMAT`, host-loop `DATABASE_URL`/`DATA_DIR`. Validated at startup, the API refuses to start on bad values |
+| `deploy/server/.env` | from `deploy/server/.env.example` | prod only: `POSTGRES_PASSWORD`, `WEB_PORT`, `WEB_BIND`, `BACKUP_DIR`, `ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`, `OWNER_EMAIL`, `LOG_LEVEL` (see [deploy/README.md](deploy/README.md)) |
 | `deploy/local/dev.env`, `test.env` | committed, no secrets | dev and test ports and log level |
 | `frontend-web/.env` (optional) | from `frontend-web/.env.example` | `API_PROXY_TARGET` for the Vite dev proxy (host runs only; the dev/test compose sets it to `http://api:8080`) |
 

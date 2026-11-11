@@ -45,7 +45,9 @@ stale generated client, storage permissions).
 | `DATABASE_URL` | — (required) | `postgres://collection:<pw>@db:5432/collection?sslmode=disable` (in-network) |
 | `DB_MAX_CONNS` | `10` | pgx pool |
 | `DATA_DIR` | `/data` | Must exist and be writable, or startup fails |
-| `WORKSPACE_NAME` | `Our Collection` | Used only on first bootstrap |
+| `ACCESS_TEAM_DOMAIN`, `ACCESS_AUD` | — | Cloudflare Access team host + app AUD tag; both or neither; required in production (F-027) |
+| `OWNER_EMAIL` | — | Owner of pre-accounts data and of every home-network request (D-150); required in production |
+| `DEV_IDENTITY` | `false` | Fake dev users (dev and the Pi test stack only); refused in production |
 | ~~`CORS_ALLOWED_ORIGINS`~~ | — | Dropped (D-033): dev uses the Vite proxy, so it's same-origin everywhere |
 | `LOG_LEVEL` | `info` | |
 | `LOG_FORMAT` | `json` | `json` \| `text` |
