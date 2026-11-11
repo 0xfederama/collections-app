@@ -2,7 +2,7 @@
 # Restores a backup made by backup.sh into fresh volumes (BACKUP_AND_DEPLOYMENT §4).
 # Usage: scripts/restore.sh <backup-dir> [--force]
 # Refuses to touch non-empty pgdata/appdata volumes. --force deletes them after a typed confirmation.
-# Order: check hashes → empty volumes → restore dump → extract images → verify → migrate up → start api.
+# Order: check hashes → empty volumes → restore dump → extract images → verify → migrate up → start the whole stack.
 set -euo pipefail
 
 here="$(cd "$(dirname "$0")" && pwd)"
@@ -80,6 +80,8 @@ echo "verifying against the manifest"
 echo "applying newer migrations (if any)"
 dc run --rm migrate
 
-echo "starting api"
-dc up -d --wait api
+# `down` above removed every container (web, and tunnel/logs when their profiles are on), so start them all,
+# not only the api: otherwise the app is unreachable after a restore.
+echo "starting the stack"
+dc up -d --wait
 echo "restore complete from $backup"
