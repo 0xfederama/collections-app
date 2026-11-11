@@ -93,8 +93,7 @@ Web (after the contract):
   it; trash of shared folders for both).
 - W6 "Updated by" and description history authors.
 - W7 Dev/test user switcher (dev/test builds only).
-- W8 ~~LAN redirect in the web image's Caddy~~: **dropped by D-150** (merged in web#136, to be removed before 3.0.0
-  ships). The LAN is served as the owner, no redirect, no `PUBLIC_URL`.
+- W8 ~~LAN redirect in the web image's Caddy~~: **dropped by D-150** (merged in web#136, removed by web#146 `abda585`, D-151). The LAN is served as the owner, no redirect, no `PUBLIC_URL`.
 
 Deploy (top-level orchestrator): `.env.example` (`ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`, `OWNER_EMAIL`) passed to `api`
 in compose, README and Pi guide (`LAN_OWNER_FALLBACK` and `PUBLIC_URL` dropped by D-150).
@@ -202,3 +201,4 @@ removing workspaces, a public API.
 - 2026-11-11 (web): W1 (web#144, `f3ad9cb`; replaces #138, closed by GitHub when its stacked base W2 was deleted on merge), W4 (web#145, `58bae69`; replaces #139), W3 (web#142, `3ae2552`), W6 (web#141, `a96646e`), W7 (web#140, `315a8be`), W5 (web#143, `74aba46`) merged, each rebased onto main by a subagent before its squash merge. **Web 3.0.0 = `74aba46`**: `npm run check` green on it (2048 tests, image built); `npm audit`: 0 in shipped deps (moderate minimatch in the dev-only ESLint chain). Not tagged, no release. Web image env: `PUBLIC_URL`, `LAN_OWNER_FALLBACK`. All web stories done.
 - 2026-11-11 (top-level): **D-150**: the home network always acts as `OWNER_EMAIL` (no switch, `LAN_OWNER_FALLBACK` removed) and nothing redirects it to `collections.federama.dev` (W8 and `PUBLIC_URL` dropped). Backend and web follow-ups before 3.0.0 ships; the rehearsal waits for them. Deploy passes only `ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`, `OWNER_EMAIL` to the api.
 - 2026-11-11 (backend): D-150 follow-up merged (backend#92, `010f44b`, design D-151): LAN = `OWNER_EMAIL` always, `LAN_OWNER_FALLBACK` removed (ignored with a warning), production requires `OWNER_EMAIL`, `GET /me` `identity_source` (contract `api-v4.1.0`, to tag), B6 tests extended. Caddy passes the Cloudflare headers unchanged. **Backend 3.0.0 = `010f44b`**, not released. Web follow-up: sync `api-v4.1.0`, Log out only for `access`, remove W8.
+- 2026-11-11 (web): D-150 follow-up: web#146 merged (`abda585`): W8 redirect removed, image needs no env var, `Cf-Ray` / `Cf-Connecting-Ip` / `Cf-Access-Jwt-Assertion` pass-through guarded by a test and a live image check; home-screen app checked on a LAN Host; D-151. Log out only for `identity_source: access` waits for the backend tag (backend#92).
