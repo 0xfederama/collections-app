@@ -157,6 +157,21 @@ the spec and fails when an operation has no authorization test.
 New link tables have no FK to folders/lists, so the 2.12.0 purge still works on the new schema (D-118); the new
 purge deletes their rows explicitly.
 
+## Web handoff: `api-v4.0.0` (backend orch., 2026-11-11)
+Sync with `npm run api:sync -- api-v4.0.0`. The spec is authoritative; summary:
+- **401 everywhere** (`unauthenticated`) on every `/api/v1` operation without a valid identity → reload the page (Access login). Probes stay open.
+- `GET /api/v1/me` → `{id, email, name|null, avatar_url|null, dev_identities: string[]|null}`. `name` and `avatar_url` may be null (show the email); `dev_identities` is non-null only on dev/test servers: the W7 switcher sets the `dev_user` cookie (or `X-Dev-User` header) to one of them; no cookie = the first.
+- `GET /api/v1/users` → `{data: [{id, email, name, avatar_url}]}`: every user who signed in once; resolve ids below to names/avatars.
+- **Folder**: `owner_user_id` (uuid, null when nested), `shared` (bool, top-level with members), `member_user_ids` (uuid[], always present), `created_by_user_id`, `updated_by_user_id` (null = unknown or before accounts). **List**: `owner_user_id`, `created_by_user_id`, `updated_by_user_id`. **Item** and **ItemSummary**: `created_by_user_id`, `updated_by_user_id`. **Content** and content version entries: `author_user_id`.
+- Visibility: everything belongs to a top-level "box"; other users' private things are `404 not_found` and absent from tree, search, recent items, trash. Shared folders appear at the recipient's top level. Quick add = the tree's lists.
+- Sharing (W3): `POST /api/v1/folders/{id}/members {email}` → 200 Folder (owner only → else 403 `forbidden`; nested folder → 409 `folder_not_top_level`; unknown email / own email → 422 `validation_failed` on `email`; already a member → 200). `DELETE /api/v1/folders/{id}/members/{user_id}` → 204: owner removes a member (stop sharing), a member removes themself (leave); others 403. Neither needs If-Match nor bumps the folder version: refetch the tree.
+- Owner-only (403 `forbidden`): delete or move a top-level folder/list you don't own (the recipient's menu must hide Delete/Move for a shared folder; Rename is allowed), restore a trashed shared top-level folder to a new destination.
+- Moves (W5): into a shared folder → shared with its members; out of it by any member to your top level or one of your private folders → yours, the others lose it (confirm in the UI). A folder with members can't go into another folder: 409 `folder_shared`. An invisible destination → 409 `destination_unavailable`.
+- Top-level order is per user: `PUT /folders/order` / `PUT /lists/order` with a `null` parent take exactly the caller's visible top-level ids (409 `order_stale` otherwise); `sort_order` in `/tree` is the caller's order for top-level entries.
+- Trash (decision 9): batches inside a shared folder are listed, restorable and purgeable by every member; Empty trash purges only what the caller sees.
+- **Settings**: `workspace_name` removed (GET no longer has it, PATCH with it → 400 `unknown_field`); the title is always "Collections".
+- Logout link: `/cdn-cgi/access/logout`.
+
 ## Out of scope
 Per-user settings, Settings → Account editing, ownership transfer, view-only shares, sharing lists or nested folders,
 removing workspaces, a public API.
@@ -169,3 +184,4 @@ removing workspaces, a public API.
 - 2026-11-11 (backend): design D-147; B1 identity merged (backend#85, `eaa2a4f`): Access JWT verification, dev identities, LAN fallback, `users`, `GET /me`, 401 `unauthenticated` everywhere. Deploy needs `ACCESS_TEAM_DOMAIN`/`ACCESS_AUD` in prod; Pi test stack `APP_ENV=development` for dev identities.
 - 2026-11-11 (backend): B2 ownership merged (backend#86, `29787e6`): boxes, path guard (404), filtered tree/search/recent/trash, per-user top-level order, startup owner backfill; upgrade rehearsal `scripts/check-accounts-migration.sh` on a realistic 2.12.0 dataset: all row counts and 8/8 files unchanged, 6 top-level rows owned by the owner.
 - 2026-11-11 (backend): B3 shares merged (backend#88, `071c853`): `folder_members`, share/unshare/leave endpoints, owner-only 403s, `folder_shared`/`folder_not_top_level`, in-tx visibility re-checks; item moves don't re-check in the tx (no ownership change). Restore of a top-level root to a new destination is owner-only.
+- 2026-11-11 (backend): B4 who changed merged (backend#89, `6c5f987`): created/updated-by on folders, lists, items, content version authors, `GET /users`; upgrade rehearsal rerun on the final schema: nothing lost. B5 merged (backend#87, `01789ef`): `workspace_name` gone. **`api-v4.0.0` tagged on `01789ef`** (D-148); web handoff below.

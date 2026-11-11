@@ -222,7 +222,7 @@ CREATE TABLE item_content_versions (
 - Content versions are independent of `items.version`. A content save **does** bump `items.updated_at` (for "recently updated" sort) but **not** `items.version`.
 
 ### users (F-027, migration `000002_accounts`)
-One row per person who reached the API (keyed by lower-cased `email`, unique per workspace), with optional `name`/`avatar_url` from Access `get-identity`. Ownership, members, per-user order and attribution columns are added to the same migration by B2–B4 (D-147).
+One row per person who reached the API (keyed by lower-cased `email`, unique per workspace), with optional `name`/`avatar_url` from Access `get-identity`. Same migration: `folders/lists.owner_user_id` (top-level rows only; null when nested), `folder_members (folder_id, user_id, added_by_user_id)`, `user_top_order (user_id, entry_type, entry_id, sort_order)` (both without FK to folders/lists so the 2.12.0 purge still works; the new purge deletes their rows first), `created_by_user_id`/`updated_by_user_id` on folders, lists, items and `author_user_id` on content versions (null = unknown). Ownerless top-level rows get the `OWNER_EMAIL` user at API startup (D-147/D-148). `workspaces.name` is no longer written by the API (B5).
 
 ## 3. Bootstrap (idempotent)
 
