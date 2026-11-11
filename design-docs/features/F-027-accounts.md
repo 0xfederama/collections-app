@@ -47,8 +47,10 @@ Two people use the app. Each needs their own lists, plus folders they share. Log
 12. **Who changed what:** record the user on every change (created by / updated by on folders, lists, items;
     description history entries). Shown as "Updated by …" and in the description history.
 13. **Search** covers own + shared lists; **Quick add** offers every list the user can edit.
-14. **LAN / environments** (roadmap 31, D-146): `raspberrypi.local` redirects to `collections.federama.dev`. Emergency
-    switch `LAN_OWNER_FALLBACK=true` serves LAN requests (no Access token) as `OWNER_EMAIL`; off by default.
+14. **LAN / environments** (roadmap 31, D-146, **changed by D-150**): requests reaching the Pi from the home network
+    (`raspberrypi.local`, the LAN IP: no Cloudflare headers, no Access token) **always act as `OWNER_EMAIL`**,
+    permanently, with no setting to turn it off and **no redirect** to `collections.federama.dev`, which keeps going
+    through Cloudflare Access as usual. (Briefed first as a redirect plus an emergency `LAN_OWNER_FALLBACK` switch.)
     Dev and the test stacks use fake identities: a fixed set of dev users and a **user switcher shown only in
     dev/test** (never compiled into or enabled in prod), so sharing can be tested.
 15. **Data rules (IMPORTANT, user):** migrations change **structure only**. The only data they may touch is a generic
@@ -68,7 +70,7 @@ settings) needs exactly such an instance-level home. **Keep it, hidden.** Removi
 ## Stories
 Backend (contract first, one PR per story, `api-v4.0.0`):
 - B1 **Identity**: Access JWT verification middleware (keys cached + refreshed, `aud`/`iss`/`exp`), `users` table, create on
-  first request, `GET /me` (id, email, name, avatar). `LAN_OWNER_FALLBACK` + `OWNER_EMAIL`. Dev/test identity provider
+  first request, `GET /me` (id, email, name, avatar). LAN = `OWNER_EMAIL`, always (D-150). Dev/test identity provider
   (header or cookie set by the dev switcher, enabled only by an explicit dev/test config flag; prod refuses to start
   with it on). 401 for every request without a valid identity.
 - B2 **Ownership + backfill**: `owner_user_id` on top-level folders and lists, created/updated-by columns, migration
@@ -79,7 +81,8 @@ Backend (contract first, one PR per story, `api-v4.0.0`):
 - B4 **Who changed**: created/updated by on payloads, description history author.
 - B5 **Workspace name gone**: drop it from the API and settings (keep the table).
 - B6 **Authorization tests**: for every endpoint, user A can't read or change user B's private data; recipient rights
-  inside a shared folder; LAN fallback off/on; forged plain email header ignored.
+  inside a shared folder; LAN requests = owner, Cloudflare-header requests without a valid token = 401 (D-150); forged plain
+  email header ignored.
 
 Web (after the contract):
 - W1 Identity: `GET /me`, avatar + name in Settings / menu, logout link, 401 → reload (Access login).
@@ -90,12 +93,11 @@ Web (after the contract):
   it; trash of shared folders for both).
 - W6 "Updated by" and description history authors.
 - W7 Dev/test user switcher (dev/test builds only).
-- W8 LAN redirect in the web image's Caddy: requests whose **Host** is not the public hostname (`raspberrypi.local`,
-  the LAN IP) get a redirect to `PUBLIC_URL` (same path), unless `LAN_OWNER_FALLBACK=true`; off when `PUBLIC_URL` is
-  unset (dev, test stacks). Host-based, not token-based: the Access Bypass paths (icons) arrive without a token.
+- W8 ~~LAN redirect in the web image's Caddy~~: **dropped by D-150** (merged in web#136, to be removed before 3.0.0
+  ships). The LAN is served as the owner, no redirect, no `PUBLIC_URL`.
 
-Deploy (top-level orchestrator): `.env.example` (`ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`, `OWNER_EMAIL`,
-`LAN_OWNER_FALLBACK`, `PUBLIC_URL`) passed to `api` and `web` in compose, README and Pi guide.
+Deploy (top-level orchestrator): `.env.example` (`ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`, `OWNER_EMAIL`) passed to `api`
+in compose, README and Pi guide (`LAN_OWNER_FALLBACK` and `PUBLIC_URL` dropped by D-150).
 
 ## Safety plan (top-level orchestrator + user)
 1. **Freeze**: the user doesn't change data until this is live.
@@ -123,13 +125,13 @@ schema, concurrency), simple tier for B4–B5. Contract tag `api-v4.0.0` once B5
 present → verify (go-oidc v3 verifier over our own throttled JWKS cache: refetch on unknown `kid` at most once a
 minute, so forged tokens cannot hammer Cloudflare; `iss` = `https://<ACCESS_TEAM_DOMAIN>`, `aud` = `ACCESS_AUD`,
 `exp`/`nbf`, `email` required) → invalid = 401, never a fallback; (2) else dev identity when `DEV_IDENTITY=true`
-(header `X-Dev-User` or cookie `dev_user`, one of the dev identities; absent → the first); (3) else LAN fallback when
-`LAN_OWNER_FALLBACK=true` **and** the request carries no Cloudflare edge header (`Cf-Ray`, `Cf-Connecting-Ip`) → the
+(header `X-Dev-User` or cookie `dev_user`, one of the dev identities; absent → the first); (3) else **(D-150: always, no switch)** the LAN owner when
+the request carries no Cloudflare edge header (`Cf-Ray`, `Cf-Connecting-Ip`) → the
 owner; (4) else 401 `unauthenticated`. `Cf-Access-Authenticated-User-Email` is never read. Users are keyed by
 lower-cased email, created on first request; name/avatar best-effort from the team `get-identity` endpoint
 (cookie `CF_Authorization=<token>`, 3 s timeout, at creation and at most daily; https avatars only), else null (web
 shows the email). Config: `APP_ENV=production` requires `ACCESS_TEAM_DOMAIN` + `ACCESS_AUD` and refuses
-`DEV_IDENTITY=true`; `LAN_OWNER_FALLBACK=true` requires `OWNER_EMAIL`. Dev identities: `OWNER_EMAIL` (or
+`DEV_IDENTITY=true`; production also requires `OWNER_EMAIL` (D-150; `LAN_OWNER_FALLBACK` removed). Dev identities: `OWNER_EMAIL` (or
 `owner@dev.test`), `alice@dev.test`, `bob@dev.test`. The Pi test stack must run `APP_ENV=development` to use them.
 **Ownership (B2).** `owner_user_id` only on top-level folders/lists (null when nested); access to anything is decided by
 its top-level ancestor (the "box"): visible = owner is me, or (B3) the box is a folder shared with me. One `access`
@@ -198,3 +200,4 @@ removing workspaces, a public API.
 - 2026-11-11 (backend): release audit fix merged (backend#91, `ed11840`). **Version to rehearse: backend 3.0.0 = `ed11840`** (contract `api-v4.0.0`); `make check`, `make audit`, `make smoke`, `make test-backup` green. Not tagged, no release. Deploy needs: `ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`, `OWNER_EMAIL` in prod (API refuses to start without them, since prod data has ownerless rows); Pi test stack `APP_ENV=development` + `DEV_IDENTITY=true` for dev identities; `WORKSPACE_NAME` can go.
 - 2026-11-11 (web): W8 merged (web#136, `de51a67`: Caddy 307 to `PUBLIC_URL` for non-public Hosts, `/healthz` exempt, off with empty `PUBLIC_URL` or `LAN_OWNER_FALLBACK=true`); W2 merged (web#137, `4c8f9ea`: sync `api-v4.0.0`, always "Collections", workspace-name setting gone, web 3.0.0). Web design D-149; all eight stories checked together on `./deploy/dev` (owner/alice sharing, iPhone size).
 - 2026-11-11 (web): W1 (web#144, `f3ad9cb`; replaces #138, closed by GitHub when its stacked base W2 was deleted on merge), W4 (web#145, `58bae69`; replaces #139), W3 (web#142, `3ae2552`), W6 (web#141, `a96646e`), W7 (web#140, `315a8be`), W5 (web#143, `74aba46`) merged, each rebased onto main by a subagent before its squash merge. **Web 3.0.0 = `74aba46`**: `npm run check` green on it (2048 tests, image built); `npm audit`: 0 in shipped deps (moderate minimatch in the dev-only ESLint chain). Not tagged, no release. Web image env: `PUBLIC_URL`, `LAN_OWNER_FALLBACK`. All web stories done.
+- 2026-11-11 (top-level): **D-150**: the home network always acts as `OWNER_EMAIL` (no switch, `LAN_OWNER_FALLBACK` removed) and nothing redirects it to `collections.federama.dev` (W8 and `PUBLIC_URL` dropped). Backend and web follow-ups before 3.0.0 ships; the rehearsal waits for them. Deploy passes only `ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`, `OWNER_EMAIL` to the api.
