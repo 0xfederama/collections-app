@@ -22,19 +22,26 @@ Two people use the app. Each needs their own lists, plus folders they share. Log
    UI go away; `WORKSPACE_NAME` is no longer needed.
 4. **Keep the single workspace under the hood** (top-level decision, see "Workspaces" below): it becomes the instance
    that holds the shared settings. Users, ownership and shares are added on top.
-5. **Ownership:** every **top-level** folder and top-level list has an owner (`owner_user_id`). Anything inside a
-   folder belongs to that folder's owner. Each user sees: what they own + top-level folders shared with them.
+5. **Folders and lists are boxes** (user, 2026-11-11). Ownership lives **only on top-level entries**
+   (`owner_user_id` on top-level folders and lists); anything inside a folder inherits access from its top-level
+   ancestor. One owner per top-level entry plus a **members** table for shares (not multiple owners): simplest, and
+   expandable later (roles, view-only, transfer) without changing the model. Each user sees what they own plus the
+   top-level folders shared with them. Whoever creates a folder or list owns it.
 6. **Sharing:** only **top-level folders**, only with **edit** rights (no view-only). Shared from the folder's `…` menu
    in the sidebar, which holds every share setting (share with…, who it's shared with, stop sharing; for the
    recipient: leave). A shared folder shows a small **two-person badge** at the bottom right of its icon, for both users.
 7. The recipient sees a shared folder **at their top level** and can't move it into their own folders. **Ordering of
    top-level entries is per user.**
-8. **Moving:** dragging one of your lists into a shared folder makes it shared. Moving anything **out of** a shared
-   folder is allowed **only for the folder owner**; the other person then no longer sees it.
+8. **Moving (boxes):** moving a list or folder into a shared folder makes it shared (it loses its own owner and
+   inherits the shared folder's access). **Any member** of a shared folder may move things out of it: moved to the
+   mover's own top level (or into one of the mover's private folders), it becomes **the mover's**, and the others no
+   longer see it. Only top-level folders can be shared/unshared; a folder inside a shared folder is shared through
+   its parent.
 9. **Trash:** deleting inside a shared folder goes to the owner's trash, and **both** users can see and restore that
    folder's deleted things.
-10. **Stopping a share:** the folder disappears for the other person; everything they added stays (it's the owner's).
-    The recipient can also leave a share. **No ownership transfer** for now.
+10. **Stopping a share** (owner only): the folder disappears for the other person; everything they added stays
+    (it's the owner's). The recipient can also leave a share. **No explicit ownership transfer** for now (moving a
+    box out of a shared folder is the only way ownership changes, decision 8).
 11. **Settings stay shared** by everyone (country for store links, types/kinds, custom fields, streaming services):
     they stay on the workspace. May become per-user later.
 12. **Who changed what:** record the user on every change (created by / updated by on folders, lists, items;
@@ -67,8 +74,8 @@ Backend (contract first, one PR per story, `api-v4.0.0`):
 - B2 **Ownership + backfill**: `owner_user_id` on top-level folders and lists, created/updated-by columns, migration
   with the generic backfill to the owner user (decision 15). Every read and write filtered by "visible to the
   current user"; per-user ordering of top-level entries.
-- B3 **Shares**: share/unshare/leave endpoints for top-level folders, list of shares, `shared` flag + people on folder
-  payloads; move rules (decision 8), trash visibility (decision 9).
+- B3 **Shares**: members table, share/unshare/leave endpoints for top-level folders, `shared` flag + members on folder
+  payloads; move rules (decision 8: into shared = loses own owner, out = mover becomes owner), trash visibility (decision 9).
 - B4 **Who changed**: created/updated by on payloads, description history author.
 - B5 **Workspace name gone**: drop it from the API and settings (keep the table).
 - B6 **Authorization tests**: for every endpoint, user A can't read or change user B's private data; recipient rights
@@ -79,7 +86,8 @@ Web (after the contract):
 - W2 "Collections" everywhere as the title; remove the workspace-name setting.
 - W3 Sharing UI in the folder's `…` menu in the sidebar (share with a known user by email, list, stop sharing, leave).
 - W4 Two-person badge on shared folder icons (sidebar, Home, phone).
-- W5 Move/trash rules surfaced (recipient can't move out; trash of shared folders for both).
+- W5 Move/trash rules surfaced (moving out of a shared folder makes it yours, with a confirmation that the others lose
+  it; trash of shared folders for both).
 - W6 "Updated by" and description history authors.
 - W7 Dev/test user switcher (dev/test builds only).
 - W8 LAN redirect in the web image's Caddy: requests whose **Host** is not the public hostname (`raspberrypi.local`,
@@ -106,3 +114,5 @@ removing workspaces, a public API.
 
 ## Log
 - 2026-11-09: brief written after exploring the feature with the user (decisions 1–15).
+- 2026-11-11: decisions 5, 8, 10 revised (user): folders and lists move like boxes; any member can move out of a shared
+  folder and becomes the owner; one owner per top-level entry + members table. `deploy/prod snapshot` pushed.
