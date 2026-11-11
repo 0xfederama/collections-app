@@ -246,8 +246,10 @@ Small one-off actions outside the code. Tick them off here when done.
     own client): delete the folder in drive.google.com.
   - the `pre-accounts` snapshot (rollback point for accounts, F-027): on the Pi `sudo rm -r /srv/collection/snapshots/pre-accounts`,
     and `rclone purge gdrive-crypt:collections-snapshots/pre-accounts`.
-- [ ] **Backup → wipe → restore drill on the Pi test stack** (2026-11-11): newest Drive backup restored into the wiped test
-  stack, verified, app checked on :8081. Proves the Drive copies, the restore and the migrations; not a rebuild from scratch.
+- [x] **Backup → wipe → restore drill on the Pi test stack** ✅ 2026-11-11: Drive backup `20261111T021513Z` (nightly,
+  backend 2.12.0) downloaded, test stack wiped and restored, `verify ok: 10 tables, 7 content bodies, 317 attachments`,
+  migrated to backend 3.0.0, app checked on :8081. Proves the Drive copies, the restore and the migrations; not a
+  rebuild from scratch.
 - [ ] **From-scratch drill with the new SD card** (Future): fresh install on the new card following the Pi guide (02),
   secrets from 1Password, data from Drive (03); the old card stays as the fallback.
 
