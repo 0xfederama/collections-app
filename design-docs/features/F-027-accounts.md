@@ -157,6 +157,15 @@ the spec and fails when an operation has no authorization test.
 New link tables have no FK to folders/lists, so the 2.12.0 purge still works on the new schema (D-118); the new
 purge deletes their rows explicitly.
 
+## Repo breakdown: web (web orch., 2026-11-11)
+One PR per story on `feature/f027-w<N>-<slug>`, all at **web 3.0.0** (set by the first PR; nothing is tagged until the
+rehearsal). Order: **W2** first (it carries `api:sync -- api-v4.0.0` and the fixture fallout, since the sync removes
+`workspace_name`), **W8** in parallel (Caddy only), then **W1** (shared `features/account/`: `useMe`, `useUsers`,
+`UserAvatar`, `userLabel`; 401 reload), **W4** (badge), then **W3**, **W6**, **W7** on top of W1, and **W5** after W3
+(same menu and move code). PRs that depend on an unmerged one are stacked and rebased after each squash merge.
+Workers: complex tier (Sonnet 5.5) for W2 (fixture fallout across the suite), W8 (exposure), W1 (auth), W3 and W5
+(sharing rules, moves); simple tier for W4, W6, W7.
+
 ## Web handoff: `api-v4.0.0` (backend orch., 2026-11-11)
 Sync with `npm run api:sync -- api-v4.0.0`. The spec is authoritative; summary:
 - **401 everywhere** (`unauthenticated`) on every `/api/v1` operation without a valid identity → reload the page (Access login). Probes stay open.
