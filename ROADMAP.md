@@ -237,11 +237,24 @@ Tick them off here when done, and update that row.
 
 - [ ] **federama.dev transfer to Cloudflare** (started 2026-11-09, waiting for Squarespace, ~5 days): when it completes,
   turn DNSSEC back on in Cloudflare (DNS → Settings → Enable DNSSEC) and check that auto-renew is on.
-- [ ] **Publish both Google OAuth apps by 2026-11-16** (`Collections Backup` for rclone, `Collections` for the Access login;
-  both in Testing mode with you as test user, so their tokens expire 7 days after login): add a placeholder privacy page
-  at `https://federama.dev/privacy`, fill in Branding (name, support email, home page `https://federama.dev`, privacy link,
-  authorized domain `federama.dev`, no logo), then Audience → Publish app. Then `rclone config reconnect gdrive:` once more
-  so the backup token stops expiring, and update the rclone config in 1Password.
+- [ ] **Publish both Google OAuth apps by 2026-11-16** (both in Testing mode with you as the only test user, so every
+  login token expires 7 days after it was made: the nightly Drive backup and the Google login stop working).
+  - The two apps (Google Cloud Console → Google Auth Platform, one project each):
+    - `Collections Backup`: rclone's own client, scope `drive.file` (sees only the files it created), uploads the nightly
+      encrypted backups to your Drive.
+    - `Collections`: the Google login of Cloudflare Access for `collections.federama.dev`, scopes `openid email profile`.
+    Both use only non-sensitive scopes, so publishing needs no Google review.
+  1. **Privacy page on the website** (federama.dev repo, GitHub Pages; prompt for a session there given 2026-11-11):
+     `https://federama.dev/privacy`, honest and short: who runs it, which Google data each app gets and why, where it is
+     stored, no sharing/selling/ads, how to get it deleted, contact. The home page links to it.
+  2. **Branding**, for each app: app name, user support email, home page `https://federama.dev`, privacy policy
+     `https://federama.dev/privacy`, authorized domain `federama.dev`, developer contact email, no logo (a logo forces a
+     brand review).
+  3. **Audience → Publish app**, for each app. Status becomes "In production".
+  4. **Fresh backup token**: `rclone config reconnect gdrive:` on the Pi (log in again), then a test upload
+     (`sudo systemctl start collections-backup.service`, check the log), and replace the rclone config in 1Password.
+  5. **Login**: log out of `collections.federama.dev` and log in again with Google; nothing else to change (Access keeps
+     the same client ID/secret).
 - [ ] **After 2026-11-25, delete the two old backup leftovers** (both no longer needed by then):
   - `collections-backups-old` on Google Drive (old backups made with rclone's shared client, replaced 2026-11-09 by our
     own client): delete the folder in drive.google.com.
