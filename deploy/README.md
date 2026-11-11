@@ -81,7 +81,7 @@ journalctl -fu collections-release                    # wait for "backend X is l
 ```
 
 The units assume user `fede` and the clone at `/home/fede/collections-app`; edit `User=` and the paths otherwise.
-Quote values with spaces in `.env` (`WORKSPACE_NAME="My Lists"`): the wrapper reads it as a shell file.
+Quote values with spaces in `.env` (`LOKI_HOST="a b"`): the wrapper reads it as a shell file.
 
 #### Where the data lives
 
@@ -98,7 +98,8 @@ the api (UID 65532) and web (UID 10001) run with a read-only root filesystem.
 
 ### Reaching it from your other devices
 
-The app has **no login**. It must never be reachable from the internet.
+The app has **no login screen of its own**: from backend 3.0.0 (F-027) the user comes from the signed Cloudflare Access
+token, so the only way in from outside is the tunnel below. The stack itself must never be reachable from the internet.
 
 - Set `WEB_BIND` to the Pi's LAN IP (reserved on the router) and `WEB_PORT=80`, and allow the LAN in ufw
   (`sudo ufw allow from 192.168.1.0/24 to any port 80 proto tcp`). Tailscale works too: bind to the Tailscale IP instead.
@@ -114,6 +115,14 @@ only after a Cloudflare Access login (allowed emails only, one-time email code);
   (`/favicon*`, `/apple-touch-icon*`, `/icons/*`, `/manifest.webmanifest`), which iOS may fetch without the login cookie.
 - Never a public hostname without the Access application in front: the tunnel would publish the app to the internet.
 - The test stack never starts the tunnel (its profiles are cleared).
+
+**Accounts (roadmap #31, F-027, backend 3.0.0 + web 3.0.0).** Set in `deploy/server/.env` before those releases reach prod
+(the backend refuses to start in production without all three):
+- `ACCESS_TEAM_DOMAIN` (`<team>.cloudflareaccess.com`) and `ACCESS_AUD` (the Access application's AUD tag): requests
+  through the tunnel carry Cloudflare's signed `Cf-Access-Jwt-Assertion`, verified against them.
+- `OWNER_EMAIL`: your Google email. Everything created before accounts becomes yours on the first 3.0.0 start, and every
+  request from the home network (`raspberrypi.local`, the LAN IP: no Cloudflare headers) acts as you, always, with no
+  switch and no redirect (D-150). Anyone on the home Wi-Fi is you; other people use `collections.federama.dev`, at home too.
 
 ### Releases (upgrade)
 
@@ -174,6 +183,9 @@ A second, empty stack next to prod on the Pi: `./deploy/pitest` takes the same c
 - Flow: tag `vX.Y.Z`, publish the GitHub Release as a **pre-release**: test gets it within a minute. When it looks right, edit the release, untick pre-release and set it as latest: prod gets it.
 - The release check runs test first; a failure there is logged as `[release test]` and never blocks prod. Same preflight and rollback, no backups.
 - Wipe it: `./deploy/pitest down -v`.
+- Accounts (F-027): the test stack runs with fake dev users instead of Access (`APP_ENV=development`, `DEV_IDENTITY=true`,
+  set by `deploy/prod` for the test stack only; prod refuses them): you (`OWNER_EMAIL`), `alice@dev.test` and
+  `bob@dev.test`, picked with the switcher in the web app. Home only: never on the tunnel, no Cloudflare login.
 
 ## Alerts (healthchecks.io, roadmap #24)
 

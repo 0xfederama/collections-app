@@ -42,8 +42,14 @@ if [ "${PI_STACK:-prod}" = test ]; then
   versions_file="$here/versions-test.env"
   project="collections-app-pitest"
   export COMPOSE_PROFILES=""   # no log shipping from the test stack
-  export WEB_PORT="${TEST_WEB_PORT:-8081}" WORKSPACE_NAME="${WORKSPACE_NAME:-Collections} (test)"
+  export WEB_PORT="${TEST_WEB_PORT:-8081}"
+  # Accounts (F-027): the test stack is home-only (LAN, never the tunnel), so no Cloudflare login: fake dev users instead
+  # (owner = OWNER_EMAIL, alice, bob, picked with the web switcher).
+  export PITEST_APP_ENV=development PITEST_DEV_IDENTITY=true ACCESS_TEAM_DOMAIN="" ACCESS_AUD=""
   export BACKUP_DIR="${TEST_BACKUP_DIR:-${BACKUP_DIR:-/srv/collection/backups}-test}"
+else
+  # The dev identity lets anyone on the network act as any user: never on prod.
+  [ -z "${PITEST_APP_ENV:-}${PITEST_DEV_IDENTITY:-}" ] || die "PITEST_APP_ENV/PITEST_DEV_IDENTITY are for the test stack only; remove them from deploy/server/.env"
 fi
 # Deployed versions (written by release.sh); values already in the environment win.
 if [ -f "$versions_file" ]; then
