@@ -8,7 +8,8 @@
 # Needs GITHUB_TOKEN (read-only) in deploy/server/.env: API rate limit and GHCR pulls.
 #
 # RELEASE_STACK=test (roadmap #22): the test stack (./deploy/pitest) instead, tracking the newest published
-# release including pre-releases, with no backup. With TEST_STACK=1 in .env, the prod run starts it first.
+# release including pre-releases, with no backup. It is always on: every prod run checks it first, keeps it running
+# (a stopped or wiped test stack is started again, empty if wiped) and deploys to it.
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
 root="$(cd "$here/../.." && pwd)"
@@ -48,13 +49,26 @@ hc() { [ "$stack" = prod ] && "$here/hc.sh" "$@"; return 0; }
 [ "$stack" = prod ] && trap '[ $? -eq 0 ] && "$here/hc.sh" collections-release ok' EXIT
 
 # Test first: a failure there is logged and never stops the prod check.
-if [ "$stack" = prod ] && [ "${TEST_STACK:-}" = 1 ]; then
+if [ "$stack" = prod ]; then
   RELEASE_STACK="test" "$here/release.sh" || true
 fi
 
 BACKEND_VERSION=""; WEB_VERSION=""
 # shellcheck disable=SC1090
 [ -f "$versions" ] && . "$versions"
+
+# The test stack is always on: if its api or web is not running (taken down, wiped, a crash), start it whole on its
+# current versions. Never a single service (a lone web answers 502). A restore holds this stack's lock, so it is
+# never restarted under a restore. Bounded wait, so a broken test stack delays the prod check by two minutes at most.
+if [ "$stack" = test ] && [ -n "$BACKEND_VERSION" ]; then
+  running="$("$stack_cmd" ps --status running --services 2>/dev/null || true)"
+  if ! grep -qx api <<<"$running" || { [ -n "$WEB_VERSION" ] && ! grep -qx web <<<"$running"; }; then
+    echo "[release test] the test stack is not running: starting it on backend $BACKEND_VERSION / web ${WEB_VERSION:-none}"
+    if [ -n "$WEB_VERSION" ]; then svc=(); else svc=(api); fi
+    "$stack_cmd" up -d --remove-orphans --wait --wait-timeout 120 ${svc[@]+"${svc[@]}"} \
+      || { echo "[release test] could not start the test stack: check './deploy/pitest ps' and its logs" >&2; exit 1; }
+  fi
+fi
 
 # Release tag to deploy, without the leading v. Conditional request: a 304 costs no rate limit.
 # prod: the release marked latest. test: the highest version among published releases, pre-releases included.
@@ -101,6 +115,15 @@ echo "$GITHUB_TOKEN" | docker login ghcr.io -u 0xfederama --password-stdin >/dev
 prod() { "$stack_cmd" "$@"; }
 psql_admin() { prod exec -T db psql -U collection -d postgres -q -v ON_ERROR_STOP=1 "$@"; }
 drop_preflight() { psql_admin -c "DROP DATABASE IF EXISTS collection_preflight" >/dev/null 2>&1 || true; }
+
+# Deploy only into a running stack: the single-service steps below (`up --no-deps web`) would otherwise start that
+# service alone in a stopped stack (a web with no api behind it, 502 on /api, reported as live). The test stack was
+# started above; prod is never started behind your back: the release waits (no ok ping, so a long wait alerts)
+# until `./deploy/prod up -d`.
+if [ "$stack" = prod ] && [ -n "$BACKEND_VERSION" ] && [ -z "$(prod ps -q --status running api 2>/dev/null)" ]; then
+  log "the prod api is not running: not deploying into a stopped stack; start it with './deploy/prod up -d'"
+  exit 1
+fi
 
 # Backend deploy, safe to fail at any step:
 #   1. pull the new image (nothing changes yet)

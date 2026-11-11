@@ -179,10 +179,12 @@ or a spare machine (`./deploy/pitest restore <backup>`).
 A second, empty stack next to prod on the Pi: `./deploy/pitest` takes the same commands as `./deploy/prod`
 (project `collections-app-pitest`, own volumes, `deploy/server/versions-test.env`, port `TEST_WEB_PORT`, 8081).
 
-- Enable: `TEST_STACK=1` in `deploy/server/.env`, and allow the port on the LAN (`sudo ufw allow from 192.168.1.0/24 to any port 8081 proto tcp`).
+- Always on (no setting): allow the port on the LAN (`sudo ufw allow from 192.168.1.0/24 to any port 8081 proto tcp`).
 - Flow: tag `vX.Y.Z`, publish the GitHub Release as a **pre-release**: test gets it within a minute. When it looks right, edit the release, untick pre-release and set it as latest: prod gets it.
 - The release check runs test first; a failure there is logged as `[release test]` and never blocks prod. Same preflight and rollback, no backups.
-- Wipe it: `./deploy/pitest down -v`.
+- Always running: every release check (each minute) starts it again if it is down, empty if it was wiped, never as a
+  lone service. Wipe it with `./deploy/pitest down -v`; it is back, empty, within a minute. A restore holds the
+  stack's release lock, so it is never restarted mid-restore.
 - Accounts (F-027): the test stack runs with fake dev users instead of Access (`APP_ENV=development`, `DEV_IDENTITY=true`,
   set by `deploy/prod` for the test stack only; prod refuses them): you (`OWNER_EMAIL`), `alice@dev.test` and
   `bob@dev.test`, picked with the switcher in the web app. Home only: never on the tunnel, no Cloudflare login.

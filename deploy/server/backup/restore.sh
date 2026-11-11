@@ -21,6 +21,15 @@ if [ -z "$backup_arg" ] || [ ! -d "$backup_arg" ]; then
 fi
 backup="$(cd "$backup_arg" && pwd)"
 
+# On the Pi, hold the release lock of the stack being restored (prod: lock, test stack: test-lock), so the release
+# check never deploys to it or restarts it mid-restore. Waits up to 5 minutes for a running release to finish.
+release_state="$here/../.release-state"
+if command -v flock >/dev/null && [ -d "$release_state" ]; then
+  lockname=lock; [ "${PI_STACK:-prod}" = test ] && lockname=test-lock
+  exec 8>"$release_state/$lockname"
+  flock -w 300 8 || { echo "a release is still running on this stack; try again in a few minutes" >&2; exit 1; }
+fi
+
 # shellcheck source=lib/backup-common.sh
 . "$here/lib/backup-common.sh"
 check_tools
