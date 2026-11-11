@@ -221,6 +221,9 @@ CREATE TABLE item_content_versions (
 - **Restore v**: same as save, using the body of version v. It fails with 404 if v was pruned.
 - Content versions are independent of `items.version`. A content save **does** bump `items.updated_at` (for "recently updated" sort) but **not** `items.version`.
 
+### users (F-027, migration `000002_accounts`)
+One row per person who reached the API (keyed by lower-cased `email`, unique per workspace), with optional `name`/`avatar_url` from Access `get-identity`. Ownership, members, per-user order and attribution columns are added to the same migration by B2–B4 (D-147).
+
 ## 3. Bootstrap (idempotent)
 
 At API startup, in one transaction: `SELECT pg_advisory_xact_lock(<fixed app constant>)`. If `workspaces` is empty,

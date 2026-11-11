@@ -166,3 +166,4 @@ removing workspaces, a public API.
 - 2026-11-11: decisions 5, 8, 10 revised (user): folders and lists move like boxes; any member can move out of a shared
   folder and becomes the owner; one owner per top-level entry + members table. `deploy/prod snapshot` pushed.
 - 2026-11-11: snapshot `pre-accounts` taken on prod (backend 2.12.0, web 2.41.0); data frozen until F-027 is live.
+- 2026-11-11 (backend): design D-147; B1 identity merged (backend#85, `eaa2a4f`): Access JWT verification, dev identities, LAN fallback, `users`, `GET /me`, 401 `unauthenticated` everywhere. Deploy needs `ACCESS_TEAM_DOMAIN`/`ACCESS_AUD` in prod; Pi test stack `APP_ENV=development` for dev identities.
