@@ -173,6 +173,7 @@ if [ -n "$be" ] && [ "$be" != "$BACKEND_VERSION" ]; then
   ); then
     BACKEND_VERSION="$be"
     save
+    rm -f "$state/${pfx}backend.waiting"
     log "backend $be is live"
     hc collections-deploy ok "backend $be is live"
   else
@@ -191,6 +192,7 @@ if [ -n "$web" ] && [ "$web" != "$WEB_VERSION" ]; then
   if WEB_VERSION="$web" prod up -d --no-deps --wait web; then
     WEB_VERSION="$web"
     save
+    rm -f "$state/${pfx}web.waiting"
     log "web $web is live"
     hc collections-deploy ok "web $web is live"
   else
