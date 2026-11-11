@@ -67,7 +67,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 33 | web | **Web 3.1.0 fixes**: drag and drop of lists/folders into and out of folders doesn't work on prod (3.0.0); lists inside a folder indented a bit more in the sidebar | ✅ Done 2026-11-11: web 3.1.0 (`789708a`, web#148, D-153), confirmed on prod; test stack always on after a lone-web 502 on the Pi test stack (D-154) | Nov 2026 |
 | 34 | web + deploy | **Privacy policy inside the app**: public page `collections.federama.dev/privacy` (no login: its own Cloudflare Access Bypass app, like the icons; also at `raspberrypi.local/privacy`), self-contained static page served by the web container, same content as today's `federama.dev/privacy`; the web orchestrator releases 3.2.0 itself (pre-release → test stack → latest); then the two Google apps' Branding points to it and the website page is removed (no redirect, no link: federama.dev stays unrelated to Collections). Home page stays `https://federama.dev` (Google wants a public one; the app is behind login) | ✅ Done 2026-11-11: web 3.2.0 (D-155) live, Access bypass `Collections privacy`, both Google apps' Branding → `https://collections.federama.dev/privacy`, page removed from federama.dev (404, no link) | Nov 2026 |
 | — | future | Development paused 2026-11-06. Future improvements: new high-endurance SD card (32–64 GB Samsung PRO Endurance / SanDisk MAX Endurance; steps in the Pi guide, 04), installed from scratch as the full backup drill (fresh OS following the Pi guide 02, secrets from 1Password, data from Drive per 03; the old card stays as the fallback), list import, advanced search | 🔭 Future | — |
-| — | to-do | Manual chores, yours (details and commands in [§7b](#7b-to-do-manual-chores-yours)):<br>• **When the federama.dev transfer completes:** DNSSEC back on, check auto-renew<br>• **Soon:** Pi power check: the red light isn't steady (possible under-voltage); check, then replace the charger/cable if needed | 📝 To-do | — |
+| — | to-do | Manual chores, yours (details and commands in [§7b](#7b-to-do-manual-chores-yours)):<br>• **When the federama.dev transfer completes:** DNSSEC back on, check auto-renew<br>• **Soon:** Pi power check: the red light isn't steady (under-voltage confirmed); buy a new micro-USB supply (5.1 V 2.5 A official, or 5 V 3 A Pi-specific), then recheck | 📝 To-do | — |
 
 ```mermaid
 timeline
@@ -243,7 +243,9 @@ Tick them off here when done, and update that row.
      bit 16 = it happened since boot, e.g. `0x50000` or `0x50005`) and `journalctl -k | grep -i voltage | tail`.
   2. If it reports under-voltage: buy the official **Raspberry Pi Universal Power Supply** (micro-USB, 5.1 V 2.5 A,
      the one for the 3B+), or a 5.1 V / 2.5 A+ supply with a short, thick, attached cable. Phone chargers and long or
-     thin cables are the usual cause. Unplug USB devices the Pi doesn't need.
+     thin cables are the usual cause. Unplug USB devices the Pi doesn't need. A 5 V / 3 A supply
+     made for the Pi with its own attached cable also works (the extra 0.1 V only covers cable loss); confirmed
+     under-voltage on 2026-11-11.
   3. After the swap: reboot, `vcgencmd get_throttled` must stay `0x0` for a few days and the red light steady.
   4. If it's `0x0` and the light still flickers, it's not the power: note it and leave it.
 - [x] **Publish both Google OAuth apps** ✅ 2026-11-11: privacy page at `https://federama.dev/privacy` (website repo,
