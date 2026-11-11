@@ -244,6 +244,9 @@ Small one-off actions outside the code. Tick them off here when done.
 - [ ] **Delete `collections-backups-old` from Google Drive** after 2026-11-16 (old backups made with rclone's shared
   client, replaced 2026-11-09 by our own client), once the new folder has a week of daily copies.
 - [ ] Backup → wipe → restore drill on a spare machine or card (also listed in Upkeep).
+- [ ] **Delete the `pre-accounts` snapshot** after 2026-11-25 (rollback point for accounts, F-027; not needed once 3.x has
+  run two weeks): on the Pi `sudo rm -r /srv/collection/snapshots/pre-accounts`, and on Drive
+  `rclone purge gdrive-crypt:collections-snapshots/pre-accounts`.
 
 ## 8. Future (on the roadmap, not yet ordered)
 
