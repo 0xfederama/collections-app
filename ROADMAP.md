@@ -4,7 +4,7 @@
 |---|---|
 | **Owner** | Top-level orchestrator (parent repo session), approved by the product owner (you) |
 | **Last updated** | 2026-11-11 |
-| **Horizons** | **Now**: in flight · **Next**: committed, in order · **Pool**: committed, proposed order fixed at the next re-plan · **Future**: on the roadmap, not ordered · **Exploring**: uncertain concepts, no commitment |
+| **Horizons** | **Now**: in flight · **Next**: committed, in order · **Pool**: committed, proposed order fixed at the next re-plan · **Future**: on the roadmap, not ordered · **To-do**: manual chores for you, outside the code · **Exploring**: uncertain concepts, no commitment |
 | **Status** | ✅ shipped · 🟢 in progress · 🟡 planned · ⚪ idea · ⛔ not doing |
 
 Target windows are **indicative**, not promises. Order within a horizon is the priority order.
@@ -64,9 +64,9 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 29 | ops (you) | **Move the Pi to another room**: moved and switched from Wi-Fi to Ethernet (192.168.1.75 on eth0, Wi-Fi off on the Pi); Pi guide updated | ✅ Done 2026-11-07 | Nov 2026 |
 | 30 | deploy + web | **Remote access**: Cloudflare Tunnel (`cloudflared` on the Pi, `tunnel` profile + `TUNNEL_TOKEN`) + Cloudflare Access on `collections.federama.dev` (allowed emails, Google login + one-time PIN, Bypass only for the icon files); federama.dev DNS on Cloudflare (GitHub Pages records kept); manifest `use-credentials` (web 2.40.0, D-144). Domain transfer to Cloudflare tracked in To-do | ✅ Done 2026-11-09 | Nov 2026 |
 | 31 | backend + web | **Accounts via Cloudflare Access** ([F-027](design-docs/features/F-027-accounts.md), brief 2026-11-09; LAN: always the owner, D-150): the backend reads the user from Access's signed token (`Cf-Access-Jwt-Assertion`, verified against the team keys + app audience, never the plain header), no passwords or login screens in the app; `collections.federama.dev` goes through Access; the home network (`raspberrypi.local`, no Cloudflare headers) always acts as the owner (`OWNER_EMAIL`), no switch and no redirect (D-150); dev/test use fake identities; then users, list ownership and sharing (backend 3.0). Brief to write after 30 | ✅ Done 2026-11-11: backend 3.0.0 (`010f44b`, `api-v4.1.0`, D-147/D-148/D-152) + web 3.0.0 (`89cf732`, D-149/D-151), rehearsed on the Pi test stack with the pre-accounts snapshot, live on prod; LAN = owner (D-150) | Nov 2026 |
-| 32 | backend + web | ~~**Owner view of everyone's data on the LAN**~~: the LAN already acts as the owner (D-150); seeing the other users' private data there is not wanted | ⛔ Not doing (scrapped 2026-11-11) | — |
 | 33 | web | **Web 3.1.0 fixes**: drag and drop of lists/folders into and out of folders doesn't work on prod (3.0.0); lists inside a folder indented a bit more in the sidebar | ✅ Done 2026-11-11: web 3.1.0 (`789708a`, web#148, D-153), confirmed on prod; test stack always on after a lone-web 502 on the Pi test stack (D-154) | Nov 2026 |
 | — | future | Development paused 2026-11-06. Future improvements: new high-endurance SD card (32–64 GB Samsung PRO Endurance / SanDisk MAX Endurance; steps in the Pi guide, 04), public API (needs its own auth; the security checks for Access-based accounts are part of 31), collaborative Markdown, list import, advanced search | 🔭 Future | — |
+| — | to-do | Manual chores, yours (details and commands in [§7b](#7b-to-do-manual-chores-yours)): **by 2026-11-16** publish both Google OAuth apps (`Collections Backup`, `Collections`), or the nightly backup and the Google login stop working; when the federama.dev transfer completes, DNSSEC back on + auto-renew; **after 2026-11-25** delete `collections-backups-old` on Drive and the `pre-accounts` snapshot (Pi + Drive); from-scratch drill with the new SD card | 📝 To-do | — |
 
 ```mermaid
 timeline
@@ -232,7 +232,8 @@ Committed, in this order (set by you, 2026-10-15), after the UI refresh. The re-
 
 ## 7b. To-do (manual chores, yours)
 
-Small one-off actions outside the code. Tick them off here when done.
+Small one-off actions outside the code, with their commands; the open ones are summarized in the **to-do** row of §2.
+Tick them off here when done, and update that row.
 
 - [ ] **federama.dev transfer to Cloudflare** (started 2026-11-09, waiting for Squarespace, ~5 days): when it completes,
   turn DNSSEC back on in Cloudflare (DNS → Settings → Enable DNSSEC) and check that auto-renew is on.
