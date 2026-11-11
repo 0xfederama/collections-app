@@ -126,7 +126,7 @@ Markdown history limit (default 20), and Delete trash automatically (Off / 7 / 3
 1. **MVP**: everything in this document.
 2. **Phase 2: TMDB plus automatic refresh** (after the MVP is feature-complete): movie lookup, metadata refresh, streaming availability by country, attribution, and rate limits. User-entered values are never silently overwritten. No IMDb scraping. Verify current TMDB terms first.
 3. **Phase 3: Accounts and access control** (near future): users, memberships, authz. Required before public exposure.
-4. **Phase 4: Public API**, which needs a full re-discussion first. Not committed.
+4. ~~**Phase 4: Public API**~~ **Dropped 2026-11-11 (D-156).** On the home network the API already acts as the owner (D-150); a remote script would use a Cloudflare Access service token, with no app changes.
 5. **Very distant: AI/LLM features** (description generation, comparisons, Q&A). Only with explicit user approval before saving.
 
 Also deferred, with no committed phase: real-time collaborative editing (the architecture keeps this path open, see ARCHITECTURE §7), offline mode, advanced search, multiple images, rich editor, diffs, custom workflows. F-012 adds clipboard images on open items, empty trash and auto-purge.

@@ -3,7 +3,7 @@
 The private REST API is used by `collections-app-frontend-web`. Base path is `/api/v1`, and bodies are JSON (`application/json`) unless noted.
 This document was the input to the contract. Since F-019 (`api-v1.0.0`) `backend/api/openapi.yaml` is **generated from the handler code** (`make spec`, drift-checked in `make check`) and is the only source of truth; this document is background and may be out of date, the spec wins. Error codes are listed in the spec's `Problem` description. The web syncs the contract with `npm run api:sync` (current: `api-v1.0.1`).
 
-> `/api/v1` is **not** a public API product (PRODUCT §13, Phase 4). There is no auth in MVP, so it is private-network only.
+> `/api/v1` is **not** a public API product (dropped, D-156). It is reached through Cloudflare Access (identity from the Access token) or from the home network as the owner (D-150).
 
 > F-012 / `api-v0.8.0`: lists and list path segments include nullable `icon` (one emoji or `i:<name>`) and `icon_color` (red/orange/amber/green/teal/blue/indigo/purple/pink/gray, built-in icons only). List create/PATCH accept them. Settings GET/PATCH adds `trash_retention_days` (`null` off, otherwise 1–365). `DELETE /api/v1/trash` permanently empties every batch and its images, idempotent 204, no If-Match. The vendored contract is authoritative for exact schemas.
 

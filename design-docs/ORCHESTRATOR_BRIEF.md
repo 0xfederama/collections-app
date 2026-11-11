@@ -16,7 +16,7 @@ network.
 Do **not** implement, scaffold, or add tables, endpoints, or UI for any of these:
 - Accounts, auth, users, memberships (Phase 3)
 - TMDB or any provider lookup or auto-refresh (Phase 2)
-- Public API productization, rate limiting, API keys (Phase 4, to be re-discussed)
+- Public API productization, rate limiting, API keys (dropped, D-156)
 - AI/LLM anything (very distant future)
 - Real-time collaboration, WebSockets, CRDTs, offline mode, auto-merge, diffs, rich-text editor
 - Multiple images per item, items in multiple lists, custom workflows, Markdown/metadata search
