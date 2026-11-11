@@ -66,7 +66,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 31 | backend + web | **Accounts via Cloudflare Access** ([F-027](design-docs/features/F-027-accounts.md), brief 2026-11-09; LAN: always the owner, D-150): the backend reads the user from Access's signed token (`Cf-Access-Jwt-Assertion`, verified against the team keys + app audience, never the plain header), no passwords or login screens in the app; `collections.federama.dev` goes through Access; the home network (`raspberrypi.local`, no Cloudflare headers) always acts as the owner (`OWNER_EMAIL`), no switch and no redirect (D-150); dev/test use fake identities; then users, list ownership and sharing (backend 3.0). Brief to write after 30 | ✅ Done 2026-11-11: backend 3.0.0 (`010f44b`, `api-v4.1.0`, D-147/D-148/D-152) + web 3.0.0 (`89cf732`, D-149/D-151), rehearsed on the Pi test stack with the pre-accounts snapshot, live on prod; LAN = owner (D-150) | Nov 2026 |
 | 33 | web | **Web 3.1.0 fixes**: drag and drop of lists/folders into and out of folders doesn't work on prod (3.0.0); lists inside a folder indented a bit more in the sidebar | ✅ Done 2026-11-11: web 3.1.0 (`789708a`, web#148, D-153), confirmed on prod; test stack always on after a lone-web 502 on the Pi test stack (D-154) | Nov 2026 |
 | — | future | Development paused 2026-11-06. Future improvements: new high-endurance SD card (32–64 GB Samsung PRO Endurance / SanDisk MAX Endurance; steps in the Pi guide, 04), installed from scratch as the full backup drill (fresh OS following the Pi guide 02, secrets from 1Password, data from Drive per 03; the old card stays as the fallback), public API (needs its own auth; the security checks for Access-based accounts are part of 31), collaborative Markdown, list import, advanced search | 🔭 Future | — |
-| — | to-do | Manual chores, yours (details and commands in [§7b](#7b-to-do-manual-chores-yours)):<br>• **By 2026-11-16:** publish both Google OAuth apps (`Collections Backup`, `Collections`), or the nightly backup and the Google login stop working<br>• **When the federama.dev transfer completes:** DNSSEC back on, check auto-renew<br>• **After 2026-11-25:** delete `collections-backups-old` on Drive and the `pre-accounts` snapshot (Pi + Drive) | 📝 To-do | — |
+| — | to-do | Manual chores, yours (details and commands in [§7b](#7b-to-do-manual-chores-yours)):<br>• **When the federama.dev transfer completes:** DNSSEC back on, check auto-renew<br>• **Anytime:** check the Access allow list is exactly you + your girlfriend; optional new-user alert<br>• **After 2026-11-25:** delete `collections-backups-old` on Drive and the `pre-accounts` snapshot (Pi + Drive) | 📝 To-do | — |
 
 ```mermaid
 timeline
@@ -237,24 +237,11 @@ Tick them off here when done, and update that row.
 
 - [ ] **federama.dev transfer to Cloudflare** (started 2026-11-09, waiting for Squarespace, ~5 days): when it completes,
   turn DNSSEC back on in Cloudflare (DNS → Settings → Enable DNSSEC) and check that auto-renew is on.
-- [ ] **Publish both Google OAuth apps by 2026-11-16** (both in Testing mode with you as the only test user, so every
-  login token expires 7 days after it was made: the nightly Drive backup and the Google login stop working).
-  - The two apps (Google Cloud Console → Google Auth Platform, one project each):
-    - `Collections Backup`: rclone's own client, scope `drive.file` (sees only the files it created), uploads the nightly
-      encrypted backups to your Drive.
-    - `Collections`: the Google login of Cloudflare Access for `collections.federama.dev`, scopes `openid email profile`.
-    Both use only non-sensitive scopes, so publishing needs no Google review.
-  1. **Privacy page on the website** (federama.dev repo, GitHub Pages; prompt for a session there given 2026-11-11):
-     `https://federama.dev/privacy`, honest and short: who runs it, which Google data each app gets and why, where it is
-     stored, no sharing/selling/ads, how to get it deleted, contact. The home page links to it.
-  2. **Branding**, for each app: app name, user support email, home page `https://federama.dev`, privacy policy
-     `https://federama.dev/privacy`, authorized domain `federama.dev`, developer contact email, no logo (a logo forces a
-     brand review).
-  3. **Audience → Publish app**, for each app. Status becomes "In production".
-  4. **Fresh backup token**: `rclone config reconnect gdrive:` on the Pi (log in again), then a test upload
-     (`sudo systemctl start collections-backup.service`, check the log), and replace the rclone config in 1Password.
-  5. **Login**: log out of `collections.federama.dev` and log in again with Google; nothing else to change (Access keeps
-     the same client ID/secret).
+- [x] **Publish both Google OAuth apps** ✅ 2026-11-11: privacy page at `https://federama.dev/privacy` (website repo,
+  linked from the footer), branding on both apps (`Collections Backup`: rclone, `drive.file`; `Collections`: Access
+  Google login, `openid email profile`; home page `https://federama.dev`, authorized domain `federama.dev`, no logo),
+  both "In production" with no Google review (basic scopes only), rclone token refreshed and saved in 1Password,
+  Google login checked. Details in the local Pi guide (01 → The two Google apps).
 - [ ] **After 2026-11-25, delete the two old backup leftovers** (both no longer needed by then):
   - `collections-backups-old` on Google Drive (old backups made with rclone's shared client, replaced 2026-11-09 by our
     own client): delete the folder in drive.google.com.
