@@ -8,6 +8,8 @@
 #   ./deploy/prod restore <dir> [--force] restore a backup (asks before replacing data)
 #   ./deploy/prod verify <dir>            compare a backup with the running database
 #   ./deploy/prod prune [dest]            keep the newest backup of each of the last 7 days and 4 weeks
+#   ./deploy/prod snapshot <name>         named backup kept forever (never pruned): $SNAPSHOT_DIR/<name>/<stamp>,
+#                                         verified against the running database, copied to Drive (collections-snapshots)
 #   ./deploy/prod offsite upload|list|get <name>  encrypted backup copies on Google Drive
 #   ./deploy/prod backup-status [hours]   fail if the newest backup is missing, incomplete or older than [hours] (26)
 #
@@ -52,6 +54,7 @@ fi
 # PROD_PROJECT is only for trial runs next to a real prod stack (own containers and volumes); leave it unset on the server.
 export COMPOSE_FILE="$here/compose.yaml" COMPOSE_PROJECT_NAME="$project"
 backups="${BACKUP_DIR:-/srv/collection/backups}"
+snapshots="${SNAPSHOT_DIR:-/srv/collection/snapshots}"
 
 
 # Newest backup per day (first 7 days) and per ISO week (first 4 weeks); everything else goes.
@@ -113,6 +116,29 @@ case "$cmd" in
     dest="${1:-$backups}"
     mkdir -p "$dest"
     exec "$here/backup/backup.sh" "$dest"
+    ;;
+  snapshot)
+    # A named, verified backup outside the pruned folder, plus an encrypted copy on Drive. Used before risky
+    # releases (roadmap 31, accounts): roll back = previous releases back to "latest", then restore this snapshot.
+    name="${1:?usage: deploy/prod snapshot <name>   (letters, digits, - and _ only)}"
+    [[ "$name" =~ ^[A-Za-z0-9_-]+$ ]] || die "snapshot name may only contain letters, digits, - and _"
+    dest="$snapshots/$name"
+    mkdir -p "$dest"
+    "$here/backup/backup.sh" "$dest"
+    stamp="$(cd "$dest" && printf '%s\n' * | grep -E '^[0-9]{8}T[0-9]{6}Z$' | sort -r | head -n1)"
+    [ -f "$dest/$stamp/manifest.json" ] || die "snapshot $name: backup incomplete (no manifest.json)"
+    "$here/backup/verify-restore.sh" "$dest/$stamp"
+    remote="${OFFSITE_REMOTE:-gdrive-crypt:collections-backups}"
+    remote="${remote%%:*}:collections-snapshots/$name/$stamp"
+    if command -v rclone >/dev/null; then
+      rclone copy --checksum "$dest/$stamp" "$remote"
+      rclone cryptcheck "$dest/$stamp" "$remote" 2>/dev/null || rclone check "$dest/$stamp" "$remote"
+      ok "snapshot $name: $dest/$stamp (verified), Drive copy $remote"
+    else
+      ok "snapshot $name: $dest/$stamp (verified); rclone missing, NO Drive copy"
+    fi
+    echo "  restore:   deploy/prod restore $dest/$stamp --force   (after putting the matching releases back as latest)"
+    echo "  rehearse:  deploy/pitest restore $dest/$stamp --force"
     ;;
   restore) exec "$here/backup/restore.sh" "$@" ;;
   verify) exec "$here/backup/verify-restore.sh" "$@" ;;
