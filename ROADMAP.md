@@ -245,7 +245,8 @@ Tick them off here when done, and update that row.
      the one for the 3B+), or a 5.1 V / 2.5 A+ supply with a short, thick, attached cable. Phone chargers and long or
      thin cables are the usual cause. Unplug USB devices the Pi doesn't need. A 5 V / 3 A supply
      made for the Pi with its own attached cable also works (the extra 0.1 V only covers cable loss); confirmed
-     under-voltage on 2026-11-11.
+     under-voltage on 2026-11-12: `0x50000`, 1669 warnings since boot, flapping every ~15 s even at night (idle):
+     the supply/cable is borderline all the time, not just on load spikes. Replace it.
   3. After the swap: reboot, `vcgencmd get_throttled` must stay `0x0` for a few days and the red light steady.
   4. If it's `0x0` and the light still flickers, it's not the power: note it and leave it.
 - [x] **Publish both Google OAuth apps** ✅ 2026-11-11: privacy page at `https://federama.dev/privacy` (website repo,
