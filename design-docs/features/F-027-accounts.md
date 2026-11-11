@@ -108,6 +108,11 @@ Deploy (top-level orchestrator): `.env.example` (`ACCESS_TEAM_DOMAIN`, `ACCESS_A
 5. **Rollback**: mark the previous releases (noted in step 2) as latest again, wait for the deploy, then
    `./deploy/prod restore <snapshot> --force`.
 
+**Rollback point (2026-11-11):** snapshot `/srv/collection/snapshots/pre-accounts/20261111T133944Z` (verified: 10
+tables, 7 content bodies, 317 attachments; Drive copy `gdrive-crypt:collections-snapshots/pre-accounts/20261111T133944Z`),
+taken on **backend 2.12.0 + web 2.41.0**. Rollback = mark backend `v2.12.0` and web `v2.41.0` as latest, wait for the
+deploy, then `./deploy/prod restore /srv/collection/snapshots/pre-accounts/20261111T133944Z --force`.
+
 ## Out of scope
 Per-user settings, Settings → Account editing, ownership transfer, view-only shares, sharing lists or nested folders,
 removing workspaces, a public API.
@@ -116,3 +121,4 @@ removing workspaces, a public API.
 - 2026-11-09: brief written after exploring the feature with the user (decisions 1–15).
 - 2026-11-11: decisions 5, 8, 10 revised (user): folders and lists move like boxes; any member can move out of a shared
   folder and becomes the owner; one owner per top-level entry + members table. `deploy/prod snapshot` pushed.
+- 2026-11-11: snapshot `pre-accounts` taken on prod (backend 2.12.0, web 2.41.0); data frozen until F-027 is live.
