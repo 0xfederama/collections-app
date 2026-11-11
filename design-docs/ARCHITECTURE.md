@@ -84,7 +84,7 @@ React · TypeScript (strict) · Vite · npm with a committed `package-lock.json`
 API types and client via **openapi-typescript + openapi-fetch** (thin, typed, maintained; verify in M0-R1) ·
 server state via **TanStack Query** · routing via **React Router** (data router, needed for `useBlocker` unsaved-changes guard) ·
 styling with **Tailwind CSS** using design tokens as CSS variables, plus accessible headless primitives (**Radix UI** or **React Aria Components**, pick one in M0-R1) ·
-drag-and-drop via **dnd-kit** (keyboard sensor) · Markdown editor **CodeMirror 6** (it has a Yjs binding for future real-time collaboration) ·
+drag-and-drop via **dnd-kit** (keyboard sensor) · Markdown editor **CodeMirror 6** ·
 Markdown rendering with **react-markdown + remark-gfm**, raw HTML disabled, plus a URL sanitizer ·
 self-hosted fonts via **Fontsource** (no third-party font CDN) ·
 tests: **Vitest + Testing Library + MSW**, e2e with **Playwright** and **@axe-core/playwright** ·
@@ -161,6 +161,6 @@ Both repos: Dependabot (gomod/npm, github-actions, docker), branch protection on
 |---|---|
 | Accounts (Phase 3) | `workspace_id` on every table and query; single resolution point for "current workspace" in middleware |
 | TMDB (Phase 2) | Definition-backed metadata validation by stable field key; metadata JSONB; no provider columns yet |
-| Real-time collaborative Markdown | Content in Postgres with per-item versions; CodeMirror 6 editor. Later: add `item_content_updates(item_id, seq, update BYTEA)` + snapshot table for Yjs updates, a WebSocket endpoint, and `y-codemirror.next`. Saved versions remain checkpoints |
+| ~~Real-time collaborative Markdown~~ | Dropped 2026-11-11 (D-157); no seam kept. Content stays in Postgres with per-item versions and last-write-wins saves |
 | Multiple images | `attachments` table independent of `items`; adding `item_attachments` later is additive |
 | Mobile app | Same pinned OpenAPI contract; separate repo |

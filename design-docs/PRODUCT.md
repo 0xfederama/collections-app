@@ -129,4 +129,4 @@ Markdown history limit (default 20), and Delete trash automatically (Off / 7 / 3
 4. ~~**Phase 4: Public API**~~ **Dropped 2026-11-11 (D-156).** On the home network the API already acts as the owner (D-150); a remote script would use a Cloudflare Access service token, with no app changes.
 5. **Very distant: AI/LLM features** (description generation, comparisons, Q&A). Only with explicit user approval before saving.
 
-Also deferred, with no committed phase: real-time collaborative editing (the architecture keeps this path open, see ARCHITECTURE §7), offline mode, advanced search, multiple images, rich editor, diffs, custom workflows. F-012 adds clipboard images on open items, empty trash and auto-purge.
+Also deferred, with no committed phase: offline mode, advanced search, multiple images, rich editor, diffs, custom workflows. F-012 adds clipboard images on open items, empty trash and auto-purge.
