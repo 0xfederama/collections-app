@@ -67,7 +67,8 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 33 | web | **Web 3.1.0 fixes**: drag and drop of lists/folders into and out of folders doesn't work on prod (3.0.0); lists inside a folder indented a bit more in the sidebar | ✅ Done 2026-11-11: web 3.1.0 (`789708a`, web#148, D-153), confirmed on prod; test stack always on after a lone-web 502 on the Pi test stack (D-154) | Nov 2026 |
 | 34 | web + deploy | **Privacy policy inside the app**: public page `collections.federama.dev/privacy` (no login: its own Cloudflare Access Bypass app, like the icons; also at `raspberrypi.local/privacy`), self-contained static page served by the web container, same content as today's `federama.dev/privacy`; the web orchestrator releases 3.2.0 itself (pre-release → test stack → latest); then the two Google apps' Branding points to it and the website page is removed (no redirect, no link: federama.dev stays unrelated to Collections). Home page stays `https://federama.dev` (Google wants a public one; the app is behind login) | ✅ Done 2026-11-11: web 3.2.0 (D-155) live, Access bypass `Collections privacy`, both Google apps' Branding → `https://collections.federama.dev/privacy`, page removed from federama.dev (404, no link) | Nov 2026 |
 | 35 | backend + web | **Sidebar drag and drop, anywhere** (reported 2026-11-15 on prod 3.2.0): a list/folder drops into a folder only over the folder's name, and leaves a folder only at the very bottom of the tree. Wanted: drop anywhere (between any rows, inside an open folder at any position, back out between top-level rows) and it lands exactly where it was dropped, with a clear insertion indicator. Backend first: an atomic position on the move endpoints (today they only append last) | ✅ Done 2026-11-15: backend 3.1.0 (`before_id` on move, `api-v4.2.0`, D-159) + web 3.3.0 (drop anywhere, D-158, web#150), test stack then prod | Nov 2026 |
-| — | future | Development paused 2026-11-06. Future improvements: new high-endurance SD card (32–64 GB Samsung PRO Endurance / SanDisk MAX Endurance; steps in the Pi guide, 04), installed from scratch as the full backup drill (fresh OS following the Pi guide 02, secrets from 1Password, data from Drive per 03; the old card stays as the fallback), list import, advanced search | 🔭 Future | — |
+| 36 | web | **Movie list extras** (asked 2026-11-15): in a Movies list's `…` menu, (1) open https://mikeyguinness.com/movies/ in a new tab, (2) pick a random movie from the list | 🚧 In progress 2026-11-15 | Nov 2026 |
+| — | future | Development paused 2026-11-06. Future improvements: new high-endurance SD card (32–64 GB Samsung PRO Endurance / SanDisk MAX Endurance; steps in the Pi guide, 04), installed from scratch as the full backup drill (fresh OS following the Pi guide 02, secrets from 1Password, data from Drive per 03; the old card stays as the fallback), advanced search | 🔭 Future | — |
 | — | to-do | Manual chores, yours (details and commands in [§7b](#7b-to-do-manual-chores-yours)):<br>• **Soon:** Pi power check: the red light isn't steady (under-voltage confirmed); buy a new micro-USB supply (5.1 V 2.5 A official, or 5 V 3 A Pi-specific), then recheck | 📝 To-do | — |
 
 ```mermaid
@@ -269,7 +270,6 @@ Tick them off here when done, and update that row.
 
 | Idea | Notes |
 |---|---|
-| List import | Create a list from text, e.g. a Markdown bullet list (one item per bullet). Format and rules to be defined |
 | Advanced search | Search inside Markdown descriptions and kind fields, saved filters |
 
 ## 9. Exploring and not on the roadmap
@@ -288,6 +288,7 @@ Tick them off here when done, and update that row.
 - CI (GitHub Actions) and Dependabot, for now (D-084): gates run locally, audits before each tag.
 - Exposing the app to the internet other than behind Cloudflare Access (D-146).
 - **A public API** (dropped 2026-11-11, D-156): scripts and Shortcuts at home already reach the API as the owner (D-150); a one-off remote client would get a Cloudflare Access service token, not app-level tokens.
+- **List import** (dropped 2026-11-15, your call): creating a list from pasted text.
 - **Real-time collaborative Markdown** (dropped 2026-11-11, D-157): two people editing the same description live (Yjs, WebSockets). Shared folders already cover working on the same lists; saves stay last-write-wins with versions.
 - A monorepo, microservices, Redis, queues, an ORM (ORCHESTRATOR_BRIEF §2).
 - Scraping IMDb or any provider that doesn't allow it.
@@ -307,6 +308,7 @@ Tick them off here when done, and update that row.
 - This file is updated when a feature ships, starts, or changes horizon. Detailed task history stays in STATUS.md.
 
 ## Changelog
+- 2026-11-15: **List import dropped** (your call). Roadmap 36 added: Movies list menu extras.
 - 2026-11-11: **Collaborative Markdown dropped** (D-157): pool item 9 removed, the ARCHITECTURE/DATA_MODEL real-time seams retired.
 - 2026-11-11: **Public API dropped** (D-156): pool item 7 removed, PRODUCT §13 Phase 4 dropped; home scripts already work (LAN = owner), a remote client would use an Access service token.
 - 2026-11-01: **App in use (D-116):** baseline frozen as migration 1.0; one migration per feature, edited in place until released; dev/test vs prod, prod releases only after your yes in chat. Next: accounts (migration 1.1).
