@@ -127,7 +127,7 @@ This document was the input to the contract. Since F-019 (`api-v1.0.0`) `backend
 | GET | `/api/v1/folders/{id}` | |
 | PATCH | `/api/v1/folders/{id}` | `If-Match`. `{ name }` |
 | DELETE | `/api/v1/folders/{id}` | `If-Match`. Moves the subtree to Trash → 204 |
-| POST | `/api/v1/folders/{id}/move` | `If-Match`. `{ parent_folder_id: uuid\|null, before_id?: uuid\|null }`: `before_id` = child folder of the target to insert before (absent/null = last); else 422 `invalid_before_id` (D-159) |
+| POST | `/api/v1/folders/{id}/move` | `If-Match`. `{ parent_folder_id: uuid\|null, before_id?: uuid\|null }`: `before_id` = child folder of the target to insert before (at the top level any folder the caller sees, shared ones included; only the caller's own order changes; absent/null = last); else 422 `invalid_before_id` (D-159) |
 | PUT | `/api/v1/folders/order` | `{ parent_folder_id: uuid\|null, ids: [uuid] }` orders child **folders** of that parent → 204 |
 
 ### Lists
