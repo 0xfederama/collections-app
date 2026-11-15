@@ -68,8 +68,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 34 | web + deploy | **Privacy policy inside the app**: public page `collections.federama.dev/privacy` (no login: its own Cloudflare Access Bypass app, like the icons; also at `raspberrypi.local/privacy`), self-contained static page served by the web container, same content as today's `federama.dev/privacy`; the web orchestrator releases 3.2.0 itself (pre-release → test stack → latest); then the two Google apps' Branding points to it and the website page is removed (no redirect, no link: federama.dev stays unrelated to Collections). Home page stays `https://federama.dev` (Google wants a public one; the app is behind login) | ✅ Done 2026-11-11: web 3.2.0 (D-155) live, Access bypass `Collections privacy`, both Google apps' Branding → `https://collections.federama.dev/privacy`, page removed from federama.dev (404, no link) | Nov 2026 |
 | 35 | backend + web | **Sidebar drag and drop, anywhere** (reported 2026-11-15 on prod 3.2.0): a list/folder drops into a folder only over the folder's name, and leaves a folder only at the very bottom of the tree. Wanted: drop anywhere (between any rows, inside an open folder at any position, back out between top-level rows) and it lands exactly where it was dropped, with a clear insertion indicator. Backend first: an atomic position on the move endpoints (today they only append last) | ✅ Done 2026-11-15: backend 3.1.0 (`before_id` on move, `api-v4.2.0`, D-159) + web 3.3.0 (drop anywhere, D-158, web#150), test stack then prod | Nov 2026 |
 | 36 | web | **Movie list extras** (asked 2026-11-15): in a Movies list's `…` menu, (1) open https://mikeyguinness.com/movies/ in a new tab, (2) pick a random movie from the list | ✅ Done 2026-11-15: web 3.4.0 (D-160, web#151): "Movie Vector Map" link + random pick, test stack then prod | Nov 2026 |
-| — | future | Development paused 2026-11-06. Future improvements: new high-endurance SD card (32–64 GB Samsung PRO Endurance / SanDisk MAX Endurance; steps in the Pi guide, 04), installed from scratch as the full backup drill (fresh OS following the Pi guide 02, secrets from 1Password, data from Drive per 03; the old card stays as the fallback), advanced search | 🔭 Future | — |
-| — | to-do | Manual chores, yours (details and commands in [§7b](#7b-to-do-manual-chores-yours)):<br>• **Soon:** Pi power check: the red light isn't steady (under-voltage confirmed); buy a new micro-USB supply (5.1 V 2.5 A official, or 5 V 3 A Pi-specific), then recheck | 📝 To-do | — |
+| — | future | Development paused 2026-11-06. Future improvements: new high-endurance SD card (32–64 GB Samsung PRO Endurance / SanDisk MAX Endurance; steps in the Pi guide, 04), installed from scratch as the full backup drill (fresh OS following the Pi guide 02, secrets from 1Password, data from Drive per 03; the old card stays as the fallback), new power supply (under-voltage confirmed 2026-11-12; see §8) | 🔭 Future | — |
 
 ```mermaid
 timeline
@@ -237,19 +236,6 @@ Small one-off actions outside the code, with their commands; the open ones are s
 Tick them off here when done, and update that row.
 
 - [x] **federama.dev transfer to Cloudflare** ✅ 2026-11-15: transfer completed, DNSSEC enabled, auto-renew on.
-- [ ] **Pi power check** (noticed 2026-11-11): the red PWR light on the Pi 3B+ isn't steady. On a 3B+ a steady red
-  light means the power is fine; off or flickering means under-voltage (below ~4.63 V), even with an original charger
-  (worn cable, ageing supply). Under-voltage slows the Pi down and can corrupt the SD card.
-  1. Check on the Pi (read-only): `vcgencmd get_throttled` (`0x0` = never had a problem; bit 0 = under-voltage now,
-     bit 16 = it happened since boot, e.g. `0x50000` or `0x50005`) and `journalctl -k | grep -i voltage | tail`.
-  2. If it reports under-voltage: buy the official **Raspberry Pi Universal Power Supply** (micro-USB, 5.1 V 2.5 A,
-     the one for the 3B+), or a 5.1 V / 2.5 A+ supply with a short, thick, attached cable. Phone chargers and long or
-     thin cables are the usual cause. Unplug USB devices the Pi doesn't need. A 5 V / 3 A supply
-     made for the Pi with its own attached cable also works (the extra 0.1 V only covers cable loss); confirmed
-     under-voltage on 2026-11-12: `0x50000`, 1669 warnings since boot, flapping every ~15 s even at night (idle):
-     the supply/cable is borderline all the time, not just on load spikes. Replace it.
-  3. After the swap: reboot, `vcgencmd get_throttled` must stay `0x0` for a few days and the red light steady.
-  4. If it's `0x0` and the light still flickers, it's not the power: note it and leave it.
 - [x] **Publish both Google OAuth apps** ✅ 2026-11-11: privacy page at `https://federama.dev/privacy` (website repo,
   linked from the footer), branding on both apps (`Collections Backup`: rclone, `drive.file`; `Collections`: Access
   Google login, `openid email profile`; home page `https://federama.dev`, authorized domain `federama.dev`, no logo),
@@ -270,7 +256,8 @@ Tick them off here when done, and update that row.
 
 | Idea | Notes |
 |---|---|
-| Advanced search | Search inside Markdown descriptions and kind fields, saved filters |
+| New SD card | 32–64 GB high-endurance (Samsung PRO Endurance / SanDisk MAX Endurance), installed from scratch as the full backup drill: fresh OS per the Pi guide 02, secrets from 1Password, data from Drive per 03; the old card stays as the fallback |
+| New power supply | Under-voltage confirmed 2026-11-12 (`vcgencmd get_throttled` = `0x50000`, 1669 warnings since boot, flapping every ~15 s even idle), so the red light isn't steady. Buy the official Raspberry Pi micro-USB 5.1 V 2.5 A supply (or a 5 V 3 A Pi-specific one with an attached cable); swap with `sudo shutdown -h now`; after: `vcgencmd get_throttled` = `0x0` and `journalctl -k -b \| grep -ci voltage` = `0`. Do it before or with the SD card swap |
 
 ## 9. Exploring and not on the roadmap
 
@@ -283,15 +270,6 @@ Tick them off here when done, and update that row.
 - **Mobile app.** Only after accounts and once the app is public; same pinned OpenAPI contract, separate repo.
 - **Multiple images per item.**
 - Offline mode, rich-text editor, version diffs, custom workflows (deferred since the MVP, no demand).
-
-**Not doing ⛔**
-- CI (GitHub Actions) and Dependabot, for now (D-084): gates run locally, audits before each tag.
-- Exposing the app to the internet other than behind Cloudflare Access (D-146).
-- **A public API** (dropped 2026-11-11, D-156): scripts and Shortcuts at home already reach the API as the owner (D-150); a one-off remote client would get a Cloudflare Access service token, not app-level tokens.
-- **List import** (dropped 2026-11-15, your call): creating a list from pasted text.
-- **Real-time collaborative Markdown** (dropped 2026-11-11, D-157): two people editing the same description live (Yjs, WebSockets). Shared folders already cover working on the same lists; saves stay last-write-wins with versions.
-- A monorepo, microservices, Redis, queues, an ORM (ORCHESTRATOR_BRIEF §2).
-- Scraping IMDb or any provider that doesn't allow it.
 
 ## 10. Open questions
 | ID | Question | Default |
@@ -308,6 +286,7 @@ Tick them off here when done, and update that row.
 - This file is updated when a feature ships, starts, or changes horizon. Detailed task history stays in STATUS.md.
 
 ## Changelog
+- 2026-11-15: **Advanced search dropped**, "Not doing" list removed (your call); the to-do row is gone: new SD card and power supply are both in Future.
 - 2026-11-15: **List import dropped** (your call). Roadmap 36 added: Movies list menu extras.
 - 2026-11-11: **Collaborative Markdown dropped** (D-157): pool item 9 removed, the ARCHITECTURE/DATA_MODEL real-time seams retired.
 - 2026-11-11: **Public API dropped** (D-156): pool item 7 removed, PRODUCT §13 Phase 4 dropped; home scripts already work (LAN = owner), a remote client would use an Access service token.
