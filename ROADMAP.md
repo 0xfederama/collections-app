@@ -271,7 +271,6 @@ Tick them off here when done, and update that row.
 |---|---|
 | List import | Create a list from text, e.g. a Markdown bullet list (one item per bullet). Format and rules to be defined |
 | Advanced search | Search inside Markdown descriptions and kind fields, saved filters |
-| Books lookup | Automatic lookup and cover for book lists, from a provider to be chosen (Open Library or Google Books); asked for 2026-10-16 after the TMDB brief |
 
 ## 9. Exploring and not on the roadmap
 
