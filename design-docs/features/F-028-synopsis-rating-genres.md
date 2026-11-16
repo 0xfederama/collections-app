@@ -91,3 +91,4 @@ Merged as [collections-app-backend#95](https://github.com/0xfederama/collections
 - 2026-11-16: brief written (user decisions: TMDB score, synopsis fills an empty description).
 - 2026-11-16: backend B1–B4 merged (backend#95, `0ceeadba`), backend 3.2.0 / `api-v4.3.0` waiting for tag + release; web next.
 - 2026-11-16: web W1–W4 merged (web#154, `e144eeb`), web 3.6.0 on `api-v4.3.0` (tag pushed at the user's request), D-165; waiting for release.
+- 2026-11-16: backend#96 keeps omitted `tmdb_id`/`openlibrary_id`/`lookup_disabled` on PATCH (no contract change); `v3.2.0` tagged at `be5245d`, `api-v4.3.0` at `0ceeadb` (same contract).
