@@ -219,6 +219,7 @@ CREATE TABLE item_content_versions (
 - **Save** (in one tx): lock the item row (`SELECT … FROM items … FOR NO KEY UPDATE`), read the latest version (number + sha256), compare with `If-Match` (mismatch → `ErrVersionConflict`). If the sha256 is equal, return the current version unchanged. Otherwise insert version `current+1`, then prune: `DELETE … WHERE item_id=$1 AND version <= current_new - (limit + 1)`.
 - The latest version of an item is never deleted (prune and restore keep it), so version numbers only grow and a `c-N` ETag is never reused for a different body.
 - **Restore v**: same as save, using the body of version v. It fails with 404 if v was pruned.
+- **F-028 (migration 000003, D-162/D-164):** `item_content_versions.origin text NULL CHECK (origin IN ('lookup'))` (NULL = user). `lookup_imports` gains `description_version int NULL` + `description_sha256 bytea NULL` (the lookup-written version; still imported iff current version and sha match, else cleared) and `import_generation int NOT NULL DEFAULT 0` (rows below the code's current generation are refreshed once by the backfill: TMDB scheduled refresh, Open Library fill). Movie/TV metadata gains imported `tmdb_rating`, `tmdb_vote_count`, `genres` (`text_list`).
 - Content versions are independent of `items.version`. A content save **does** bump `items.updated_at` (for "recently updated" sort) but **not** `items.version`.
 
 ### users (F-027, migration `000002_accounts`)

@@ -153,6 +153,8 @@ This document was the input to the contract. Since F-019 (`api-v1.0.0`) `backend
 
 Max list page is 200 (not 100 as in the archive) so typical lists render in one request.
 
+**F-028 (`api-v4.3.0`, D-162/D-163):** on movie and TV lists, `GET /lists/{id}/items` also takes `sort=rating` (`metadata.tmdb_rating` descending, unrated last, tie by id; `rating` is also a valid list `sort_mode`) and a repeatable `genre` (`?genre=Drama&genre=Comedy`, 1–10 values ≤ 100 chars, any-of, case-insensitive exact; AND with `q`, `filter_*`, `availability`, before paging). Either on another list type → 422 `invalid_sort` / `invalid_filter`. `GET /api/v1/lists/{id}/genres` → `{ genres: [{ name, count }] }` over active items, by name; `[]` on other types. Movie/TV metadata gains lookup-owned `tmdb_rating` (0–10, one decimal, absent under 10 votes), `tmdb_vote_count`, `genres` (string array, field type `text_list`): omitted in a PATCH keeps them, a differing value is 422, an equal one passes.
+
 ### Image
 | Method | Path | Notes |
 |---|---|---|
@@ -169,6 +171,8 @@ Max list page is 200 (not 100 as in the archive) so typical lists render in one 
 | GET | `/api/v1/items/{id}/content/versions` | `{ data: [{ version, size_bytes, created_at }] }`, newest first, unpaginated (≤ 201) |
 | GET | `/api/v1/items/{id}/content/versions/{version}` | Content of that version (for preview). 404 if pruned. Its `ETag` is that version's `"c-N"` |
 | POST | `/api/v1/items/{id}/content/restore` | `If-Match: "c-N"` (current). `{ version }` → creates a new version, returns Content |
+
+Content and version infos carry read-only `origin` (`user`|`lookup`, F-028): a lookup writes the provider synopsis into a never-saved description as a `lookup` version (author null), and replaces it on refresh/re-match only while it is still that exact version; any user save ends that.
 
 ### Search
 | GET | `/api/v1/search?q=&limit=&offset=` | `q` 1–200 chars, required. `{ data: [{ item: ItemSummary, path: [{type,id,name}] }], page }` |

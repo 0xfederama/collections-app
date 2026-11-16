@@ -64,5 +64,22 @@ Backend first (contract tag), then web against that tag. Backfill runs on deploy
 The IMDb rating (no OMDb or IMDb datasets), manual editing of genres/rating, book ratings, genres for books unless free,
 showing the rating or genres in list rows.
 
+## Repo breakdown: backend
+Merged as [collections-app-backend#95](https://github.com/0xfederama/collections-app-backend/pull/95) (squash `0ceeadba0dcbec232e35faf417f76727ba7f1797`), backend 3.2.0, contract `api-v4.3.0`, migration 000003 (expand-only). Decisions D-162 (fields, synopsis, unedited detection), D-163 (sort/filter/genres endpoint), D-164 (backfill).
+- B1: TMDB `overview` (en-US fallback when empty), `vote_average` → `tmdb_rating` only at ≥ 10 votes, `vote_count` → `tmdb_vote_count`, `genres` names; Open Library work `description`; Hardcover `description` (untracked creates).
+- B2: synopsis fills only a never-saved description (version 0) as a `lookup`-origin version; tracked by `description_version` + sha; replaced while tracked; any user save ends it. No expiry path today (D-123 / D-095).
+- B3: `sort=rating`, `genre` filter, `GET /lists/{id}/genres`, codes `invalid_sort`, `invalid_filter`.
+- B4: generic backfill on `import_generation`, 25 items / 10 min.
+
+## Web handoff
+- Item (movie/TV) `metadata`: `tmdb_rating` (number 0–10, one decimal, absent when < 10 votes), `tmdb_vote_count` (number), `genres` (string[], ≤ 10). Lookup-owned: hide them from the editor (like the bookkeeping fields); a PATCH may omit them (kept) or echo them unchanged; a different value → 422 `validation_failed`. Definitions: new field type `text_list` (`genres`).
+- Show "TMDB score 7.4 (1,200 votes)" and genre chips in the expanded item only.
+- `GET /lists/{id}/items`: `sort=rating` (desc, unrated last); repeatable `genre=` (any-of, case-insensitive); both movie/TV only, else 422 `invalid_sort` / `invalid_filter` (also for an empty `genre=`). `rating` is a valid list `sort_mode` for movie/TV.
+- `GET /lists/{id}/genres` → `{ genres: [{ name, count }] }` for the Filter menu (`[]` on other types).
+- Content: `origin` (`user`|`lookup`) on `GET /items/{id}/content` and on each version info; label lookup versions in history (author null). A lookup can create a new content version, so an open editor may get the usual 412 on save.
+- After deploy: the backend refreshes every provider-linked item once in the background (25 items every 10 min; logs `lookup backfill progress`, then `lookup backfill complete`). Movie/TV get score, genres and (if the description was never saved) a synopsis; books get only an empty description filled. Resumes after restarts; no action needed.
+- W4: TMDB attribution in About already covers it.
+
 ## Log
 - 2026-11-16: brief written (user decisions: TMDB score, synopsis fills an empty description).
+- 2026-11-16: backend B1–B4 merged (backend#95, `0ceeadba`), backend 3.2.0 / `api-v4.3.0` waiting for tag + release; web next.
