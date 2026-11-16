@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Owner** | Top-level orchestrator (parent repo session), approved by the product owner (you) |
-| **Last updated** | 2026-11-15 |
+| **Last updated** | 2026-11-16 |
 | **Horizons** | **In progress**: rows marked 🚧 in §2 · **Future**: wanted, not scheduled (§3) · **Exploring**: uncertain concepts, no commitment (§4) |
 | **Status** | ✅ done · 🚧 in progress · 🔭 future |
 
@@ -69,7 +69,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 35 | backend + web | **Sidebar drag and drop, anywhere** (reported 2026-11-15 on prod 3.2.0): a list/folder drops into a folder only over the folder's name, and leaves a folder only at the very bottom of the tree. Wanted: drop anywhere (between any rows, inside an open folder at any position, back out between top-level rows) and it lands exactly where it was dropped, with a clear insertion indicator. Backend first: an atomic position on the move endpoints (today they only append last) | ✅ Done 2026-11-15: backend 3.1.0 (`before_id` on move, `api-v4.2.0`, D-159) + web 3.3.0 (drop anywhere, D-158, web#150), test stack then prod | Nov 2026 |
 | 36 | web | **Movie list extras** (asked 2026-11-15): in a Movies list's `…` menu, (1) open https://mikeyguinness.com/movies/ in a new tab, (2) pick a random movie from the list | ✅ Done 2026-11-15: web 3.4.0 (D-160, web#151): "Movie Vector Map" link + random pick, test stack then prod | Nov 2026 |
 | 37 | web | **Upkeep**: Node 26 LTS (D-042), TypeScript 7 if typescript-eslint supports it (D-040), the flaky drag-reorder e2e, dependency bumps + audit | ✅ web 3.5.0 merged and released 2026-11-15 (D-161; also instant Settings) | Nov 2026 |
-| 38 | backend + web | **Synopsis, rating, genres** ([F-028](design-docs/features/F-028-synopsis-rating-genres.md), brief 2026-11-16): the provider's summary fills an empty item description (movies, TV, books; metadata language, English fallback; tracked until you edit it), the TMDB score for movies/TV (sortable, shown only in the expanded item), TMDB genres (filterable, chips in the expanded item); existing items via a one-off backfill. Backend first | 🚧 backend 3.2.0 merged (`api-v4.3.0` tagged), web 3.6.0 merged, waiting for release (D-162–D-165) | Nov 2026 |
+| 38 | backend + web | **Synopsis, rating, genres** ([F-028](design-docs/features/F-028-synopsis-rating-genres.md), brief 2026-11-16): the provider's summary fills an empty item description (movies, TV, books; metadata language, English fallback; tracked until you edit it), the TMDB score for movies/TV (sortable, shown only in the expanded item), TMDB genres (filterable, chips in the expanded item); existing items via a one-off backfill. Backend first | ✅ Done 2026-11-16: backend 3.2.0 (`api-v4.3.0`) + web 3.6.0 released, prod (D-162–D-165) | Nov 2026 |
 | — | future | Wanted, not scheduled (§3): new high-endurance SD card (32–64 GB Samsung PRO Endurance / SanDisk MAX Endurance; steps in the Pi guide, 04), installed from scratch as the full backup drill (fresh OS following the Pi guide 02, secrets from 1Password, data from Drive per 03; the old card stays as the fallback), new power supply (under-voltage confirmed 2026-11-12; see §3) | 🔭 Future | — |
 
 ---
@@ -108,6 +108,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 - This file is updated when something starts, ships, or changes horizon; the repo orchestrators update their own row after merging. Detailed task history stays in STATUS.md, manual ops chores in the local Pi guide.
 
 ## Changelog
+- 2026-11-16: **Roadmap 38 done**: synopsis, TMDB score and genres (F-028) live with backend 3.2.0 and web 3.6.0; the one-off backfill fills existing items in the background.
 - 2026-11-15: **Roadmap trimmed**: the October timeline, Now/Next/Pool, shipped-MVP and Next sections removed (all done; the history stays in §2, the feature briefs and this changelog), the done manual chores list removed (Google apps published, domain transfer + DNSSEC, Access allow list, old backups deleted, restore drill on the test stack: all 2026-11-11/15; details in the local Pi guide). Upkeep becomes row 37; the rest of the old upkeep list (VoiceOver pass, mock-mode check, upload checks, icon packs, exposure script) dropped.
 - 2026-11-15: **Advanced search dropped**, "Not doing" list removed (your call); the to-do row is gone: new SD card and power supply are both in Future.
 - 2026-11-15: **List import dropped** (your call). Roadmap 36 added: Movies list menu extras.
