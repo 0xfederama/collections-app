@@ -80,6 +80,14 @@ Merged as [collections-app-backend#95](https://github.com/0xfederama/collections
 - After deploy: the backend refreshes every provider-linked item once in the background (25 items every 10 min; logs `lookup backfill progress`, then `lookup backfill complete`). Movie/TV get score, genres and (if the description was never saved) a synopsis; books get only an empty description filled. Resumes after restarts; no action needed.
 - W4: TMDB attribution in About already covers it.
 
+## Repo breakdown: web
+- **W1** `items/TmdbDetails.tsx` + `items/tmdbData.ts`: genre chips and "TMDB score 8.4 (40,750 votes)" on the expanded movie/TV item; the keys are hidden from the type fields by `useTypes`.
+- **W2** "Rating" in the movie/TV Sort menu (`sort=rating`, default sort too).
+- **W3** Genre checkboxes in the Filter menu from `GET /lists/{id}/genres`, any-of `?genre=`, with availability; "Genre: X" chips (`lists/GenreFilter.tsx`, `genres.ts`, `useGenreFilter.ts`).
+- **W4** About attribution unchanged (already covers it). History labels lookup versions "Imported summary".
+- Also fixed: a type-field save dropped `tmdb_id` / `openlibrary_id` (D-165).
+
 ## Log
 - 2026-11-16: brief written (user decisions: TMDB score, synopsis fills an empty description).
 - 2026-11-16: backend B1–B4 merged (backend#95, `0ceeadba`), backend 3.2.0 / `api-v4.3.0` waiting for tag + release; web next.
+- 2026-11-16: web W1–W4 merged (web#154, `e144eeb`), web 3.6.0 on `api-v4.3.0` (tag pushed at the user's request), D-165; waiting for release.
