@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Owner** | Top-level orchestrator (parent repo session), approved by the product owner (you) |
-| **Last updated** | 2026-11-16 |
+| **Last updated** | 2026-11-23 |
 | **Horizons** | **In progress**: rows marked 🚧 in §2 · **Future**: wanted, not scheduled (§3) · **Exploring**: uncertain concepts, no commitment (§4) |
 | **Status** | ✅ done · 🚧 in progress · 🔭 future |
 
@@ -71,6 +71,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 | 37 | web | **Upkeep**: Node 26 LTS (D-042), TypeScript 7 if typescript-eslint supports it (D-040), the flaky drag-reorder e2e, dependency bumps + audit | ✅ web 3.5.0 merged and released 2026-11-15 (D-161; also instant Settings) | Nov 2026 |
 | 38 | backend + web | **Synopsis, rating, genres** ([F-028](design-docs/features/F-028-synopsis-rating-genres.md), brief 2026-11-16): the provider's summary fills an empty item description (movies, TV, books; metadata language, English fallback; tracked until you edit it), the TMDB score for movies/TV (sortable, shown only in the expanded item), TMDB genres (filterable, chips in the expanded item); existing items via a one-off backfill. Backend first | ✅ Done 2026-11-16: backend 3.2.0 (`api-v4.3.0`) + web 3.6.0 released, prod (D-162–D-165) | Nov 2026 |
 | 39 | web | **All items always shown** (reported 2026-11-16): a list over 200 items (Film, 207) ends with "Load more (7 of 7 remaining)"; every list must show all its items, with sort, filters, drag reorder and the random pick working on the whole list | ✅ Done 2026-11-16: web 3.6.1 released, prod (D-166, web#155) | Nov 2026 |
+| 40 | backend + web | **Share a list as text** (asked 2026-11-23): "[icon] Share" in the list's `…` menu writes the whole list as a bulleted text (`* Title (field1, field2):` then the description as a nested bullet) and opens the system share sheet (iOS: copy, WhatsApp…), with a copy fallback; also the proper reload icon next to "Refresh details". Backend first: the item descriptions in the list items response (today one request per item) | 🚧 In progress 2026-11-23 | Nov 2026 |
 | — | future | Wanted, not scheduled (§3): new high-endurance SD card (32–64 GB Samsung PRO Endurance / SanDisk MAX Endurance; steps in the Pi guide, 04), installed from scratch as the full backup drill (fresh OS following the Pi guide 02, secrets from 1Password, data from Drive per 03; the old card stays as the fallback), new power supply (under-voltage confirmed 2026-11-12; see §3) | 🔭 Future | — |
 
 ---
