@@ -70,6 +70,26 @@ if [ "$stack" = test ] && [ -n "$BACKEND_VERSION" ]; then
   fi
 fi
 
+# Prod: start again a service Docker failed to start (D-168). At boot Docker can start before Wi-Fi/DHCP has given the
+# Pi its LAN address, so web's bind on WEB_BIND fails ("cannot assign requested address", Exited 128) and the restart
+# policy never retries a failed start. Only containers with a start error (.State.Error) are started: a service you
+# stopped yourself (no error) stays stopped, as before. Runs every minute, so prod is back a minute after the address.
+if [ "$stack" = prod ]; then
+  for svc in db api web; do
+    id="$("$stack_cmd" ps -aq "$svc" 2>/dev/null | head -n1 || true)"
+    [ -n "$id" ] || continue
+    st="$(docker inspect -f '{{.State.Status}}|{{.State.Error}}' "$id" 2>/dev/null || true)"
+    case "$st" in
+      running\|* | "" | *\|) ;;
+      *)
+        echo "[release] prod $svc failed to start (${st#*|}): starting it again"
+        "$stack_cmd" up -d --no-deps --wait --wait-timeout 120 "$svc" \
+          || echo "[release] prod $svc still does not start: check './deploy/prod ps -a' and 'docker inspect'" >&2
+        ;;
+    esac
+  done
+fi
+
 # Release tag to deploy, without the leading v. Conditional request: a 304 costs no rate limit.
 # prod: the release marked latest. test: the highest version among published releases, pre-releases included.
 latest() {

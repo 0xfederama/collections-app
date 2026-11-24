@@ -199,7 +199,7 @@ Set `HC_PING_KEY` in `deploy/server/.env`; the checks are created on the first p
 | `collections-release` | every finished prod release run (each minute) | 1 min / 15 min | no successful run for 15 min: expired token, dead timer, Pi offline |
 | `collections-deploy` | each prod deploy | 365 days / 1 day | a deploy failed and rolled back, or an image is still missing an hour after its release |
 | `collections-backup` | the nightly backup unit (backup, prune, Drive upload) | cron `15 3 * * *`, your time zone / 2 h | the backup failed, or did not run (stale) |
-| `raspberrypi` | `collections-health.timer`, every minute | 1 min / 5 min | disk over `HEALTH_DISK_MAX`%, memory low, a prod container unhealthy, or the Pi is off |
+| `raspberrypi` | `collections-health.timer`, every minute | 1 min / 5 min | disk over `HEALTH_DISK_MAX`%, memory low, a prod container unhealthy, the site not answering on `WEB_BIND:WEB_PORT/readyz`, or the Pi is off |
 
 A release waiting for its image (build still running) is not an alert. Test stack (`pitest`) failures are only logged.
 Install the health timer: `sudo cp deploy/server/systemd/collections-health.* deploy/server/systemd/collections-backup.service /etc/systemd/system/ && sudo systemctl daemon-reload && sudo systemctl enable --now collections-health.timer`.
