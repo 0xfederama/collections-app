@@ -13,8 +13,15 @@ disk="$(df -P / | awk 'NR == 2 { gsub("%", "", $5); print $5 }')"
 avail="$(awk '/^MemAvailable:/ { print int($2 / 1024) }' /proc/meminfo)"
 [ "$avail" -ge "${HEALTH_MEM_MIN_MB:-100}" ] || problems+=("only ${avail} MB memory available")
 
+# The nightly backup stops the api for a few minutes (backup.sh, writes paused): not an outage (D-169). Skipped only
+# while its marker is younger than 30 minutes, so a backup stuck with the api down still alerts.
+paused=0
+marker="$here/.release-state/api-paused-for-backup"
+if [ -f "$marker" ] && [ $(( $(date +%s) - $(stat -c %Y "$marker") )) -lt 1800 ]; then paused=1; fi
+
 # Prod containers must be running and healthy (the test stack is not watched).
 for svc in db api web; do
+  [ "$svc" = api ] && [ "$paused" = 1 ] && continue
   state="$("$root/deploy/prod" ps --format '{{.State}} {{.Health}}' "$svc" 2>/dev/null | head -n1)"
   case "$state" in
     "running healthy" | "running ") ;;
@@ -28,10 +35,11 @@ done
 bind="$(sed -n 's/^WEB_BIND=//p' "$here/.env" 2>/dev/null | tr -d '"'"'"' \r')"
 port="$(sed -n 's/^WEB_PORT=//p' "$here/.env" 2>/dev/null | tr -d '"'"'"' \r')"
 url="http://${bind:-127.0.0.1}:${port:-8081}/readyz"
-curl -fsS -m 10 -o /dev/null "$url" 2>/dev/null || problems+=("site not answering on $url")
+[ "$paused" = 1 ] || curl -fsS -m 10 -o /dev/null "$url" 2>/dev/null || problems+=("site not answering on $url")
 
 if [ "${#problems[@]}" -eq 0 ]; then
-  "$here/hc.sh" raspberrypi ok "disk ${disk}%, ${avail} MB free"
+  note=""; [ "$paused" = 0 ] || note=", api paused for the backup"
+  "$here/hc.sh" raspberrypi ok "disk ${disk}%, ${avail} MB free$note"
 else
   msg="$(IFS='; '; echo "${problems[*]}")"
   echo "[health] $msg" >&2

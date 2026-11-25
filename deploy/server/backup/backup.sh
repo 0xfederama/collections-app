@@ -30,11 +30,22 @@ work="$dest/$ts.partial"
 [ ! -e "$final" ] || die "$final already exists"
 
 restart_api=0
+# While the api is paused for the backup, the Pi health check (health.sh) doesn't report it as down (D-169).
+# Only on the Pi, where deploy/server/.release-state exists; removed as soon as the api is started again.
+paused_marker="$here/../.release-state/api-paused-for-backup"
 cleanup() {
   local rc=$?
   if [ "$restart_api" = 1 ]; then
     echo "restarting api"
     dc start api >/dev/null || echo "warning: could not restart api, run: docker compose start api" >&2
+    # Keep the marker until the api is healthy again (up to a minute), so its start isn't reported either.
+    if [ -f "$paused_marker" ]; then
+      for _ in $(seq 30); do
+        [ "$(docker inspect -f '{{.State.Health.Status}}' "$(dc ps -q api 2>/dev/null)" 2>/dev/null)" = healthy ] && break
+        sleep 2
+      done
+      rm -f "$paused_marker"
+    fi
   fi
   if [ -d "$work" ]; then
     rm -rf "$work"
@@ -51,6 +62,7 @@ mkdir "$work"
 
 if api_running; then
   restart_api=1
+  [ ! -d "${paused_marker%/*}" ] || touch "$paused_marker"
   echo "stopping api (writes paused)"
   dc stop api >/dev/null
 fi
