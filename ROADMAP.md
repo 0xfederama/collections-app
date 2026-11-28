@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Owner** | Top-level orchestrator (parent repo session), approved by the product owner (you) |
-| **Last updated** | 2026-11-26 |
+| **Last updated** | 2026-11-28 |
 | **Horizons** | **In progress**: rows marked 🚧 in §2 · **Future**: wanted, not scheduled (§3) · **Exploring**: uncertain concepts, no commitment (§4) |
 | **Status** | ✅ done · 🚧 in progress · 🔭 future |
 
@@ -96,9 +96,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 - Offline mode, rich-text editor, version diffs, custom workflows (deferred since the MVP, no demand).
 
 ## 5. Open questions
-| ID | Question | Default |
-|---|---|---|
-| Q-4 | License for the repos? | No LICENSE (all rights reserved) |
+None open.
 
 ---
 
@@ -110,6 +108,7 @@ version history, a trash with restore, and backups. It should be quick to use on
 - This file is updated when something starts, ships, or changes horizon; the repo orchestrators update their own row after merging. Detailed task history stays in STATUS.md, manual ops chores in the local Pi guide.
 
 ## Changelog
+- 2026-11-28: **Q-4 closed: no license** (repos stay public, all rights reserved; your call). Backend version in Settings → About dropped (the contract shown is enough, releases go out in step).
 - 2026-11-26: **New power supply done** (swapped 2026-11-25: `get_throttled` 0x0, no voltage warnings); the reboot exposed a boot-timing bug, fixed in deploy (D-168). Future keeps the SD card.
 - 2026-11-16: **Roadmap 39 done**: every list shows all its items (web 3.6.1, no more Load more past 200).
 - 2026-11-16: **Roadmap 38 done**: synopsis, TMDB score and genres (F-028) live with backend 3.2.0 and web 3.6.0; the one-off backfill fills existing items in the background.
